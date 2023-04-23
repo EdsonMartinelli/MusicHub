@@ -6,18 +6,36 @@ import LoopButton from "./PlayerComponents/LoopButton";
 import PlayButton from "./PlayerComponents/PlayButton";
 import ProgressBar from "./PlayerComponents/ProgressBar";
 import VolumeBar from "./PlayerComponents/VolumeBar";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/client/redux/store";
+import { setDuration, updateTime } from "@/client/redux/slices/playlistSlice";
 
 export default function AudioPlayer() {
   const [isLoad, setIsLoad] = useState(false);
   const audioObject = useRef<HTMLAudioElement | null>(null);
+  const currentSong = useSelector(
+    (state: RootState) => state.playlist.currentSong
+  );
+  const ableToPlay = useSelector(
+    (state: RootState) => state.playlist.ableToPlay
+  );
+  const volume = useSelector((state: RootState) => state.playlist.volume);
+  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
+  const isInLoop = useSelector((state: RootState) => state.playlist.isInLoop);
+  const currentTime = useSelector(
+    (state: RootState) => state.playlist.currentTime
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    /* audioObject.current = new Audio(
-      "https://drive.google.com/u/0/uc?id=1TZi8nYn9k_Cb1e2VSDxSiB9o6DSTZjXI&export=download"
-    ); */
-    audioObject.current = new Audio("api/drive/downloadFile");
+    if (currentSong == null) return;
+    audioObject.current?.pause();
+    audioObject.current = new Audio(
+      `https://drive.google.com/u/0/uc?id=${currentSong.id}&export=download`
+    );
+    //audioObject.current = new Audio(`api/drive/downloadFile/${currentSong.id}`);
     const audioPlayer = audioObject.current;
-    audioPlayer.volume = 0.05;
+    audioPlayer.load();
 
     function handleLoadStart() {
       setIsLoad(false);
@@ -40,8 +58,74 @@ export default function AudioPlayer() {
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);
     };
-  }, []);
+  }, [currentSong]);
 
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    if (ableToPlay) audioObject.current.play();
+  }, [currentSong, ableToPlay]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    audioObject.current.volume = volume;
+  }, [currentSong, volume]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    if (isPlaying) {
+      audioObject.current.play();
+    } else {
+      audioObject.current.pause();
+    }
+  }, [currentSong, isPlaying]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    audioObject.current.loop = isInLoop;
+  }, [currentSong, isInLoop]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+
+    function handleTime() {
+      dispatch(setDuration(audioObject.current?.duration ?? 0));
+    }
+    audioObject.current.addEventListener("durationchange", handleTime);
+
+    return () => {
+      audioObject.current?.removeEventListener("durationchange", handleTime);
+    };
+  }, [currentSong, dispatch]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+
+    function handleTime() {
+      dispatch(updateTime(audioObject.current?.currentTime ?? 0));
+    }
+    audioObject.current.addEventListener("timeupdate", handleTime);
+
+    return () => {
+      audioObject.current?.removeEventListener("timeupdate", handleTime);
+    };
+  }, [currentSong, dispatch]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+
+    if (!isPlaying) audioObject.current.currentTime = currentTime;
+  }, [currentSong, currentTime, isPlaying]);
+
+  const songNamedFormated = currentSong?.name.replace(".mp3", "");
+  const artist = songNamedFormated?.split(" - ")[0];
+  const songName = songNamedFormated?.split(" - ")[1];
   return (
     <>
       <div
@@ -49,6 +133,7 @@ export default function AudioPlayer() {
         text-white
         flex flex-row items-center gap-[16px]"
       >
+        {!isLoad && <div>Loading</div>}
         {isLoad && (
           <>
             <div className="flex-1 h-full hidden md:flex items-center gap-[16px]">
@@ -57,9 +142,9 @@ export default function AudioPlayer() {
               </div>
               <div className="w-fit flex flex-col gap-0 ">
                 <p className="w-full font-bold text-xl whitespace-nowrap truncate">
-                  Berzerk
+                  {songName}
                 </p>
-                <span className="text-sm text-white/70">Eminem</span>
+                <span className="text-sm text-white/70">{artist}</span>
               </div>
             </div>
 
@@ -69,21 +154,19 @@ export default function AudioPlayer() {
             >
               <div className="flex flex-row w-full items-center justify-center gap-[16px]">
                 <div className="flex-1 flex justify-center items-center gap-[16px]">
-                  {isLoad && <LoopButton object={audioObject} />}
-                  {isLoad && <PlayButton object={audioObject} />}
-                  {isLoad && <LoopButton object={audioObject} />}
+                  {isLoad && <LoopButton />}
+                  {isLoad && <PlayButton />}
+                  {isLoad && <LoopButton />}
                 </div>
               </div>
 
               <div className="w-full h-fit text-[0.7rem] text-white/80">
-                {isLoad && <ProgressBar object={audioObject} />}
+                {isLoad && <ProgressBar />}
               </div>
             </div>
 
             <div className="flex-1 hidden md:flex justify-end pr-[24px]">
-              <div className="w-1/2">
-                {isLoad && <VolumeBar object={audioObject} />}
-              </div>
+              <div className="w-1/2">{isLoad && <VolumeBar />}</div>
             </div>
 
             <div
@@ -91,7 +174,7 @@ export default function AudioPlayer() {
               items-center justify-between md:hidden"
             >
               <p className="w-full font-semibold text-lg whitespace-nowrap truncate text-center">
-                Berzerk - Eminem
+                {artist} - {songName}
               </p>
             </div>
           </>

@@ -3,8 +3,8 @@ import { IDriveDownloadFileCase } from "../cases/driveDownloadFileCase/IDriveDow
 export class DriveDownloadFileController{
     constructor(private readonly driveDownloadFileCase: IDriveDownloadFileCase){}
 
-    async handle(){
-        const result = await this.driveDownloadFileCase.execute()
+    async handle(id: string){
+        const result = await this.driveDownloadFileCase.execute(id)
         return result
     }
 }

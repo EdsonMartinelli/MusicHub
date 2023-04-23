@@ -1,9 +1,10 @@
 import { IDriveDownloadFileCase } from "./IDriveDownloadFileCase";
 
 export class DriveDownloadFileCase implements IDriveDownloadFileCase{
-    async execute(){
+    async execute(id: string){
         const key= process.env.GOOGLE_KEY;
-        const file = "1W3yG1O2TB3dscfQBrFV42e_kgHXhh5AG"
+        //const file = "1W3yG1O2TB3dscfQBrFV42e_kgHXhh5AG"
+        const file = id
         const alt = "media"
         const url = `https://www.googleapis.com/drive/v3/files/${file}?alt=${alt}&key=${key}`
        
@@ -12,4 +13,6 @@ export class DriveDownloadFileCase implements IDriveDownloadFileCase{
         
         return data
     }
+
+
 }

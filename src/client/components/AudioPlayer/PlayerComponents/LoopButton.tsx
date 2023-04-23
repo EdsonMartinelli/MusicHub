@@ -1,21 +1,19 @@
+import { setLoop } from "@/client/redux/slices/playlistSlice";
+import { RootState } from "@/client/redux/store";
 import { ArrowsClockwise } from "@phosphor-icons/react";
-import { RefObject, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-interface PlayButtonProps {
-  object: RefObject<HTMLAudioElement>;
-}
+export default function LoopButton() {
+  const loop = useSelector((state: RootState) => state.playlist.isInLoop);
+  const dispatch = useDispatch();
 
-export default function LoopButton({ object }: PlayButtonProps) {
-  const [loop, setLoop] = useState(false);
-  function handleLoop() {
-    if (object.current == null) return;
-    object.current.loop = !loop;
-    setLoop(!loop);
+  function toogleLoop() {
+    dispatch(setLoop(!loop));
   }
   return (
     <>
       <button
-        onClick={() => handleLoop()}
+        onClick={() => toogleLoop()}
         className={`w-[32px] h-[32px] rounded-full flex items-center
       justify-center p-[8px] ${loop ? "bg-white" : "bg-transparent"}`}
       >

@@ -1,3 +1,3 @@
 export interface IDriveDownloadFileCase{
-    execute: () => Promise<Blob>
+    execute: (id: string) => Promise<Blob>
 }

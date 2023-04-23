@@ -1,35 +1,18 @@
+import { pauseSong, playSong } from "@/client/redux/slices/playlistSlice";
+import { RootState } from "@/client/redux/store";
 import { Play, Pause } from "@phosphor-icons/react";
-import { RefObject, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-interface PlayButtonProps {
-  object: RefObject<HTMLAudioElement>;
-}
-
-export default function PlayButton({ object }: PlayButtonProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  useEffect(() => {
-    const audioPlayer = object.current;
-    function handlePlay() {
-      setIsPlaying(true);
-    }
-    function handlePause() {
-      setIsPlaying(false);
-    }
-    audioPlayer?.addEventListener("play", handlePlay);
-    audioPlayer?.addEventListener("pause", handlePause);
-
-    return () => {
-      audioPlayer?.removeEventListener("play", handlePlay);
-      audioPlayer?.removeEventListener("pause", handlePause);
-    };
-  }, [object]);
+export default function PlayButton() {
+  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
+  const dispatch = useDispatch();
 
   function play() {
-    object.current?.play();
+    dispatch(playSong());
   }
 
   function pause() {
-    object.current?.pause();
+    dispatch(pauseSong());
   }
 
   return (

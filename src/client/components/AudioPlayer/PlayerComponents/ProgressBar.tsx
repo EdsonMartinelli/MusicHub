@@ -1,18 +1,24 @@
 "use client";
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useRef } from "react";
 import InputRange, { InputRangeFunctionArgs } from "../InputRange/InputRange";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/client/redux/store";
+import {
+  pauseSong,
+  playSong,
+  updateTime,
+} from "@/client/redux/slices/playlistSlice";
 
-interface ProgressBarProps {
-  object: RefObject<HTMLAudioElement>;
-}
-
-export default function ProgressBar({ object }: ProgressBarProps) {
-  const [currentTime, setCurrentTime] = useState(0);
-  const { current: duration } = useRef(
-    object.current?.duration == null || Number.isNaN(object.current?.duration)
-      ? 0
-      : object.current.duration
+export default function ProgressBar() {
+  const currentTime = useSelector(
+    (state: RootState) => state.playlist.currentTime
   );
+  const duration = useSelector((state: RootState) => state.playlist.duration);
+  const ableToPlay = useSelector(
+    (state: RootState) => state.playlist.ableToPlay
+  );
+  const dispatch = useDispatch();
+
   const { current: durationMinutes } = useRef(Math.floor(duration / 60));
   const { current: durationSeconds } = useRef(
     Math.floor(duration % 60) < 10
@@ -23,33 +29,21 @@ export default function ProgressBar({ object }: ProgressBarProps) {
   const currentMinutes = Math.floor(currentTime / 60);
   const currentSeconds = Math.floor(currentTime % 60);
 
-  useEffect(() => {
-    const audioPlayer = object.current;
-    function handleTime() {
-      setCurrentTime(audioPlayer?.currentTime ?? 0);
-    }
-    audioPlayer?.addEventListener("timeupdate", handleTime);
-
-    return () => audioPlayer?.removeEventListener("timeupdate", handleTime);
-  }, [object]);
-
   const returnToPlay = useCallback(
     (_: InputRangeFunctionArgs) => {
-      const playPromise = object.current?.play();
-
-      if (playPromise !== undefined) {
-        playPromise.then().catch(() => {});
+      if (ableToPlay) {
+        dispatch(playSong());
       }
     },
-    [object]
+    [ableToPlay, dispatch]
   );
 
   const setTimeOnPause = useCallback(
     (e: InputRangeFunctionArgs) => {
-      object.current?.pause();
-      if (object.current != null) object.current.currentTime = e.value;
+      dispatch(pauseSong());
+      dispatch(updateTime(e.value));
     },
-    [object]
+    [dispatch]
   );
 
   return (

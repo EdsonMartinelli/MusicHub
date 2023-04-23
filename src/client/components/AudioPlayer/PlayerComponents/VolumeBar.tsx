@@ -1,48 +1,29 @@
 "use client";
-import { RefObject, useCallback, useEffect, useState, MouseEvent } from "react";
+import { useCallback, MouseEvent } from "react";
 import { SpeakerLow, SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
 import InputRange, { InputRangeFunctionArgs } from "../InputRange/InputRange";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/client/redux/store";
+import { updateVolume } from "@/client/redux/slices/playlistSlice";
 
-interface VolumeBarProps {
-  object: RefObject<HTMLAudioElement>;
-}
-
-export default function VolumeBar({ object }: VolumeBarProps) {
-  const [currentVolume, setCurrentVolume] = useState<number>(0); // 0 until 1
-
-  useEffect(() => {
-    const audioPlayer = object.current;
-    function handleVolume() {
-      setCurrentVolume(audioPlayer?.volume ?? 0);
-    }
-
-    audioPlayer?.addEventListener("volumechange", handleVolume);
-
-    if (audioPlayer != null) {
-      audioPlayer.volume = 0.2;
-    }
-
-    return () => {
-      audioPlayer?.removeEventListener("volumechange", handleVolume);
-    };
-  }, [object]);
+export default function VolumeBar() {
+  const currentVolume = useSelector(
+    (state: RootState) => state.playlist.volume
+  );
+  const dispatch = useDispatch();
 
   const setVolume = useCallback(
     (e: InputRangeFunctionArgs) => {
-      if (object.current != null) {
-        object.current.volume = e.value / 100;
-      }
+      dispatch(updateVolume(e.value / 100));
     },
-    [object]
+    [dispatch]
   );
 
   const mute = useCallback(
     (_: MouseEvent<HTMLButtonElement>) => {
-      if (object.current != null) {
-        object.current.volume = 0;
-      }
+      dispatch(updateVolume(0));
     },
-    [object]
+    [dispatch]
   );
 
   return (

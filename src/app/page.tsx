@@ -14,7 +14,10 @@ export default function Home() {
     </>
   );*/
   //return <DriveListItem name="Eminem - Berserk" />;
-  return <AudioPlayer />;
+
+  //return <AudioPlayer />;
+
+  return <h1>Página inicial</h1>;
 }
 
 //https://www.behance.net/gallery/163951635/NFT-Landing-Page-Design?tracking_source=search_projects%7Cwebiste+ux
