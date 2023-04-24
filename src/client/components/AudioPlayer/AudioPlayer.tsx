@@ -8,7 +8,13 @@ import ProgressBar from "./PlayerComponents/ProgressBar";
 import VolumeBar from "./PlayerComponents/VolumeBar";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
-import { setDuration, updateTime } from "@/client/redux/slices/playlistSlice";
+import {
+  nextSong,
+  setDuration,
+  updateTime,
+} from "@/client/redux/slices/playlistSlice";
+import PreviousButton from "./PlayerComponents/PreviousButton";
+import NextButton from "./PlayerComponents/NextButton";
 
 export default function AudioPlayer() {
   const [isLoad, setIsLoad] = useState(false);
@@ -22,9 +28,6 @@ export default function AudioPlayer() {
   const volume = useSelector((state: RootState) => state.playlist.volume);
   const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
   const isInLoop = useSelector((state: RootState) => state.playlist.isInLoop);
-  const currentTime = useSelector(
-    (state: RootState) => state.playlist.currentTime
-  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function AudioPlayer() {
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);
     };
-  }, [currentSong]);
+  }, [currentSong, dispatch]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -116,6 +119,20 @@ export default function AudioPlayer() {
     };
   }, [currentSong, dispatch]);
 
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+
+    function handleEnded() {
+      if (!isInLoop) dispatch(nextSong());
+    }
+    audioObject.current.addEventListener("ended", handleEnded);
+
+    return () => {
+      audioObject.current?.removeEventListener("ended", handleEnded);
+    };
+  }, [currentSong, dispatch, isInLoop]);
+
   const setNewTime = useCallback((newTime: number) => {
     if (audioObject.current == null) return;
     audioObject.current.currentTime = newTime;
@@ -152,19 +169,23 @@ export default function AudioPlayer() {
             >
               <div className="flex flex-row w-full items-center justify-center gap-[16px]">
                 <div className="flex-1 flex justify-center items-center gap-[16px]">
-                  {isLoad && <LoopButton />}
-                  {isLoad && <PlayButton />}
-                  {isLoad && <LoopButton />}
+                  <LoopButton />
+                  <PreviousButton />
+                  <PlayButton />
+                  <NextButton />
+                  <LoopButton />
                 </div>
               </div>
 
               <div className="w-full h-fit text-[0.7rem] text-white/80">
-                {isLoad && <ProgressBar setNewTime={setNewTime} />}
+                <ProgressBar setNewTime={setNewTime} />
               </div>
             </div>
 
             <div className="flex-1 hidden md:flex justify-end pr-[24px]">
-              <div className="w-1/2">{isLoad && <VolumeBar />}</div>
+              <div className="w-1/2">
+                <VolumeBar />
+              </div>
             </div>
 
             <div

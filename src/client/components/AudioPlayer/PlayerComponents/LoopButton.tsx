@@ -1,3 +1,4 @@
+"use client";
 import { setLoop } from "@/client/redux/slices/playlistSlice";
 import { RootState } from "@/client/redux/store";
 import { ArrowsClockwise } from "@phosphor-icons/react";

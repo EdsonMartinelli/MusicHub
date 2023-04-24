@@ -45,7 +45,6 @@ export default function ProgressBar({ setNewTime }: ProgressBarProps) {
   const setTimeOnPause = useCallback(
     (e: InputRangeFunctionArgs) => {
       dispatch(pauseSong());
-      // dispatch(updateTime(e.value));
       setNewTime(e.value);
     },
     [dispatch, setNewTime]
