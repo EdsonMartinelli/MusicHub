@@ -9,7 +9,11 @@ import {
   updateTime,
 } from "@/client/redux/slices/playlistSlice";
 
-export default function ProgressBar() {
+type ProgressBarProps = {
+  setNewTime: (newTime: number) => void;
+};
+
+export default function ProgressBar({ setNewTime }: ProgressBarProps) {
   const currentTime = useSelector(
     (state: RootState) => state.playlist.currentTime
   );
@@ -41,9 +45,10 @@ export default function ProgressBar() {
   const setTimeOnPause = useCallback(
     (e: InputRangeFunctionArgs) => {
       dispatch(pauseSong());
-      dispatch(updateTime(e.value));
+      // dispatch(updateTime(e.value));
+      setNewTime(e.value);
     },
-    [dispatch]
+    [dispatch, setNewTime]
   );
 
   return (

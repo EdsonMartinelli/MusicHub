@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Equalizer } from "@phosphor-icons/react";
 import LoopButton from "./PlayerComponents/LoopButton";
 import PlayButton from "./PlayerComponents/PlayButton";
@@ -116,12 +116,10 @@ export default function AudioPlayer() {
     };
   }, [currentSong, dispatch]);
 
-  useEffect(() => {
-    if (currentSong == null) return;
+  const setNewTime = useCallback((newTime: number) => {
     if (audioObject.current == null) return;
-
-    if (!isPlaying) audioObject.current.currentTime = currentTime;
-  }, [currentSong, currentTime, isPlaying]);
+    audioObject.current.currentTime = newTime;
+  }, []);
 
   const songNamedFormated = currentSong?.name.replace(".mp3", "");
   const artist = songNamedFormated?.split(" - ")[0];
@@ -161,7 +159,7 @@ export default function AudioPlayer() {
               </div>
 
               <div className="w-full h-fit text-[0.7rem] text-white/80">
-                {isLoad && <ProgressBar />}
+                {isLoad && <ProgressBar setNewTime={setNewTime} />}
               </div>
             </div>
 
