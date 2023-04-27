@@ -12,8 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-appDark flex justify-center">
-        <div className="max-w-screen-xl w-full">{children}</div>
+      <body className="bg-zinc-800 flex justify-center">
+        <div className="w-full">{children}</div>
       </body>
     </html>
   );

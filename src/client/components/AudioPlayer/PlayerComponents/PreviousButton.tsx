@@ -16,7 +16,7 @@ export default function PreviousButton() {
         className={`w-[32px] h-[32px] rounded-full flex items-center
       justify-center p-[8px] bg-white`}
       >
-        <SkipBack className={`text-teste`} weight="fill" size={"100%"} />
+        <SkipBack className={`text-zinc-900`} weight="fill" size={"100%"} />
       </button>
     </>
   );

@@ -23,9 +23,9 @@ export default function PlayButton() {
       justify-center p-[10px]"
       >
         {isPlaying ? (
-          <Pause className="text-teste" weight="fill" size={"100%"} />
+          <Pause className="text-zinc-900" weight="fill" size={"100%"} />
         ) : (
-          <Play className="text-teste" weight="fill" size={"100%"} />
+          <Play className="text-zinc-900" weight="fill" size={"100%"} />
         )}
       </button>
     </>

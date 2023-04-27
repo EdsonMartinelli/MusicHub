@@ -1,4 +1,4 @@
-import ProviderWrapper from "@/client/components/MySongList/ProviderWrapper";
+import ProviderWrapper from "@/client/components/DriveSongList/ProviderWrapper";
 
 export default function Teste() {
   const data = [

@@ -1,5 +1,5 @@
 "use client"
-import { SongInfo } from '@/client/components/MySongList/ProviderWrapper'
+import { SongInfo } from '@/client/components/DriveSongList/ProviderWrapper'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

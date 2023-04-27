@@ -19,7 +19,7 @@ export default function LoopButton() {
       justify-center p-[8px] ${loop ? "bg-white" : "bg-transparent"}`}
       >
         <ArrowsClockwise
-          className={`${loop ? "text-teste" : "text-white"}`}
+          className={`${loop ? "text-zinc-900" : "text-white"}`}
           weight="fill"
           size={"100%"}
         />

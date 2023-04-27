@@ -7,10 +7,6 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        appDark: grayDark.gray5,
-        bgComponentDark: grayDark.gray2,
-        componentDark: grayDark.gray7,
-        teste: grayDark.gray1
       }
       
     },
