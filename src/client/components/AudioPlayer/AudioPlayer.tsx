@@ -139,8 +139,8 @@ export default function AudioPlayer() {
 
   return (
     <div
-      className="fixed bottom-0 left-0  w-full h-[128px] xl:h-[96px] bg-zinc-900
-      text-white flex flex-row items-center gap-[16px]"
+      className="fixed bottom-0 left-0 w-full h-[128px] lg:h-[96px] bg-zinc-900
+      border-t-[1px] border-zinc-600"
     >
       {isLoaded ? (
         <Player
