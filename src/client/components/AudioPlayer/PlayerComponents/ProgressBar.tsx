@@ -1,15 +1,11 @@
 "use client";
-import { RefObject, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import InputRange, { InputRangeFunctionArgs } from "../InputRange/InputRange";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
-import {
-  pauseSong,
-  playSong,
-  updateTime,
-} from "@/client/redux/slices/playlistSlice";
+import { pauseSong, playSong } from "@/client/redux/slices/playlistSlice";
 
-type ProgressBarProps = {
+export type ProgressBarProps = {
   setNewTime: (newTime: number) => void;
 };
 
@@ -52,7 +48,7 @@ export default function ProgressBar({ setNewTime }: ProgressBarProps) {
 
   return (
     <>
-      <div className="w-full flex gap-[10px] flex-row items-center">
+      <div className="w-full flex gap-[10px] flex-row items-center text-[0.7rem] text-white/80">
         <div>
           {currentMinutes}:
           {currentSeconds < 10 ? `0${currentSeconds}` : `${currentSeconds}`}

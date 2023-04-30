@@ -28,10 +28,10 @@ export default function VolumeBar() {
 
   return (
     <>
-      <div className="w-full flex gap-[10px] items-center">
+      <div className="w-full flex gap-2 items-center">
         <button
-          className="w-[32px] h-[32px] min-w-[32px] hover:bg-black/10 active:bg-black/30 flex items-center
-          justify-center p-[8px] rounded-full"
+          className="w-8 h-8 min-w-8 hover:bg-black/10 active:bg-black/30 flex items-center
+          justify-center p-2 rounded-full"
           onClick={mute}
         >
           {currentVolume > 0.8 ? (

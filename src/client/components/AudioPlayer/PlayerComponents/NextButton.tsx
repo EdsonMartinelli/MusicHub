@@ -13,8 +13,7 @@ export default function NextButton() {
     <>
       <button
         onClick={() => toogleLoop()}
-        className={`w-[32px] h-[32px] rounded-full flex items-center
-      justify-center p-[8px] bg-white`}
+        className={`w-8 h-8 rounded-full flex items-center justify-center p-2 bg-white`}
       >
         <SkipForward className={`text-zinc-900`} weight="fill" size={"100%"} />
       </button>

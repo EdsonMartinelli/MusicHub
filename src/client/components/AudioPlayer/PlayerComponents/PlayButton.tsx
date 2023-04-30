@@ -19,8 +19,8 @@ export default function PlayButton() {
     <>
       <button
         onClick={isPlaying ? pause : play}
-        className="w-[38px] h-[38px] bg-white rounded-full flex items-center
-      justify-center p-[10px]"
+        className="w-10 h-10 bg-white rounded-full flex items-center justify-center
+        p-[10px] box-border"
       >
         {isPlaying ? (
           <Pause className="text-zinc-900" weight="fill" size={"100%"} />

@@ -15,8 +15,8 @@ export default function LoopButton() {
     <>
       <button
         onClick={() => toogleLoop()}
-        className={`w-[32px] h-[32px] rounded-full flex items-center
-      justify-center p-[8px] ${loop ? "bg-white" : "bg-transparent"}`}
+        className={`w-8 h-8 rounded-full flex items-center justify-center p-2
+        ${loop ? "bg-white" : "bg-transparent"}`}
       >
         <ArrowsClockwise
           className={`${loop ? "text-zinc-900" : "text-white"}`}
