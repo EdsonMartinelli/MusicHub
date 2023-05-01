@@ -1,4 +1,4 @@
-import Menu from "@/client/components/AudioPlayer/Menu/Menu";
+import Menu from "@/client/components/Menu/Menu";
 
 export default function MenuLayout({
   children,

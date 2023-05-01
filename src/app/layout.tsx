@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-800 flex justify-center">
+      <body className="bg-zinc-900 flex justify-center">
         <div className="w-full">{children}</div>
       </body>
     </html>
