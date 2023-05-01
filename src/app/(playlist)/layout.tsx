@@ -8,7 +8,7 @@ export default function MenuLayout({
   return (
     <>
       <Menu />
-      <div className="ml-72">{children}</div>
+      <div className="lg:ml-72">{children}</div>
     </>
   );
 }
