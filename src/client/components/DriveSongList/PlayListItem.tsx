@@ -1,5 +1,4 @@
 import { selectSong } from "@/client/redux/slices/playlistSlice";
-import { RootState } from "@/client/redux/store";
 import { useDispatch } from "react-redux";
 import { SongInfo } from "@/client/components/DriveSongList/ProviderWrapper";
 

@@ -13,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-zinc-900 flex justify-center">
-        <div className="w-full">{children}</div>
+        <div className="w-screen">{children}</div>
       </body>
     </html>
   );

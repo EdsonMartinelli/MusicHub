@@ -8,7 +8,8 @@ export default function MenuLayout({
   return (
     <>
       <Menu />
-      <div className="lg:ml-64">{children}</div>
+
+      <div className="pl-64 w-full overflow-hidden">{children}</div>
     </>
   );
 }

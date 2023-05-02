@@ -1,7 +1,7 @@
 "use client";
 import { setLoop } from "@/client/redux/slices/playlistSlice";
 import { RootState } from "@/client/redux/store";
-import { ArrowsClockwise } from "@phosphor-icons/react";
+import { Repeat } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function LoopButton() {
@@ -21,7 +21,7 @@ export default function LoopButton() {
        hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2
         hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs`}
       >
-        <ArrowsClockwise
+        <Repeat
           className={`${loop ? "text-zinc-900" : "text-white"}`}
           weight="fill"
           size={"100%"}

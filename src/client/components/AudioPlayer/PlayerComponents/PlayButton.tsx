@@ -31,9 +31,9 @@ export default function PlayButton() {
         hover:after:text-xs`}
       >
         {isPlaying ? (
-          <Pause className="text-zinc-900" weight="fill" size={"100%"} />
+          <Pause className="text-zinc-900" weight="fill" size="100%" />
         ) : (
-          <Play className="text-zinc-900" weight="fill" size={"100%"} />
+          <Play className="text-zinc-900" weight="fill" size="100%" />
         )}
       </button>
     </>

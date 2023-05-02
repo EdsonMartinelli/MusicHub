@@ -38,11 +38,11 @@ export default function VolumeBar() {
           onClick={mute}
         >
           {currentVolume > 0.8 ? (
-            <SpeakerHigh size={"100%"} />
+            <SpeakerHigh size="100%" />
           ) : currentVolume > 0 ? (
-            <SpeakerLow size={"100%"} />
+            <SpeakerLow size="100%" />
           ) : (
-            <SpeakerSlash size={"100%"} />
+            <SpeakerSlash size="100%" />
           )}
         </button>
         <div className="w-full">

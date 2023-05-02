@@ -16,7 +16,7 @@ export default function Player({ song, artist, setNewTime }: PlayerProps) {
     <div className="flex flex-row items-center gap-4 w-full h-full text-white">
       <div className="w-1/3 h-full hidden lg:flex items-center gap-4">
         <div className="h-full w-24 min-w-24 bg-black text-white/30 p-4 shrink-0">
-          <Equalizer size={"100%"} />
+          <Equalizer size="100%" />
         </div>
         <div className="w-full flex flex-col gap-1 overflow-hidden">
           <p className="h-7 font-bold text-xl whitespace-nowrap truncate">

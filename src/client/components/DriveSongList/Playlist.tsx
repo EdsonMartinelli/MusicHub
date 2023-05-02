@@ -3,24 +3,69 @@
 import { RootState } from "@/client/redux/store";
 import { useSelector } from "react-redux";
 import PlayListItem from "./PlayListItem";
+import PlayListItem2 from "./PlayListItem2";
 
 export function Playlist() {
   const playlist = useSelector((state: RootState) => state.playlist.playlist);
 
   return (
     <>
-      <div className="bg-red-700">
-        <div className="text-xs text-zinc-400 p-3 mx-10 flex flex-row items-center">
-          <div className="flex flex-row gap-7 flex-1">
-            <div>#</div>
-            <div>ARTIST</div>
-          </div>
-          <div className="flex-1">TITLE</div>
-        </div>
+      <div className="h-64 bg-blue-800/90 "></div>
 
+      <div className="bg-teste p-14 pb-40 grid grid-cols-auto-fill gap-x-4 gap-y-10">
         {playlist.map((item, index) => {
           return (
-            <PlayListItem
+            <PlayListItem2
+              id={item.id}
+              name={item.name}
+              index={index + 1}
+              key={item.id}
+            />
+          );
+        })}
+        {playlist.map((item, index) => {
+          return (
+            <PlayListItem2
+              id={item.id}
+              name={item.name}
+              index={index + 1}
+              key={item.id}
+            />
+          );
+        })}
+        {playlist.map((item, index) => {
+          return (
+            <PlayListItem2
+              id={item.id}
+              name={item.name}
+              index={index + 1}
+              key={item.id}
+            />
+          );
+        })}
+        {playlist.map((item, index) => {
+          return (
+            <PlayListItem2
+              id={item.id}
+              name={item.name}
+              index={index + 1}
+              key={item.id}
+            />
+          );
+        })}
+        {playlist.map((item, index) => {
+          return (
+            <PlayListItem2
+              id={item.id}
+              name={item.name}
+              index={index + 1}
+              key={item.id}
+            />
+          );
+        })}
+        {playlist.map((item, index) => {
+          return (
+            <PlayListItem2
               id={item.id}
               name={item.name}
               index={index + 1}
