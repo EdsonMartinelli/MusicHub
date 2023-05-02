@@ -9,7 +9,7 @@ export function Playlist() {
 
   return (
     <>
-      <div>
+      <div className="bg-red-700">
         <div className="text-xs text-zinc-400 p-3 mx-10 flex flex-row items-center">
           <div className="flex flex-row gap-7 flex-1">
             <div>#</div>
