@@ -33,7 +33,6 @@ export const playlistSlice = createSlice({
   reducers: {
     addPlaylist: (state, action: PayloadAction<SongInfo[]>) => {
       state.playlist = action.payload
-      state.currentSong = action.payload[state.index]
     },
 
     playSong: (state) => {

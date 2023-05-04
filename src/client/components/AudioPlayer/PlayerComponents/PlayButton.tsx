@@ -19,8 +19,8 @@ export default function PlayButton() {
     <>
       <button
         onClick={isPlaying ? pause : play}
-        className={`w-10 h-10 bg-white rounded-full flex items-center justify-center
-        p-[10px] box-border hover:after:absolute 
+        className={`w-8 h-8 lg:w-10 lg:h-10 bg-white rounded-full flex items-center justify-center
+        p-2 lg:p-[10px] box-border hover:after:absolute 
         ${
           isPlaying
             ? "hover:after:content-['Pause']"

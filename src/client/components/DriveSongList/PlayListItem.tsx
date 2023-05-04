@@ -1,4 +1,10 @@
-import { selectSong } from "@/client/redux/slices/playlistSlice";
+"use client";
+
+import {
+  pauseSong,
+  playSong,
+  selectSong,
+} from "@/client/redux/slices/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { SongInfo } from "@/client/components/DriveSongList/ProviderWrapper";
 import { Pause, Play } from "@phosphor-icons/react";
@@ -13,6 +19,7 @@ export default function PlayListItem({
   const currentSong = useSelector(
     (state: RootState) => state.playlist.currentSong
   );
+  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
 
   const dispatch = useDispatch();
 
@@ -20,9 +27,17 @@ export default function PlayListItem({
   const artist = songNamedFormated.split(" - ")[0];
   const songName = songNamedFormated.split(" - ")[1];
 
+  function handleClick() {
+    if (currentSong?.id != id) {
+      dispatch(selectSong(id));
+      return;
+    }
+
+    isPlaying ? dispatch(pauseSong()) : dispatch(playSong());
+  }
   return (
     <button
-      onClick={() => dispatch(selectSong(id))}
+      onClick={handleClick}
       className={`w-full text-white p-2 px-4 flex flex-row items-center 
       justify-between rounded-md mb-1  ${
         currentSong?.id == id
@@ -30,20 +45,31 @@ export default function PlayListItem({
           : "hover:bg-zinc-700"
       }`}
     >
-      <div className="w-1/2 flex flex-row gap-7 items-center justify-start">
-        {currentSong?.id == id ? (
-          <div className="w-7 h-7 p-1 text-white shrink-0">
-            <Pause size="100%" weight="fill" />
-          </div>
-        ) : (
-          <div className="w-7 text-xs shrink-0">{index}</div>
-        )}
-        <div className="w-full flex flex-col text-white overflow-hidden items-start">
-          <p className="truncate font-semibold text-sm mb-1">{songName}</p>
-          <p className="truncate text-xs text-white/50">{artist}</p>
+      <div className="w-1/2 flex flex-row gap-4 items-center justify-start">
+        <div
+          className="hidden lg:flex w-7 h-7 p-1 text-white items-center text-xs
+          shrink-0"
+        >
+          {currentSong?.id == id ? (
+            isPlaying ? (
+              <Pause size="100%" weight="fill" />
+            ) : (
+              <Play size="100%" weight="fill" />
+            )
+          ) : (
+            <p className="text-center w-full">{index}</p>
+          )}
+        </div>
+        <div className="w-full flex flex-col text-white items-start">
+          <p className="w-full text-left truncate text-xs lg:text-sm mb-1">
+            {songName}
+          </p>
+          <p className="w-full text-left truncate text-xs text-white/60">
+            {artist}
+          </p>
         </div>
       </div>
-      <p className="text-sm text-white/50">{createdTime}</p>
+      <p className="text-xs lg:text-xs text-white/60">{createdTime}</p>
     </button>
   );
 }

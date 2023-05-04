@@ -13,7 +13,18 @@ module.exports = {
 
       gridTemplateColumns: {
         'auto-fill': 'repeat(auto-fill, minmax(176px, 1fr));',
-      }
+      },
+
+      keyframes: {
+
+        playerShow:{
+          from: {transform: "translateY(100%)" },
+          to: {transform: "translateX(0%)"},
+        },
+      },
+      animation: {
+        playerShow: 'playerShow 500ms cubic-bezier(0.16, 1, 0.3, 1)',
+      },
       
     },
   },

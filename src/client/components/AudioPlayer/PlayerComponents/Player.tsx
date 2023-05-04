@@ -19,7 +19,7 @@ export default function Player({ song, artist, setNewTime }: PlayerProps) {
           <Equalizer size="100%" />
         </div>
         <div className="w-full flex flex-col gap-1 overflow-hidden">
-          <p className="h-7 font-bold text-xl whitespace-nowrap truncate">
+          <p className="h-7 font-semibold text-lg whitespace-nowrap truncate">
             {song}
           </p>
           <span className="text-sm text-white/70 h-5 whitespace-nowrap truncate">
@@ -27,11 +27,14 @@ export default function Player({ song, artist, setNewTime }: PlayerProps) {
           </span>
         </div>
       </div>
-
       <div
         className="w-full flex flex-col items-center justify-center px-4 
-        gap-2 mt-8 lg:w-1/3 lg:mt-0"
+        gap-2 lg:w-1/3"
       >
+        <p className="block lg:hidden w-full font-semibold text-md lg:text-lg whitespace-nowrap truncate text-center">
+          {artist} - {song}
+        </p>
+
         <div className="flex flex-row w-full items-center justify-center gap-4">
           <div className="flex-1 flex justify-center items-center gap-4">
             <LoopButton />
@@ -51,15 +54,6 @@ export default function Player({ song, artist, setNewTime }: PlayerProps) {
         <div className="w-1/2">
           <VolumeBar />
         </div>
-      </div>
-
-      <div
-        className="absolute top-2 left-0 h-8 w-full px-6 flex items-center
-        justify-center lg:hidden"
-      >
-        <p className="w-full font-semibold text-lg whitespace-nowrap truncate text-center">
-          {artist} - {song}
-        </p>
       </div>
     </div>
   );

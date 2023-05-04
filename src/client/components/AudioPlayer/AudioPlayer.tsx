@@ -103,7 +103,6 @@ export default function AudioPlayer() {
   useEffect(() => {
     if (currentSong == null) return;
     if (audioObject.current == null) return;
-
     function handleTime() {
       dispatch(updateTime(audioObject.current?.currentTime ?? 0));
     }
@@ -137,10 +136,12 @@ export default function AudioPlayer() {
   const artist = songNamedFormated?.split(" - ")[0];
   const songName = songNamedFormated?.split(" - ")[1];
 
+  if (currentSong == null) return <></>;
+
   return (
     <div
-      className="fixed bottom-0 left-0 w-full h-32 lg:h-24 bg-zinc-900
-      border-t-[1px] border-zinc-700/50"
+      className="fixed bottom-0 left-0 w-full h-28 lg:h-24 bg-zinc-900
+      border-t-[1px] border-zinc-700/50 animate-playerShow"
     >
       {isLoaded ? (
         <Player

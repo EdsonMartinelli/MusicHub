@@ -11,15 +11,17 @@ export default function PlayerSkeleton() {
 
       <div
         className="w-full flex flex-col items-center justify-center px-4 
-        gap-2 mt-8 lg:w-1/3 lg:mt-0"
+        gap-2 lg:w-1/3"
       >
+        <div className="block lg:hidden w-full h-6 bg-zinc-800 max-w-[512px]" />
+
         <div className="flex flex-row w-full items-center justify-center gap-4">
           <div className="flex-1 flex justify-center items-center gap-4">
-            <div className="w-8 h-8 rounded-full bg-zinc-800" />
-            <div className="w-8 h-8 rounded-full bg-zinc-800" />
-            <div className="w-10 h-10 rounded-full bg-zinc-800" />
-            <div className="w-8 h-8 rounded-full bg-zinc-800" />
-            <div className="w-8 h-8 rounded-full bg-zinc-800" />
+            <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-zinc-800" />
+            <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-zinc-800" />
+            <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-zinc-800" />
+            <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-zinc-800" />
+            <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-zinc-800" />
           </div>
         </div>
 
@@ -31,13 +33,6 @@ export default function PlayerSkeleton() {
           <div className="w-8 h-8 rounded-full bg-zinc-800" />
           <div className="w-full h-2 bg-zinc-800 rounded-md" />
         </div>
-      </div>
-
-      <div
-        className="absolute top-2 left-0 h-8 w-full px-6 flex items-center
-        justify-center rounded-md lg:hidden"
-      >
-        <p className="w-full h-7 bg-zinc-800 max-w-[512px]" />
       </div>
     </div>
   );

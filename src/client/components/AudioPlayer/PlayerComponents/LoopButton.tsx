@@ -15,8 +15,8 @@ export default function LoopButton() {
     <>
       <button
         onClick={() => toogleLoop()}
-        className={`w-8 h-8 rounded-full flex items-center justify-center p-2
-        ${loop ? "bg-white" : "bg-transparent"} hover:after:absolute 
+        className={`w-6 h-6 lg:w-8 lg:h-8 rounded-full flex items-center justify-center
+        p-1 lg:p-2 ${loop ? "bg-white" : "bg-transparent"} hover:after:absolute 
         hover:after:content-['Loop'] hover:after:w-fit hover:after:h-fit
        hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2
         hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs`}
