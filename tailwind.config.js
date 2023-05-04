@@ -10,9 +10,6 @@ module.exports = {
     extend: {
       colors:{
       },
-      backgroundImage: {
-        teste: `linear-gradient(to bottom, ${colors.blue[900]}, transparent 200px )`
-      },
 
       gridTemplateColumns: {
         'auto-fill': 'repeat(auto-fill, minmax(176px, 1fr));',

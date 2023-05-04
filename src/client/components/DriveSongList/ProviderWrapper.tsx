@@ -9,6 +9,7 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 export type SongInfo = {
   id: string;
   name: string;
+  createdTime: string;
 };
 
 export default function ProviderWrapper(data: { playlist: SongInfo[] }) {
