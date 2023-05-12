@@ -1,24 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Video from "./Video";
 export default function TesteComp() {
-  const [teste, setTeste] = useState("Sem nada");
-  const [video, setVideo] = useState("6DXBeoFVch8");
-  const [player, setPlayer] = useState<any | null>(null);
-  useEffect(() => {
+  const [id, setId] = useState("szVNepsJNkE");
+  //const [player, setPlayer] = useState<Record<string, any> | null>(null);
+  const iFrameRef = useRef<HTMLIFrameElement>(null);
+  /*useEffect(() => {
     (window as any).onYouTubePlayerAPIReady = () => {
-      /*let player = new (window as any).YT.Player("player", {
-        height: "390",
-        width: "640",
-        videoId: "6DXBeoFVch8",
-        playerVars: {
-          origin: "http://localhost:3000",
-          playsinline: 1,
-        },
-        events: {
-          onReady: onPlayerReady,
-        },
-      }); */
-      const playerApi = new (window as any).YT.Player("player", {
+      new (window as any).YT.Player("player", {
         events: {
           onReady: onPlayerReady,
         },
@@ -26,47 +15,82 @@ export default function TesteComp() {
     };
 
     function onPlayerReady(event: any) {
-      const t = Object.create(event.target);
-      setPlayer(t);
-      setTeste("foi");
+      setPlayer(Object.create(event.target));
     }
-  }, [player]);
+  }, [player]);*/
+
+  /*useEffect(() => {
+    iFrameRef.current?.contentWindow?.postMessage(
+      '{"event":"listening","id":1,"channel":"widget"}',
+      "*"
+    );
+  }, [video]);*/
 
   useEffect(() => {
-    console.log("isso ai");
-  }, [player]);
+    window.addEventListener("message", (event) => {
+      /*const data = JSON.parse(event.data);
+      if (data.event == "infoDelivery" && data.info && data.info?.currentTime) {
+        console.log(data.info.currentTime);
+      }*/
+      console.log(event);
+    });
+  }, []);
 
   function handleVideo1() {
-    setVideo("6DXBeoFVch8");
+    setId("szVNepsJNkE");
   }
 
   function handleVideo2() {
-    setVideo("1aAY7EI3u8c");
+    setId("1aAY7EI3u8c");
   }
 
+  /*const ag2ytControl = function (action: string, arg: string | null) {
+    console.log(window);
+    //'{"event":"command", "func":"seekTo", "args":[30,true]}'
+    const t = { event: "command", func: "seekTo", args: [30, true] };
+    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
+  };
+
   function handlePause() {
-    player?.pauseVideo();
-  }
-  return (
+    ag2ytControl("seekTo", "[30,true]");
+
+    console.log("enviou");
+    //player?.seekTo(30, true);
+  }*/
+  /*return (
     <>
       <h1 className="text-xl text-white">Teste</h1>
-      {/* <div id="player"></div> */}
       <iframe
         id="player"
+        ref={iFrameRef}
         width="640"
         height="360"
         src={`https://www.youtube-nocookie.com/embed/${video}?controls=0&origin=http://localhost:3000&enablejsapi=1`}
       ></iframe>
-      <div>{teste}</div>
       <button onClick={handleVideo1} className="bg-red-700 text-white mr-2">
         video 1
       </button>
-      <button onClick={handleVideo2} className="bg-red-700 text-white">
+      <button onClick={handleVideo2} className="bg-red-700 text-white block">
         video 2
       </button>
-      <div>{player?.videoTitle}</div>
       <button onClick={handlePause} className="bg-red-700 text-white">
-        Pausar Video
+        Seek To
+      </button>
+    </>
+  );*/
+  return (
+    <>
+      <iframe
+        ref={iFrameRef}
+        width="640"
+        height="360"
+        src={`https://www.youtube-nocookie.com/embed/${id}?origin=http://localhost:3000&enablejsapi=1`}
+      ></iframe>
+      <button onClick={handleVideo1} className="bg-red-700 text-white mr-2">
+        video 1
+      </button>
+      <button onClick={handleVideo2} className="bg-red-700 text-white block">
+        video 2
       </button>
     </>
   );
