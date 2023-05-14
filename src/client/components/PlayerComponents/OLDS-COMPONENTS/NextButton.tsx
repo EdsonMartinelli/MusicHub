@@ -6,13 +6,13 @@ import { useDispatch } from "react-redux";
 export default function NextButton() {
   const dispatch = useDispatch();
 
-  function toogleLoop() {
+  function handleNext() {
     dispatch(nextSong());
   }
   return (
     <>
       <button
-        onClick={() => toogleLoop()}
+        onClick={() => handleNext()}
         className="w-6 h-6 lg:w-8 lg:h-8 rounded-full flex items-center justify-center 
         p-1 lg:p-2 hover:after:absolute hover:after:content-['Next'] hover:after:w-fit 
         hover:after:h-fit hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2

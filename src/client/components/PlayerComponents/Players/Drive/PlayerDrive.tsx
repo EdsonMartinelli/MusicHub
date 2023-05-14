@@ -8,10 +8,10 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistSlice";
-import PlayerSkeleton from "./PlayerComponents/PlayerSkeleton";
-import Player from "./PlayerComponents/Player";
+import PlayerDriveUI from "./PlayerDriveUI";
+import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
 
-export default function AudioPlayer() {
+export default function PlayerDrive() {
   const [isLoaded, setIsLoaded] = useState(false);
   const audioObject = useRef<HTMLAudioElement | null>(null);
   const currentSong = useSelector(
@@ -144,13 +144,13 @@ export default function AudioPlayer() {
       border-t-[1px] border-zinc-700/50 animate-playerShow"
     >
       {isLoaded ? (
-        <Player
+        <PlayerDriveUI
           artist={artist ?? ""}
           song={songName ?? ""}
           setNewTime={setNewTime}
         />
       ) : (
-        <PlayerSkeleton />
+        <PlayerDriveUISkeleton />
       )}
     </div>
   );

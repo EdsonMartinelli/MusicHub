@@ -1,31 +1,21 @@
 "use client";
-import { useCallback, MouseEvent } from "react";
 import { SpeakerLow, SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
-import InputRange, { InputRangeFunctionArgs } from "../InputRange/InputRange";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/client/redux/store";
-import { updateVolume } from "@/client/redux/slices/playlistSlice";
+import InputRange, {
+  InputRangeFunctionArgs,
+} from "../../InputRange/InputRange";
+import { MouseEventHandler } from "react";
 
-export default function VolumeBar() {
-  const currentVolume = useSelector(
-    (state: RootState) => state.playlist.volume
-  );
-  const dispatch = useDispatch();
+type VolumeBarUIProps = {
+  currentVolume: number;
+  muteEvent: MouseEventHandler<HTMLButtonElement>;
+  onInput: (e: InputRangeFunctionArgs) => void;
+};
 
-  const setVolume = useCallback(
-    (e: InputRangeFunctionArgs) => {
-      dispatch(updateVolume(e.value / 100));
-    },
-    [dispatch]
-  );
-
-  const mute = useCallback(
-    (_: MouseEvent<HTMLButtonElement>) => {
-      dispatch(updateVolume(0));
-    },
-    [dispatch]
-  );
-
+export default function VolumeBarUI({
+  currentVolume,
+  muteEvent,
+  onInput,
+}: VolumeBarUIProps) {
   return (
     <>
       <div className="w-full flex gap-2 items-center">
@@ -35,7 +25,7 @@ export default function VolumeBar() {
           hover:after:content-['Volume'] hover:after:w-fit hover:after:h-fit
           hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2
           hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs"
-          onClick={mute}
+          onClick={muteEvent}
         >
           {currentVolume > 0.8 ? (
             <SpeakerHigh size="100%" />
@@ -52,7 +42,7 @@ export default function VolumeBar() {
             min={0}
             step={5}
             isVertical={false}
-            onInput={setVolume}
+            onInput={onInput}
           />
         </div>
       </div>

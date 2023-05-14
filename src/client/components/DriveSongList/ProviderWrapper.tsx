@@ -4,7 +4,9 @@ import { store } from "@/client/redux/store";
 import { Provider } from "react-redux";
 import { addPlaylist } from "@/client/redux/slices/playlistSlice";
 import { Playlist } from "./Playlist";
-import AudioPlayer from "../AudioPlayer/AudioPlayer";
+import PlayerDrive from "../PlayerComponents/Players/Drive/PlayerDrive";
+
+//import AudioPlayer from "../AudioPlayer/PlayerComponents/OLDS-COMPONENTS/AudioPlayer";
 
 export type SongInfo = {
   id: string;
@@ -18,7 +20,8 @@ export default function ProviderWrapper(data: { playlist: SongInfo[] }) {
     <>
       <Provider store={store}>
         <Playlist />
-        <AudioPlayer />
+        {/* <AudioPlayer /> */}
+        <PlayerDrive />
       </Provider>
     </>
   );

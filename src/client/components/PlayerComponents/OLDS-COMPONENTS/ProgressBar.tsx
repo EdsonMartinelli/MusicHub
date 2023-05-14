@@ -1,9 +1,12 @@
 "use client";
 import { useCallback, useRef } from "react";
-import InputRange, { InputRangeFunctionArgs } from "../InputRange/InputRange";
+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import { pauseSong, playSong } from "@/client/redux/slices/playlistSlice";
+import InputRange, {
+  InputRangeFunctionArgs,
+} from "../../InputRange/InputRange";
 
 export type ProgressBarProps = {
   setNewTime: (newTime: number) => void;
