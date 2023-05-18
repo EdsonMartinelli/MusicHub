@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import InputRange from "../AudioPlayer/InputRange/InputRange";
+import InputRange from "../InputRange/InputRange";
 
 export default function Video() {
   const [id, setId] = useState("szVNepsJNkE");
