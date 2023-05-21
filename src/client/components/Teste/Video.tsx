@@ -49,8 +49,18 @@ export default function Video() {
     iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
   }
 
+  function playVideo() {
+    //'{"event":"command", "func":"playVideo", "args": null}'
+    const t = { event: "command", func: "playVideo", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
+  }
+
   function handleSeekTo(e: number) {
     seekTo([e, true]);
+  }
+
+  function handlePlayVideo() {
+    playVideo();
   }
 
   function handleVideo1() {
@@ -79,6 +89,12 @@ export default function Video() {
       </button>
       {isLoaded && (
         <>
+          <button
+            onClick={handlePlayVideo}
+            className="bg-red-700 text-white block"
+          >
+            Play Video
+          </button>
           <div>{duration}</div>
           <div>{currentTime}</div>
           <div className={"w-[400px]"}>

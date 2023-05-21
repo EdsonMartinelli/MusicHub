@@ -8,6 +8,7 @@ import PreviousButtonDrive from "../../PreviousButton/PreviousButtonDrive";
 import PlayButtonDrive from "../../PlayButton/PlayButtonDrive";
 import NextButtonDrive from "../../NextButton/NextButtonDrive";
 import VolumeBarDrive from "../../VolumeBar/VolumeBarDrive";
+import AutoPlayButtonDrive from "../../AutoPlayButton/AutoPlayButtonDrive";
 
 type PlayerDriveUIProps = {
   artist: string;
@@ -48,7 +49,7 @@ export default function PlayerDriveUI({
             <PreviousButtonDrive />
             <PlayButtonDrive />
             <NextButtonDrive />
-            <LoopButtonDrive />
+            <AutoPlayButtonDrive />
           </div>
         </div>
 

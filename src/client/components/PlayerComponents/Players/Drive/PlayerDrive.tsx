@@ -20,6 +20,9 @@ export default function PlayerDrive() {
   const volume = useSelector((state: RootState) => state.playlist.volume);
   const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
   const isInLoop = useSelector((state: RootState) => state.playlist.isInLoop);
+  const isInAutoPlay = useSelector(
+    (state: RootState) => state.playlist.isInAutoPlay
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -109,14 +112,14 @@ export default function PlayerDrive() {
     if (audioObject.current == null) return;
 
     function handleEnded() {
-      if (!isInLoop) dispatch(nextSong());
+      if (!isInLoop && isInAutoPlay) dispatch(nextSong());
     }
     audioObject.current.addEventListener("ended", handleEnded);
 
     return () => {
       audioObject.current?.removeEventListener("ended", handleEnded);
     };
-  }, [currentSong, dispatch, isInLoop]);
+  }, [currentSong, dispatch, isInLoop, isInAutoPlay]);
 
   const setNewTime = useCallback((newTime: number) => {
     if (audioObject.current == null) return;

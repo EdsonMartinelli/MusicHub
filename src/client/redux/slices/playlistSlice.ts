@@ -7,6 +7,7 @@ type playlistState = {
     currentSong: SongInfo | null
     index: number
     isInLoop: boolean
+    isInAutoPlay: boolean
     isPlaying: boolean
     volume: number
     currentTime: number
@@ -19,6 +20,7 @@ const initialState: playlistState = {
   index: 0,
   isPlaying: false,
   isInLoop: false,
+  isInAutoPlay: false,
   volume: 0.2,
   currentTime: 0,
   duration: 0,
@@ -43,6 +45,10 @@ export const playlistSlice = createSlice({
 
     setLoop: (state, action: PayloadAction<boolean>) => {
       state.isInLoop = action.payload
+    },
+
+    setAutoPlay: (state, action: PayloadAction<boolean>) => {
+      state.isInAutoPlay = action.payload
     },
 
     updateVolume: (state, action: PayloadAction<number>) => {
@@ -93,6 +99,7 @@ export const { addPlaylist,
                playSong, 
                pauseSong,
                setLoop, 
+               setAutoPlay,
                previousSong, 
                nextSong, 
                updateVolume, 
