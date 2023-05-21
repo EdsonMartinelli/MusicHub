@@ -18,16 +18,16 @@ export default function Thumb({
   }px)`;
 
   const vertical = {
-    top: style,
+    marginTop: style,
   };
 
   const horizontal = {
-    left: style,
+    marginLeft: style,
   };
   return (
     <div
       style={isVertical ? vertical : horizontal}
-      className="absolute w-[12px] h-[12px] bg-white rounded-full z-[3]"
+      className="w-[12px] h-[12px] bg-white rounded-full shrink-0"
     />
   );
 }

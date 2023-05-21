@@ -5,7 +5,6 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 type playlistState = {
     currentSong: SongInfo | null
-    ableToPlay: boolean
     index: number
     isInLoop: boolean
     isPlaying: boolean
@@ -17,7 +16,6 @@ type playlistState = {
 
 const initialState: playlistState = {
   currentSong: null,
-  ableToPlay: false,
   index: 0,
   isPlaying: false,
   isInLoop: false,
@@ -36,7 +34,6 @@ export const playlistSlice = createSlice({
     },
 
     playSong: (state) => {
-      state.ableToPlay = true
       state.isPlaying = true
     },
 
@@ -65,7 +62,6 @@ export const playlistSlice = createSlice({
       if(newIndex >= 0) {
         state.index = newIndex
         state.currentSong = state.playlist[newIndex ?? 0]
-        state.ableToPlay = true
         state.isPlaying = true
         state.isInLoop = false
       } 
@@ -76,7 +72,6 @@ export const playlistSlice = createSlice({
       if(newIndex <= state.playlist.length - 1){
         state.index = newIndex
         state.currentSong = state.playlist[newIndex ?? 0]
-        state.ableToPlay = true
         state.isPlaying = true
         state.isInLoop = false
       }
@@ -86,7 +81,6 @@ export const playlistSlice = createSlice({
       const newIndex = state.playlist.findIndex((song: SongInfo) => song.id == action.payload)
       state.index = newIndex ?? 0
       state.currentSong = state.playlist[newIndex ?? 0]
-      state.ableToPlay = true
       state.isPlaying = true
       state.isInLoop = false
     },

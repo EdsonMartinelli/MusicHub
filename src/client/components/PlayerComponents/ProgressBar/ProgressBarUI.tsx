@@ -1,22 +1,20 @@
 "use client";
 
-import InputRange, {
-  InputRangeFunctionArgs,
-} from "../../InputRange/InputRange";
-import TimestampUI from "./TimeStampUI";
+import InputRange, { InputRangeProperties } from "../../InputRange/InputRange";
+import TimestampUI from "./TimestampUI";
 
 type ProgressBarUIProps = {
   currentTime: number;
   duration: number;
-  onInput: (e: InputRangeFunctionArgs) => void;
-  onFinishInput: (e: InputRangeFunctionArgs) => void;
+  onInput: (e: InputRangeProperties) => void;
+  onAfterInput: (e: InputRangeProperties) => void;
 };
 
 export default function ProgressBarUI({
   currentTime,
   duration,
   onInput,
-  onFinishInput,
+  onAfterInput,
 }: ProgressBarUIProps) {
   return (
     <>
@@ -27,7 +25,7 @@ export default function ProgressBarUI({
           max={duration}
           min={0}
           onInput={onInput}
-          onFinishInput={onFinishInput}
+          onAfterInput={onAfterInput}
         />
         <TimestampUI time={duration} />
       </div>

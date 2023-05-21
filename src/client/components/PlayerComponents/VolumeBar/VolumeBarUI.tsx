@@ -1,14 +1,12 @@
 "use client";
 import { SpeakerLow, SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
-import InputRange, {
-  InputRangeFunctionArgs,
-} from "../../InputRange/InputRange";
 import { MouseEventHandler } from "react";
+import InputRange, { InputRangeProperties } from "../../InputRange/InputRange";
 
 type VolumeBarUIProps = {
   currentVolume: number;
   muteEvent: MouseEventHandler<HTMLButtonElement>;
-  onInput: (e: InputRangeFunctionArgs) => void;
+  onInput: (e: InputRangeProperties) => void;
 };
 
 export default function VolumeBarUI({

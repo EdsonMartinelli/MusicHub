@@ -1,9 +1,16 @@
+import { ReactNode } from "react";
+
 type ProgressProps = {
   isVertical: boolean;
   position: number;
+  children: ReactNode;
 };
 
-export default function Progress({ position, isVertical }: ProgressProps) {
+export default function Progress({
+  position,
+  isVertical,
+  children,
+}: ProgressProps) {
   const style = `${position}px`;
 
   const vertical = {
@@ -16,9 +23,11 @@ export default function Progress({ position, isVertical }: ProgressProps) {
   return (
     <div
       style={isVertical ? vertical : horizontal}
-      className={`absolute bg-white rounded-lg z-[2] ${
+      className={`bg-white rounded-lg flex items-center justify-center ${
         isVertical ? "w-[2px]" : "h-[2px]"
       }`}
-    />
+    >
+      {children}
+    </div>
   );
 }

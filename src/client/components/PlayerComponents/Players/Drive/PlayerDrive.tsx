@@ -17,9 +17,6 @@ export default function PlayerDrive() {
   const currentSong = useSelector(
     (state: RootState) => state.playlist.currentSong
   );
-  const ableToPlay = useSelector(
-    (state: RootState) => state.playlist.ableToPlay
-  );
   const volume = useSelector((state: RootState) => state.playlist.volume);
   const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
   const isInLoop = useSelector((state: RootState) => state.playlist.isInLoop);
@@ -57,12 +54,6 @@ export default function PlayerDrive() {
       audioPlayer.removeEventListener("error", handleError);
     };
   }, [currentSong, dispatch]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-    if (ableToPlay) audioObject.current.play();
-  }, [currentSong, ableToPlay]);
 
   useEffect(() => {
     if (currentSong == null) return;

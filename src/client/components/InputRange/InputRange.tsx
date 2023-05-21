@@ -1,155 +1,159 @@
 "use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
+import Track from "./Track";
 import Progress from "./Progress";
 import Thumb from "./Thumb";
-import Track from "./Track";
 
-export type InputRangeFunctionArgs = {
+export function calculateNormalValue(value: number, min: number, max: number) {
+  if (value > max) return max;
+  if (value < min) return min;
+  return value;
+}
+
+export function calculateSteppedValue(
+  value: number,
+  step: number,
+  min: number,
+  max: number
+) {
+  const steppedValue = value - (value % step);
+  if (steppedValue > max) return max - step + ((max < 0 ? -max : max) % step);
+  if (steppedValue < min) return min + step - ((min < 0 ? -min : min) % step);
+  return steppedValue;
+}
+
+export function calculatePositionByValue(
+  value: number,
+  size: number,
+  min: number,
+  max: number
+) {
+  if (value > max) return size;
+  if (value < min) return 0;
+  return Math.round(size * ((value - min) / (max - min)));
+}
+
+export function calculateValueByPosition(
+  position: number,
+  size: number,
+  min: number,
+  max: number
+) {
+  if (position > size) return max;
+  if (position < 0) return min;
+  return (position / size) * (max - min) + min;
+}
+
+export type InputRangeProperties = {
   value: number;
-  readonly max: number;
-  readonly min: number;
+  max: number;
+  min: number;
 };
 
 type InputRangeProps = {
-  readonly step?: number;
-  readonly isVertical?: boolean;
-  readonly onInput?: (args: InputRangeFunctionArgs) => void;
-  readonly onFinishInput?: (args: InputRangeFunctionArgs) => void;
-} & InputRangeFunctionArgs;
+  step?: number;
+  isVertical?: boolean;
+  onInput?: (args: InputRangeProperties) => void;
+  onAfterInput?: (args: InputRangeProperties) => void;
+} & InputRangeProperties;
 
 export default function InputRange({
   value,
   min,
   max,
-  isVertical,
+  isVertical = false,
+  step = 0,
   onInput,
-  step,
-  onFinishInput,
+  onAfterInput,
 }: InputRangeProps) {
   const [position, setPosition] = useState(0);
-  const { current: properties } = useRef({
+  const properties = useRef({
     isDraggable: false,
-    isVertical: isVertical ?? false,
-    step: step == null || step < 0 ? null : step,
     value,
-    min,
-    max,
   });
   const track = useRef<HTMLDivElement>(null);
 
-  const getSteppedValue = useCallback(
+  const getValue = useCallback(
     (value: number) => {
-      if (properties.step == null) return value;
-
-      const step = value - (value % properties.step);
-      return step < properties.min ? step + properties.step : step;
+      if (step == 0) return calculateNormalValue(value, min, max);
+      return calculateSteppedValue(value, step, min, max);
     },
-    [properties.step, properties.min]
+    [step, min, max]
   );
 
   const getPositionByValue = useCallback(
     (value: number, trackSize: number) => {
-      return Math.round(
-        trackSize *
-          ((value - properties.min) / (properties.max - properties.min))
-      );
+      return calculatePositionByValue(value, trackSize, min, max);
     },
-    [properties.max, properties.min]
+    [max, min]
   );
 
   const getValueByPosition = useCallback(
-    (value: number, trackSize: number) => {
-      return (
-        (value / trackSize) * (properties.max - properties.min) + properties.min
-      );
+    (positionValue: number, trackSize: number) => {
+      return calculateValueByPosition(positionValue, trackSize, min, max);
     },
-    [properties.max, properties.min]
+    [max, min]
   );
 
   const renewValues = useCallback(
     (newValue: number, newPosition: number) => {
-      properties.value = newValue;
-
+      properties.current.value = newValue;
       if (onInput != null) {
         onInput({
-          value: properties.value,
-          max: properties.max,
-          min: properties.min,
+          value: properties.current.value,
+          max,
+          min,
         });
       }
       setPosition(newPosition);
     },
-    [onInput, properties]
+    [onInput, min, max]
   );
 
   useEffect(() => {
     if (track.current == null) return;
-    const trackSize = properties.isVertical
+    const trackSize = isVertical
       ? track.current.offsetHeight
       : track.current.offsetWidth;
 
-    properties.value = getSteppedValue(value);
-    const currentPosition = getPositionByValue(properties.value, trackSize);
+    properties.current.value = getValue(value);
+    const currentPosition = getPositionByValue(
+      properties.current.value,
+      trackSize
+    );
     setPosition(currentPosition);
-  }, [properties, value, getSteppedValue, getPositionByValue]);
+  }, [isVertical, value, getValue, getPositionByValue]);
 
   const handleMove = useCallback(
     (clientX: number, clientY: number) => {
-      if (!properties.isDraggable) return;
+      if (!properties.current.isDraggable) return;
       if (track.current == null) return;
-
       const rect = track.current.getBoundingClientRect();
-      const mousePosition = properties.isVertical ? clientY : clientX;
-      const offset = properties.isVertical ? rect.top : rect.left;
-      const trackSize = properties.isVertical
+      const mousePosition = isVertical ? clientY : clientX;
+      const offset = isVertical ? rect.top : rect.left;
+      const trackSize = isVertical
         ? track.current.offsetHeight
         : track.current.offsetWidth;
-      const rangePosition = mousePosition - offset;
-      const rangeValue = getValueByPosition(rangePosition, trackSize);
-      const steppedValue = getSteppedValue(rangeValue);
+      const mouseRangePosition = mousePosition - offset;
+      const mouseRangeValue = getValueByPosition(mouseRangePosition, trackSize);
+      const steppedValue = getValue(mouseRangeValue);
       const steppedPosition = getPositionByValue(steppedValue, trackSize);
-
-      if (steppedPosition > trackSize) {
-        const steppedMax = getSteppedValue(properties.max);
-        const steppedMaxPosition =
-          properties.step == null
-            ? trackSize
-            : getPositionByValue(steppedMax, trackSize);
-        renewValues(steppedMax, steppedMaxPosition);
-        return;
-      }
-      if (steppedPosition < 0) {
-        const steppedMin = getSteppedValue(properties.min);
-        const steppedMinPosition =
-          properties.step == null
-            ? 0
-            : getPositionByValue(steppedMin, trackSize);
-        renewValues(steppedMin, steppedMinPosition);
-        return;
-      }
       renewValues(steppedValue, steppedPosition);
     },
-    [
-      getPositionByValue,
-      getSteppedValue,
-      getValueByPosition,
-      properties,
-      renewValues,
-    ]
+    [isVertical, getPositionByValue, getValue, getValueByPosition, renewValues]
   );
 
   const handleMoveEnd = useCallback(() => {
-    if (!properties.isDraggable) return;
-    properties.isDraggable = false;
-    if (onFinishInput != null) {
-      onFinishInput({
-        value: properties.value,
-        max: properties.max,
-        min: properties.min,
+    if (!properties.current.isDraggable) return;
+    properties.current.isDraggable = false;
+    if (onAfterInput != null) {
+      onAfterInput({
+        value: properties.current.value,
+        max,
+        min,
       });
     }
-  }, [onFinishInput, properties]);
+  }, [onAfterInput, max, min]);
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -167,7 +171,7 @@ export default function InputRange({
 
   useEffect(() => {
     const handleSelection = (e: Event) => {
-      if (!properties.isDraggable) return;
+      if (!properties.current.isDraggable) return;
       e.preventDefault();
     };
 
@@ -188,35 +192,42 @@ export default function InputRange({
 
       window.removeEventListener("selectstart", handleSelection);
     };
-  }, [handleMouseMove, handleTouchMove, handleMoveEnd, properties.isDraggable]);
+  }, [handleMouseMove, handleTouchMove, handleMoveEnd]);
 
   return (
     <>
       <div
-        className={`relative bg-transparent flex justify-center z-[4] ${
-          properties.isVertical ? "h-full w-[20px]" : "w-full h-[20px] flex-col"
+        className={`bg-transparent flex items-center justify-center ${
+          isVertical ? "h-full w-[20px]" : "w-full h-[20px]"
         }`}
         ref={track}
         onMouseDown={() => {
-          properties.isDraggable = true;
+          properties.current.isDraggable = true;
         }}
         onTouchStart={() => {
-          properties.isDraggable = true;
+          properties.current.isDraggable = true;
+        }}
+        onClick={(e) => {
+          properties.current.isDraggable = true;
+          handleMove(e.clientX, e.clientY);
+          handleMoveEnd();
         }}
         onDragStart={(e) => {
           e.preventDefault();
         }}
         tabIndex={1}
       >
-        <Track isVertical={properties.isVertical} />
-        <Progress position={position} isVertical={properties.isVertical} />
-        <Thumb
-          position={position}
-          value={properties.value}
-          max={properties.max}
-          min={properties.min}
-          isVertical={properties.isVertical}
-        />
+        <Track isVertical={isVertical}>
+          <Progress position={position} isVertical={isVertical}>
+            <Thumb
+              position={position}
+              value={properties.current.value}
+              max={max}
+              min={min}
+              isVertical={isVertical}
+            />
+          </Progress>
+        </Track>
       </div>
     </>
   );
