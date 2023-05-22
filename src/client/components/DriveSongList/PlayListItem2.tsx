@@ -1,7 +1,7 @@
 import { selectSong } from "@/client/redux/slices/playlistSlice";
 import { useDispatch } from "react-redux";
-import { SongInfo } from "@/client/components/DriveSongList/ProviderWrapper";
 import { Equalizer, Play } from "@phosphor-icons/react";
+import { SongInfo } from "@/client/redux/reducers/playlistReducers";
 
 export default function PlayListItem2({
   id,

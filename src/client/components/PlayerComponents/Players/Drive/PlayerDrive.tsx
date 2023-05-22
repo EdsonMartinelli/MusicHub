@@ -15,13 +15,17 @@ export default function PlayerDrive() {
   const [isLoaded, setIsLoaded] = useState(false);
   const audioObject = useRef<HTMLAudioElement | null>(null);
   const currentSong = useSelector(
-    (state: RootState) => state.playlist.currentSong
+    (state: RootState) => state.playlistDrive.currentSong
   );
-  const volume = useSelector((state: RootState) => state.playlist.volume);
-  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
-  const isInLoop = useSelector((state: RootState) => state.playlist.isInLoop);
+  const volume = useSelector((state: RootState) => state.playlistDrive.volume);
+  const isPlaying = useSelector(
+    (state: RootState) => state.playlistDrive.isPlaying
+  );
+  const isInLoop = useSelector(
+    (state: RootState) => state.playlistDrive.isInLoop
+  );
   const isInAutoPlay = useSelector(
-    (state: RootState) => state.playlist.isInAutoPlay
+    (state: RootState) => state.playlistDrive.isInAutoPlay
   );
   const dispatch = useDispatch();
 

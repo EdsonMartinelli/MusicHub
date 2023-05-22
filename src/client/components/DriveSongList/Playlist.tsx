@@ -7,7 +7,9 @@ import PlayListItem2 from "./PlayListItem2";
 import { Banner } from "./Banner";
 
 export function Playlist() {
-  const playlist = useSelector((state: RootState) => state.playlist.playlist);
+  const playlist = useSelector(
+    (state: RootState) => state.playlistDrive.playlist
+  );
 
   return (
     <>

@@ -14,9 +14,11 @@ export default function ProgressBarDrive({
   setNewTime,
 }: ProgressBarDriveProps) {
   const currentTime = useSelector(
-    (state: RootState) => state.playlist.currentTime
+    (state: RootState) => state.playlistDrive.currentTime
   );
-  const duration = useSelector((state: RootState) => state.playlist.duration);
+  const duration = useSelector(
+    (state: RootState) => state.playlistDrive.duration
+  );
   const dispatch = useDispatch();
 
   const returnToPlay = useCallback(

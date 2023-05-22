@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LoopButtonUI from "./LoopButtonUI";
 
 export default function LoopButtonDrive() {
-  const loop = useSelector((state: RootState) => state.playlist.isInLoop);
+  const loop = useSelector((state: RootState) => state.playlistDrive.isInLoop);
   const dispatch = useDispatch();
 
   function toogleLoop() {

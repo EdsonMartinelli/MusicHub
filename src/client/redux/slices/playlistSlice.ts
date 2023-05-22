@@ -1,19 +1,7 @@
 "use client"
-import { SongInfo } from '@/client/components/DriveSongList/ProviderWrapper'
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 
-type playlistState = {
-    currentSong: SongInfo | null
-    index: number
-    isInLoop: boolean
-    isInAutoPlay: boolean
-    isPlaying: boolean
-    volume: number
-    currentTime: number
-    duration: number
-    playlist: SongInfo[]
-}
+import { createSlice } from '@reduxjs/toolkit'
+import { playlistState, reducers } from '../reducers/playlistReducers'
 
 const initialState: playlistState = {
   currentSong: null,
@@ -27,71 +15,10 @@ const initialState: playlistState = {
   playlist: []
 }
 
-export const playlistSlice = createSlice({
-  name: 'playlist',
+export const playlistDriveSlice = createSlice({
+  name: 'playlistDrive',
   initialState,
-  reducers: {
-    addPlaylist: (state, action: PayloadAction<SongInfo[]>) => {
-      state.playlist = action.payload
-    },
-
-    playSong: (state) => {
-      state.isPlaying = true
-    },
-
-    pauseSong: (state) => {
-      state.isPlaying = false
-    },
-
-    setLoop: (state, action: PayloadAction<boolean>) => {
-      state.isInLoop = action.payload
-    },
-
-    setAutoPlay: (state, action: PayloadAction<boolean>) => {
-      state.isInAutoPlay = action.payload
-    },
-
-    updateVolume: (state, action: PayloadAction<number>) => {
-      state.volume = action.payload
-    },
-
-    updateTime: (state, action: PayloadAction<number>) => {
-      state.currentTime = action.payload
-    },
-
-    setDuration: (state, action: PayloadAction<number>) => {
-      state.duration = action.payload
-    },
-
-    previousSong: (state) => {
-      const newIndex = state.index - 1
-      if(newIndex >= 0) {
-        state.index = newIndex
-        state.currentSong = state.playlist[newIndex ?? 0]
-        state.isPlaying = true
-        state.isInLoop = false
-      } 
-    },
-
-    nextSong: (state) => {
-      const newIndex = state.index + 1
-      if(newIndex <= state.playlist.length - 1){
-        state.index = newIndex
-        state.currentSong = state.playlist[newIndex ?? 0]
-        state.isPlaying = true
-        state.isInLoop = false
-      }
-    },
-
-    selectSong: (state, action: PayloadAction<string>) => {
-      const newIndex = state.playlist.findIndex((song: SongInfo) => song.id == action.payload)
-      state.index = newIndex ?? 0
-      state.currentSong = state.playlist[newIndex ?? 0]
-      state.isPlaying = true
-      state.isInLoop = false
-    },
-
-  }
+  reducers
 })
 
 export const { addPlaylist,
@@ -104,6 +31,7 @@ export const { addPlaylist,
                nextSong, 
                updateVolume, 
                updateTime,
-               setDuration } = playlistSlice.actions
+               setDuration } = playlistDriveSlice.actions
 
-export default playlistSlice.reducer
+//export default playlistSlice.reducer
+export const playlistDriveReducer = playlistDriveSlice.reducer

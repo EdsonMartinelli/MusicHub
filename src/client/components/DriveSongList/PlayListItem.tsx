@@ -6,9 +6,9 @@ import {
   selectSong,
 } from "@/client/redux/slices/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { SongInfo } from "@/client/components/DriveSongList/ProviderWrapper";
 import { Pause, Play } from "@phosphor-icons/react";
 import { RootState } from "@/client/redux/store";
+import { SongInfo } from "@/client/redux/reducers/playlistReducers";
 
 export default function PlayListItem({
   id,
@@ -17,9 +17,11 @@ export default function PlayListItem({
   index,
 }: SongInfo & { index: number }) {
   const currentSong = useSelector(
-    (state: RootState) => state.playlist.currentSong
+    (state: RootState) => state.playlistDrive.currentSong
   );
-  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
+  const isPlaying = useSelector(
+    (state: RootState) => state.playlistDrive.isPlaying
+  );
 
   const dispatch = useDispatch();
 

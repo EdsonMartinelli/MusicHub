@@ -6,7 +6,7 @@ import AutoPlayButtonUI from "./AutoPlayButtonUI";
 
 export default function AutoPlayButtonDrive() {
   const autoPlay = useSelector(
-    (state: RootState) => state.playlist.isInAutoPlay
+    (state: RootState) => state.playlistDrive.isInAutoPlay
   );
   const dispatch = useDispatch();
 

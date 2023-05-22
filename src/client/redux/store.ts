@@ -1,10 +1,10 @@
 "use client";
 import { configureStore } from '@reduxjs/toolkit'
-import playlistReducer from '@/client/redux/slices/playlistSlice'
+import { playlistDriveReducer } from '@/client/redux/slices/playlistSlice'
 
 export const store = configureStore({
   reducer: {
-    playlist: playlistReducer
+    playlistDrive: playlistDriveReducer
   },
 })
 

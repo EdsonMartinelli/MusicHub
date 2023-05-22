@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import PlayButtonUI from "./PlayButtonUI";
 
 export default function PlayButtonDrive() {
-  const isPlaying = useSelector((state: RootState) => state.playlist.isPlaying);
+  const isPlaying = useSelector(
+    (state: RootState) => state.playlistDrive.isPlaying
+  );
   const dispatch = useDispatch();
 
   function handlePlay() {
