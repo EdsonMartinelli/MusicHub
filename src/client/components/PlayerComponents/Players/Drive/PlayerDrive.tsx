@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
 import {
+  endSong,
+  loadSong,
   nextSong,
+  playSong,
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistSlice";
@@ -12,14 +15,13 @@ import PlayerDriveUI from "./PlayerDriveUI";
 import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
 
 export default function PlayerDrive() {
-  const [isLoaded, setIsLoaded] = useState(false);
   const audioObject = useRef<HTMLAudioElement | null>(null);
   const currentSong = useSelector(
     (state: RootState) => state.playlistDrive.currentSong
   );
   const volume = useSelector((state: RootState) => state.playlistDrive.volume);
-  const isPlaying = useSelector(
-    (state: RootState) => state.playlistDrive.isPlaying
+  const currentState = useSelector(
+    (state: RootState) => state.playlistDrive.currentState
   );
   const isInLoop = useSelector(
     (state: RootState) => state.playlistDrive.isInLoop
@@ -40,14 +42,14 @@ export default function PlayerDrive() {
     audioPlayer.load();
 
     function handleLoadStart() {
-      setIsLoaded(false);
+      dispatch(loadSong());
     }
     function handleLoadedData() {
-      setIsLoaded(true);
+      dispatch(playSong());
     }
 
     function handleError() {
-      setIsLoaded(false);
+      dispatch(loadSong());
       audioPlayer.load();
     }
 
@@ -71,12 +73,9 @@ export default function PlayerDrive() {
   useEffect(() => {
     if (currentSong == null) return;
     if (audioObject.current == null) return;
-    if (isPlaying) {
-      audioObject.current.play();
-    } else {
-      audioObject.current.pause();
-    }
-  }, [currentSong, isPlaying]);
+    if (currentState == "playing") audioObject.current.play();
+    if (currentState == "paused") audioObject.current.pause();
+  }, [currentSong, currentState]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -116,7 +115,11 @@ export default function PlayerDrive() {
     if (audioObject.current == null) return;
 
     function handleEnded() {
-      if (!isInLoop && isInAutoPlay) dispatch(nextSong());
+      if (!isInLoop && isInAutoPlay) {
+        dispatch(nextSong());
+        return;
+      }
+      dispatch(endSong());
     }
     audioObject.current.addEventListener("ended", handleEnded);
 
@@ -134,21 +137,21 @@ export default function PlayerDrive() {
   const artist = songNamedFormated?.split(" - ")[0];
   const songName = songNamedFormated?.split(" - ")[1];
 
-  if (currentSong == null) return <></>;
+  if (currentSong == null || currentState == "idle") return <></>;
 
   return (
     <div
       className="fixed bottom-0 left-0 w-full h-28 lg:h-24 bg-zinc-900
       border-t-[1px] border-zinc-700/50 animate-playerShow"
     >
-      {isLoaded ? (
+      {currentState == "loading" ? (
+        <PlayerDriveUISkeleton />
+      ) : (
         <PlayerDriveUI
           artist={artist ?? ""}
           song={songName ?? ""}
           setNewTime={setNewTime}
         />
-      ) : (
-        <PlayerDriveUISkeleton />
       )}
     </div>
   );

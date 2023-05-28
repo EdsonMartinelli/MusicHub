@@ -1,5 +1,5 @@
 "use client";
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type SongInfo = {
   id: string;
@@ -7,76 +7,91 @@ export type SongInfo = {
   createdTime: string;
 };
 
+export type allStates = "idle" | "loading" | "paused" | "playing" | "ended";
+
 export type playlistState = {
-  currentSong: SongInfo | null
-  index: number
-  isInLoop: boolean
-  isInAutoPlay: boolean
-  isPlaying: boolean
-  volume: number
-  currentTime: number
-  duration: number
-  playlist: SongInfo[]
-}
+  currentSong: SongInfo | null;
+  index: number;
+  isInLoop: boolean;
+  isInAutoPlay: boolean;
+  currentState: allStates;
+  volume: number;
+  currentTime: number;
+  duration: number;
+  playlist: SongInfo[];
+};
 
 export const reducers = {
-    addPlaylist: (state: playlistState, action: PayloadAction<SongInfo[]>) => {
-      state.playlist = action.payload
-    },
+  addPlaylist: (state: playlistState, action: PayloadAction<SongInfo[]>) => {
+    state.playlist = action.payload;
+  },
 
-    playSong: (state: playlistState) => {
-      state.isPlaying = true
-    },
+  loadSong: (state: playlistState) => {
+    state.currentState = "loading";
+  },
 
-    pauseSong: (state: playlistState) => {
-      state.isPlaying = false
-    },
+  endSong: (state: playlistState) => {
+    state.currentState = "ended";
+  },
 
-    setLoop: (state: playlistState, action: PayloadAction<boolean>) => {
-      state.isInLoop = action.payload
-    },
+  playSong: (state: playlistState) => {
+    state.currentState = "playing";
+  },
 
-    setAutoPlay: (state: playlistState, action: PayloadAction<boolean>) => {
-      state.isInAutoPlay = action.payload
-    },
+  pauseSong: (state: playlistState) => {
+    state.currentState = "paused";
+  },
 
-    updateVolume: (state: playlistState, action: PayloadAction<number>) => {
-      state.volume = action.payload
-    },
+  setLoop: (state: playlistState, action: PayloadAction<boolean>) => {
+    state.isInLoop = action.payload;
+  },
 
-    updateTime: (state: playlistState, action: PayloadAction<number>) => {
-      state.currentTime = action.payload
-    },
+  setAutoPlay: (state: playlistState, action: PayloadAction<boolean>) => {
+    state.isInAutoPlay = action.payload;
+  },
 
-    setDuration: (state: playlistState, action: PayloadAction<number>) => {
-      state.duration = action.payload
-    },
+  updateVolume: (state: playlistState, action: PayloadAction<number>) => {
+    state.volume = action.payload;
+  },
 
-    previousSong: (state: playlistState) => {
-      const newIndex = state.index - 1
-      if(newIndex >= 0) {
-        state.index = newIndex
-        state.currentSong = state.playlist[newIndex ?? 0]
-        state.isPlaying = true
-        state.isInLoop = false
-      } 
-    },
+  updateTime: (state: playlistState, action: PayloadAction<number>) => {
+    state.currentTime = action.payload;
+  },
 
-    nextSong: (state: playlistState) => {
-      const newIndex = state.index + 1
-      if(newIndex <= state.playlist.length - 1){
-        state.index = newIndex
-        state.currentSong = state.playlist[newIndex ?? 0]
-        state.isPlaying = true
-        state.isInLoop = false
-      }
-    },
+  setDuration: (state: playlistState, action: PayloadAction<number>) => {
+    state.duration = action.payload;
+  },
 
-    selectSong: (state: playlistState, action: PayloadAction<string>) => {
-      const newIndex = state.playlist.findIndex((song: SongInfo) => song.id == action.payload)
-      state.index = newIndex ?? 0
-      state.currentSong = state.playlist[newIndex ?? 0]
-      state.isPlaying = true
-      state.isInLoop = false
-    },
-}
+  previousSong: (state: playlistState) => {
+    const newIndex = state.index - 1;
+    if (newIndex >= 0) {
+      state.index = newIndex;
+      state.currentSong = state.playlist[newIndex ?? 0];
+      //state.isPlaying = true;
+      state.currentState = "loading";
+      state.isInLoop = false;
+    }
+  },
+
+  nextSong: (state: playlistState) => {
+    const newIndex = state.index + 1;
+    if (newIndex <= state.playlist.length - 1) {
+      state.index = newIndex;
+      state.currentSong = state.playlist[newIndex ?? 0];
+      //state.isPlaying = true;
+      state.currentState = "loading";
+      state.isInLoop = false;
+    }
+  },
+
+  selectSong: (state: playlistState, action: PayloadAction<string>) => {
+    const newIndex = state.playlist.findIndex(
+      (song: SongInfo) => song.id == action.payload
+    );
+    state.index = newIndex ?? 0;
+    state.currentSong = state.playlist[newIndex ?? 0];
+    //state.isPlaying = true;
+    state.currentState = "loading";
+    state.isInLoop = false;
+  },
+};

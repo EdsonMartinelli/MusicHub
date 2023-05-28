@@ -6,7 +6,7 @@ import {
   selectSong,
 } from "@/client/redux/slices/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Pause, Play } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, Pause, Play } from "@phosphor-icons/react";
 import { RootState } from "@/client/redux/store";
 import { SongInfo } from "@/client/redux/reducers/playlistReducers";
 
@@ -19,8 +19,8 @@ export default function PlayListItem({
   const currentSong = useSelector(
     (state: RootState) => state.playlistDrive.currentSong
   );
-  const isPlaying = useSelector(
-    (state: RootState) => state.playlistDrive.isPlaying
+  const currentState = useSelector(
+    (state: RootState) => state.playlistDrive.currentState
   );
 
   const dispatch = useDispatch();
@@ -35,7 +35,9 @@ export default function PlayListItem({
       return;
     }
 
-    isPlaying ? dispatch(pauseSong()) : dispatch(playSong());
+    if (currentState == "playing") dispatch(pauseSong());
+    if (currentState == "paused") dispatch(playSong());
+    if (currentState == "ended") dispatch(playSong());
   }
   return (
     <button
@@ -53,11 +55,18 @@ export default function PlayListItem({
           shrink-0"
         >
           {currentSong?.id == id ? (
-            isPlaying ? (
+            /*isPlaying ? (
               <Pause size="100%" weight="fill" />
             ) : (
               <Play size="100%" weight="fill" />
-            )
+            )*/
+            currentState == "playing" ? (
+              <Pause size="100%" weight="fill" />
+            ) : currentState == "paused" ? (
+              <Play size="100%" weight="fill" />
+            ) : currentState == "ended" ? (
+              <ArrowCounterClockwise size="100%" weight="fill" />
+            ) : null
           ) : (
             <p className="text-center w-full">{index}</p>
           )}

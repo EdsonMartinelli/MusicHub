@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowClockwise } from "@phosphor-icons/react";
+import { ArrowUUpRight } from "@phosphor-icons/react";
 import { MouseEventHandler } from "react";
 
 type AutoPlayButtonUIProps = {
@@ -24,7 +24,7 @@ export default function AutoPlayButtonUI({
        hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2
         hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs`}
       >
-        <ArrowClockwise
+        <ArrowUUpRight
           className={`${isInAutoPlay ? "text-zinc-900" : "text-white"}`}
           weight="fill"
           size={"100%"}
