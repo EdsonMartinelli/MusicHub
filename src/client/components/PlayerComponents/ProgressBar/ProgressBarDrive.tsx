@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
-import { pauseSong, playSong } from "@/client/redux/slices/playlistSlice";
+import { setChangeTime } from "@/client/redux/slices/playlistSlice";
 import ProgressBarUI from "./ProgressBarUI";
 import { InputRangeProperties } from "../../InputRange/InputRange";
 
@@ -23,14 +23,14 @@ export default function ProgressBarDrive({
 
   const returnToPlay = useCallback(
     (_: InputRangeProperties) => {
-      dispatch(playSong());
+      dispatch(setChangeTime(false));
     },
     [dispatch]
   );
 
   const setTimeOnPause = useCallback(
     (e: InputRangeProperties) => {
-      dispatch(pauseSong());
+      dispatch(setChangeTime(true));
       setNewTime(e.value);
     },
     [dispatch, setNewTime]

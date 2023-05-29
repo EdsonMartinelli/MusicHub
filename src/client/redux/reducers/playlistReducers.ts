@@ -44,6 +44,10 @@ export const reducers = {
     state.currentState = "paused";
   },
 
+  /*setStateTo:  (state: playlistState, action: PayloadAction<allStates>) => {
+    state.currentState = action.payload;
+  },*/
+
   setLoop: (state: playlistState, action: PayloadAction<boolean>) => {
     state.isInLoop = action.payload;
   },
@@ -62,6 +66,10 @@ export const reducers = {
 
   updateTime: (state: playlistState, action: PayloadAction<number>) => {
     state.currentTime = action.payload;
+  },
+
+  setChangeTime: (state: playlistState, action: PayloadAction<boolean>) => {
+    state.isChangingTime = action.payload;
   },
 
   setDuration: (state: playlistState, action: PayloadAction<number>) => {

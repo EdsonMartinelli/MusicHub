@@ -32,6 +32,9 @@ export default function PlayerDrive() {
   const isMuted = useSelector(
     (state: RootState) => state.playlistDrive.isMuted
   );
+  const isChangingTime = useSelector(
+    (state: RootState) => state.playlistDrive.isChangingTime
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -106,9 +109,13 @@ export default function PlayerDrive() {
 
   useEffect(() => {
     if (audioObject.current == null) return;
+    if (isChangingTime) {
+      audioObject.current.pause();
+      return;
+    }
     if (currentState == "playing") audioObject.current.play();
     if (currentState == "paused") audioObject.current.pause();
-  }, [currentState]);
+  }, [currentState, isChangingTime]);
 
   useEffect(() => {
     if (audioObject.current == null) return;

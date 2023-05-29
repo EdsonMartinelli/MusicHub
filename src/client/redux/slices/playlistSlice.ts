@@ -37,6 +37,7 @@ export const {
   updateVolume,
   setMuted,
   updateTime,
+  setChangeTime,
   setDuration,
 } = playlistDriveSlice.actions;
 
