@@ -7,7 +7,7 @@ export type SongInfo = {
   createdTime: string;
 };
 
-export type allStates = "idle" | "loading" | "paused" | "playing" | "ended";
+export type allStates = "idle" | "loading" | "playing" | "paused" | "ended";
 
 export type playlistState = {
   currentSong: SongInfo | null;
@@ -15,7 +15,9 @@ export type playlistState = {
   isInLoop: boolean;
   isInAutoPlay: boolean;
   currentState: allStates;
+  isChangingTime: boolean;
   volume: number;
+  isMuted: boolean;
   currentTime: number;
   duration: number;
   playlist: SongInfo[];
@@ -54,6 +56,10 @@ export const reducers = {
     state.volume = action.payload;
   },
 
+  setMuted: (state: playlistState, action: PayloadAction<boolean>) => {
+    state.isMuted = action.payload;
+  },
+
   updateTime: (state: playlistState, action: PayloadAction<number>) => {
     state.currentTime = action.payload;
   },
@@ -67,7 +73,6 @@ export const reducers = {
     if (newIndex >= 0) {
       state.index = newIndex;
       state.currentSong = state.playlist[newIndex ?? 0];
-      //state.isPlaying = true;
       state.currentState = "loading";
       state.isInLoop = false;
     }
@@ -78,7 +83,6 @@ export const reducers = {
     if (newIndex <= state.playlist.length - 1) {
       state.index = newIndex;
       state.currentSong = state.playlist[newIndex ?? 0];
-      //state.isPlaying = true;
       state.currentState = "loading";
       state.isInLoop = false;
     }
@@ -90,7 +94,6 @@ export const reducers = {
     );
     state.index = newIndex ?? 0;
     state.currentSong = state.playlist[newIndex ?? 0];
-    //state.isPlaying = true;
     state.currentState = "loading";
     state.isInLoop = false;
   },

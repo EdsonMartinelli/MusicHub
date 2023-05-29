@@ -5,12 +5,25 @@ import InputRange, { InputRangeProperties } from "../../InputRange/InputRange";
 
 type VolumeBarUIProps = {
   currentVolume: number;
+  isMuted: boolean;
   muteEvent: MouseEventHandler<HTMLButtonElement>;
   onInput: (e: InputRangeProperties) => void;
 };
 
+type IconVolumeUIProps = {
+  currentVolume: number;
+  isMuted: boolean;
+};
+
+function IconVolumeUI({ currentVolume, isMuted }: IconVolumeUIProps) {
+  if (currentVolume <= 0 || isMuted) return <SpeakerSlash size="100%" />;
+  if (currentVolume >= 0.8) return <SpeakerHigh size="100%" />;
+  return <SpeakerLow size="100%" />;
+}
+
 export default function VolumeBarUI({
   currentVolume,
+  isMuted,
   muteEvent,
   onInput,
 }: VolumeBarUIProps) {
@@ -25,17 +38,11 @@ export default function VolumeBarUI({
           hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs"
           onClick={muteEvent}
         >
-          {currentVolume > 0.8 ? (
-            <SpeakerHigh size="100%" />
-          ) : currentVolume > 0 ? (
-            <SpeakerLow size="100%" />
-          ) : (
-            <SpeakerSlash size="100%" />
-          )}
+          <IconVolumeUI currentVolume={currentVolume} isMuted={isMuted} />
         </button>
         <div className="w-full">
           <InputRange
-            value={currentVolume * 100}
+            value={isMuted ? 0 : currentVolume * 100}
             max={100}
             min={0}
             step={5}

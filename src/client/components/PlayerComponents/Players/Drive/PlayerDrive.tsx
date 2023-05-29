@@ -29,6 +29,9 @@ export default function PlayerDrive() {
   const isInAutoPlay = useSelector(
     (state: RootState) => state.playlistDrive.isInAutoPlay
   );
+  const isMuted = useSelector(
+    (state: RootState) => state.playlistDrive.isMuted
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export default function PlayerDrive() {
     function handleLoadStart() {
       dispatch(loadSong());
     }
+
     function handleLoadedData() {
       dispatch(playSong());
     }
@@ -53,62 +57,34 @@ export default function PlayerDrive() {
       audioPlayer.load();
     }
 
+    function handleDuration() {
+      dispatch(setDuration(audioObject.current?.duration ?? 0));
+    }
+
+    function handleTime() {
+      dispatch(updateTime(audioObject.current?.currentTime ?? 0));
+    }
+
     audioPlayer.addEventListener("loadstart", handleLoadStart);
     audioPlayer.addEventListener("loadeddata", handleLoadedData);
     audioPlayer.addEventListener("error", handleError);
+    audioPlayer.addEventListener("durationchange", handleDuration);
+    audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
       audioPlayer.removeEventListener("loadstart", handleLoadStart);
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);
+      audioPlayer.removeEventListener("durationchange", handleDuration);
+      audioPlayer.removeEventListener("timeupdate", handleTime);
     };
   }, [currentSong, dispatch]);
 
   useEffect(() => {
     if (currentSong == null) return;
     if (audioObject.current == null) return;
-    audioObject.current.volume = volume;
-  }, [currentSong, volume]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-    if (currentState == "playing") audioObject.current.play();
-    if (currentState == "paused") audioObject.current.pause();
-  }, [currentSong, currentState]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-    audioObject.current.loop = isInLoop;
-  }, [currentSong, isInLoop]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-
-    function handleTime() {
-      dispatch(setDuration(audioObject.current?.duration ?? 0));
-    }
-    audioObject.current.addEventListener("durationchange", handleTime);
-
-    return () => {
-      audioObject.current?.removeEventListener("durationchange", handleTime);
-    };
-  }, [currentSong, dispatch]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-    function handleTime() {
-      dispatch(updateTime(audioObject.current?.currentTime ?? 0));
-    }
-    audioObject.current.addEventListener("timeupdate", handleTime);
-
-    return () => {
-      audioObject.current?.removeEventListener("timeupdate", handleTime);
-    };
-  }, [currentSong, dispatch]);
+    audioObject.current.volume = isMuted ? 0 : volume;
+  }, [currentSong, volume, isMuted]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -127,6 +103,17 @@ export default function PlayerDrive() {
       audioObject.current?.removeEventListener("ended", handleEnded);
     };
   }, [currentSong, dispatch, isInLoop, isInAutoPlay]);
+
+  useEffect(() => {
+    if (audioObject.current == null) return;
+    if (currentState == "playing") audioObject.current.play();
+    if (currentState == "paused") audioObject.current.pause();
+  }, [currentState]);
+
+  useEffect(() => {
+    if (audioObject.current == null) return;
+    audioObject.current.loop = isInLoop;
+  }, [isInLoop]);
 
   const setNewTime = useCallback((newTime: number) => {
     if (audioObject.current == null) return;

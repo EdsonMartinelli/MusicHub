@@ -10,7 +10,9 @@ const initialState: playlistState = {
   isInLoop: false,
   isInAutoPlay: false,
   volume: 0.2,
+  isMuted: false,
   currentTime: 0,
+  isChangingTime: false,
   duration: 0,
   playlist: [],
 };
@@ -33,6 +35,7 @@ export const {
   previousSong,
   nextSong,
   updateVolume,
+  setMuted,
   updateTime,
   setDuration,
 } = playlistDriveSlice.actions;
