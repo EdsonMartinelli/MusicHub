@@ -7,8 +7,8 @@ export default function Teste() {
   return (
     <>
       {/* <Script src="https://www.youtube.com/iframe_api" /> */}
-      {/*<Video />*/}
-      <TesteDiv />
+      <Video />
+      {/* <TesteDiv /> */}
     </>
   );
 }

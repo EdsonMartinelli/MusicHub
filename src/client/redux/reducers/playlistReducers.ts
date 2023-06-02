@@ -7,7 +7,13 @@ export type SongInfo = {
   createdTime: string;
 };
 
-export type allStates = "idle" | "loading" | "playing" | "paused" | "ended";
+const controlStates = ["idle", "loading"] as const;
+export type readyStates = "playing" | "paused" | "ended";
+export type allStates = (typeof controlStates)[number] | readyStates;
+
+export function checkReadyState(state: allStates): state is readyStates {
+  return !controlStates.some((controlState) => controlState == state);
+}
 
 export type playlistState = {
   currentSong: SongInfo | null;

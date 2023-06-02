@@ -1,12 +1,22 @@
 "use client";
-import type { allStates } from "@/client/redux/reducers/playlistReducers";
+import type { readyStates } from "@/client/redux/reducers/playlistReducers";
 import { Play, Pause, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { MouseEventHandler } from "react";
 
 type PlayButtonUIProps = {
-  currentState: allStates;
+  currentState: readyStates;
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
+
+type IconPlayButtonUIProps = {
+  currentState: readyStates;
+};
+
+function IconPlayButtonUI({ currentState }: IconPlayButtonUIProps) {
+  if (currentState == "paused") return <Play weight="fill" size="100%" />;
+  if (currentState == "playing") return <Pause weight="fill" size="100%" />;
+  return <ArrowCounterClockwise weight="fill" size="100%" />;
+}
 
 export default function PlayButtonUI({
   currentState,
@@ -25,11 +35,7 @@ export default function PlayButtonUI({
         hover:after:px-2 hover:after:-translate-y-11 hover:after:rounded-md
         hover:after:text-xs`}
       >
-        {currentState == "paused" && <Play weight="fill" size="100%" />}
-        {currentState == "playing" && <Pause weight="fill" size="100%" />}
-        {currentState == "ended" && (
-          <ArrowCounterClockwise weight="fill" size="100%" />
-        )}
+        <IconPlayButtonUI currentState={currentState} />
       </button>
     </>
   );

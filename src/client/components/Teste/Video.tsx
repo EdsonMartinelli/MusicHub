@@ -13,25 +13,25 @@ export default function Video() {
 
   useEffect(() => {
     setIsLoaded(false);
-    iFrameRef.current?.setAttribute("src", iFrameRef.current?.src); // cache iframe
-    iFrameRef.current?.addEventListener("load", () => {
-      iFrameRef.current?.contentWindow?.postMessage(
-        '{"event":"listening"}',
-        "*"
-      );
-      setIsLoaded(false);
-    });
+    if (iFrameRef.current == null) return;
+    const videoPlayer = iFrameRef.current;
+    videoPlayer.src = `https://www.youtube-nocookie.com/embed/${id}?controls=0&origin=http://localhost:3000&enablejsapi=1`;
 
-    iFrameRef.current?.addEventListener("change", () => {
-      console.log("teste2");
-    });
-  }, []);
+    function handleListening() {
+      videoPlayer.contentWindow?.postMessage('{"event":"listening"}', "*");
+    }
+
+    videoPlayer.addEventListener("load", handleListening);
+    return () => {
+      videoPlayer.removeEventListener("load", handleListening);
+    };
+  }, [id]);
 
   useEffect(() => {
-    window.addEventListener("message", (event) => {
+    function handleEvent(event: MessageEvent<any>) {
       const data = JSON.parse(event.data);
       if (data.event == "initialDelivery" && data.info && data.info?.duration) {
-        setDuration(data.info?.duration);
+        setDuration(data.info.duration);
         setCurrentTime(0);
       }
       if (data.event == "onReady") {
@@ -40,7 +40,12 @@ export default function Video() {
       if (data.event == "infoDelivery" && data.info && data.info?.currentTime) {
         setCurrentTime(data.info.currentTime);
       }
-    });
+    }
+    window.addEventListener("message", handleEvent);
+
+    return () => {
+      window.removeEventListener("message", handleEvent);
+    };
   }, []);
 
   function seekTo(arg: [number, boolean]) {
@@ -55,12 +60,28 @@ export default function Video() {
     iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
   }
 
+  function pauseVideo() {
+    //'{"event":"command", "func":"playVideo", "args": null}'
+    const t = { event: "command", func: "pauseVideo", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
+  }
+
+  function mute() {
+    //'{"event":"command", "func":"playVideo", "args": null}'
+    const t = { event: "command", func: "mute", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
+  }
+
   function handleSeekTo(e: number) {
     seekTo([e, true]);
   }
 
   function handlePlayVideo() {
     playVideo();
+  }
+
+  function handlePauseVideo() {
+    pauseVideo();
   }
 
   function handleVideo1() {
@@ -75,11 +96,10 @@ export default function Video() {
     <>
       <iframe
         className={`${!isLoaded ? "hidden" : ""}`}
-        id={id}
         ref={iFrameRef}
+        allow="autoplay"
         width="640"
         height="360"
-        src={`https://www.youtube-nocookie.com/embed/${id}?origin=http://localhost:3000&enablejsapi=1`}
       ></iframe>
       <button onClick={handleVideo1} className="bg-red-700 text-white mr-2">
         video 1
@@ -94,6 +114,13 @@ export default function Video() {
             className="bg-red-700 text-white block"
           >
             Play Video
+          </button>
+
+          <button
+            onClick={handlePauseVideo}
+            className="bg-red-700 text-white block"
+          >
+            Pause Video
           </button>
           <div>{duration}</div>
           <div>{currentTime}</div>

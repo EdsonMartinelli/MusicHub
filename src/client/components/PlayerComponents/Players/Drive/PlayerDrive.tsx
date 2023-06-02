@@ -131,7 +131,7 @@ export default function PlayerDrive() {
   const artist = songNamedFormated?.split(" - ")[0];
   const songName = songNamedFormated?.split(" - ")[1];
 
-  if (currentSong == null || currentState == "idle") return <></>;
+  if (currentSong == null || currentState == "idle") return null;
 
   return (
     <div
