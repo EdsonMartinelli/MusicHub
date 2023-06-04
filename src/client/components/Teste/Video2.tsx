@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import InputRange from "../InputRange/InputRange";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
@@ -12,6 +12,17 @@ import {
   updateTime,
 } from "@/client/redux/slices/playlistYoutubeSlice";
 import { IFrameYoutube, IFrameYoutubeRef } from "./IFrameYoutube";
+
+type eventMessageType =
+  | "initialDelivery"
+  | "onReady"
+  | "infoDelivery"
+  | "apiInfoDelivery";
+
+type eventMessageFunctions = Record<
+  eventMessageType,
+  (info: Record<string, any> | null) => void
+>;
 
 export default function Video2() {
   const iFrameRef = useRef<IFrameYoutubeRef>(null);
@@ -37,6 +48,31 @@ export default function Video2() {
 
   const dispatch = useDispatch();
 
+  const initialDelivery = useCallback(
+    (info: Record<string, any> | null) => {
+      if (info == null) return;
+      if (info.duration == undefined) return;
+      dispatch(setDuration(info.duration));
+    },
+    [dispatch]
+  );
+
+  const onReady = useCallback(
+    (info: Record<string, any> | null) => {
+      dispatch(playSong());
+    },
+    [dispatch]
+  );
+
+  const infoDelivery = useCallback(
+    (info: Record<string, any> | null) => {
+      if (info == null) return;
+      if (info.currentTime == undefined) return;
+      dispatch(updateTime(info.currentTime));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     if (currentSong == null) return;
     if (iFrameRef.current == null) return;
@@ -47,14 +83,12 @@ export default function Video2() {
       `https://www.youtube-nocookie.com/embed/${currentSong.id}?controls=0&origin=http://localhost:3000&enablejsapi=1`
     );
     videoPlayer.init();
-
     return () => {
       videoPlayer.remove();
     };
   }, [currentSong, dispatch]);
 
   useEffect(() => {
-    if (currentSong == null) return;
     if (iFrameRef.current == null) return;
     if (isChangingTime) {
       iFrameRef.current.pauseVideo();
@@ -62,27 +96,31 @@ export default function Video2() {
     }
     if (currentState == "playing") iFrameRef.current.playVideo();
     if (currentState == "paused") iFrameRef.current.pauseVideo();
-  }, [currentState, isChangingTime, currentSong]);
+  }, [currentState, isChangingTime]);
 
   useEffect(() => {
-    function handleEvent(event: MessageEvent<any>) {
-      const data = JSON.parse(event.data);
-      if (data.event == "initialDelivery" && data.info && data.info?.duration) {
-        dispatch(setDuration(data.info.duration));
-      }
-      if (data.event == "onReady") {
-        dispatch(playSong());
-      }
-      if (data.event == "infoDelivery" && data.info && data.info?.currentTime) {
-        dispatch(updateTime(data.info.currentTime));
-      }
+    const messageObject: eventMessageFunctions = {
+      initialDelivery,
+      onReady,
+      infoDelivery,
+      apiInfoDelivery: (_info) => {},
+    };
+
+    function handleEvent(e: MessageEvent<any>) {
+      const data = JSON.parse(e.data) as {
+        event: eventMessageType;
+        info: Record<string, any> | null;
+      };
+      const event = data.event;
+      const info = data.info;
+      messageObject[event](info);
     }
     window.addEventListener("message", handleEvent);
 
     return () => {
       window.removeEventListener("message", handleEvent);
     };
-  }, [dispatch]);
+  }, [infoDelivery, initialDelivery, onReady]);
 
   function handleSeekTo(e: number) {
     iFrameRef.current?.seekTo([e, true]);

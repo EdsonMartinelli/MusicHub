@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
 export type IFrameYoutubeRef = {
   init: () => void;
@@ -18,54 +18,60 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
 ) {
   const iFrameRef = useRef<HTMLIFrameElement>(null);
 
-  function init() {
-    if (iFrameRef.current == null) return;
-    iFrameRef.current.addEventListener("load", () => {
-      iFrameRef.current?.contentWindow?.postMessage(
-        '{"event":"listening"}',
-        "*"
-      );
-    });
-  }
+  const listening = useCallback(() => {
+    iFrameRef.current?.contentWindow?.postMessage('{"event":"listening"}', "*");
+  }, []);
 
-  function remove() {
+  const init = useCallback(() => {
     if (iFrameRef.current == null) return;
-    iFrameRef.current.removeEventListener("load", () => {
-      iFrameRef.current?.contentWindow?.postMessage(
-        '{"event":"listening"}',
-        "*"
-      );
-    });
-  }
+    iFrameRef.current.addEventListener("load", listening);
+  }, [listening]);
 
-  function setSrc(url: string) {
+  const remove = useCallback(() => {
+    if (iFrameRef.current == null) return;
+    iFrameRef.current.removeEventListener("load", listening);
+  }, [listening]);
+
+  const setSrc = useCallback((url: string) => {
     if (iFrameRef.current == null) return;
     iFrameRef.current.src = url;
-  }
+  }, []);
 
-  function seekTo(arg: [number, boolean]) {
+  const seekTo = useCallback((arg: [number, boolean]) => {
     //'{"event":"command", "func":"seekTo", "args":[30,true]}'
-    const t = { event: "command", func: "seekTo", args: arg };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
+    const objEvent = { event: "command", func: "seekTo", args: arg };
+    iFrameRef.current?.contentWindow?.postMessage(
+      JSON.stringify(objEvent),
+      "*"
+    );
+  }, []);
 
-  function playVideo() {
+  const playVideo = useCallback(() => {
     //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "playVideo", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
+    const objEvent = { event: "command", func: "playVideo", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(
+      JSON.stringify(objEvent),
+      "*"
+    );
+  }, []);
 
-  function pauseVideo() {
-    //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "pauseVideo", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
+  const pauseVideo = useCallback(() => {
+    //'{"event":"command", "func":"pauseVideo", "args": null}'
+    const objEvent = { event: "command", func: "pauseVideo", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(
+      JSON.stringify(objEvent),
+      "*"
+    );
+  }, []);
 
-  function mute() {
-    //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "mute", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
+  const mute = useCallback(() => {
+    //'{"event":"command", "func":"mute", "args": null}'
+    const objEvent = { event: "command", func: "mute", args: null };
+    iFrameRef.current?.contentWindow?.postMessage(
+      JSON.stringify(objEvent),
+      "*"
+    );
+  }, []);
 
   useImperativeHandle(
     ref,
@@ -80,7 +86,7 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
         mute,
       };
     },
-    []
+    [init, mute, pauseVideo, playVideo, remove, seekTo, setSrc]
   );
 
   return (
@@ -93,15 +99,3 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
     ></iframe>
   );
 });
-
-/*export function T() {
-  const refT = useRef<IFrameYoutubeRef>(null);
-
-  function teste() {
-    refT.current?.addEventListener("load", () => {
-        console.log("teste")
-    });
-  }
-
-  return <IFrameYoutube ref={refT} />;
-}*/
