@@ -1,4 +1,4 @@
-import ProviderWrapper from "@/client/components/DriveSongList/ProviderWrapper";
+import ProviderWrapperDrive from "@/client/components/Providers/ProviderWrapperDrive";
 
 export default function Teste() {
   const data = [
@@ -25,7 +25,7 @@ export default function Teste() {
   ];
   return (
     <>
-      <ProviderWrapper playlist={data} />
+      <ProviderWrapperDrive playlist={data} />
     </>
   );
 }

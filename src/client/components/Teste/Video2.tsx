@@ -11,8 +11,10 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistYoutubeSlice";
+import { IFrameYoutube, IFrameYoutubeRef } from "./IFrameYoutube";
 
-export default function Video() {
+export default function Video2() {
+  const iFrameRef = useRef<IFrameYoutubeRef>(null);
   const currentSong = useSelector(
     (state: RootState) => state.playlistYoutube.currentSong
   );
@@ -34,7 +36,6 @@ export default function Video() {
   );
 
   const dispatch = useDispatch();
-  const iFrameRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -42,14 +43,13 @@ export default function Video() {
 
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
-    videoPlayer.src = `https://www.youtube-nocookie.com/embed/${currentSong.id}?controls=0&origin=http://localhost:3000&enablejsapi=1`;
+    videoPlayer.setSrc(
+      `https://www.youtube-nocookie.com/embed/${currentSong.id}?controls=0&origin=http://localhost:3000&enablejsapi=1`
+    );
+    videoPlayer.init();
 
-    function handleListening() {
-      videoPlayer.contentWindow?.postMessage('{"event":"listening"}', "*");
-    }
-    videoPlayer.addEventListener("load", handleListening);
     return () => {
-      videoPlayer.removeEventListener("load", handleListening);
+      videoPlayer.remove();
     };
   }, [currentSong, dispatch]);
 
@@ -57,11 +57,11 @@ export default function Video() {
     if (currentSong == null) return;
     if (iFrameRef.current == null) return;
     if (isChangingTime) {
-      pauseVideo();
+      iFrameRef.current.pauseVideo();
       return;
     }
-    if (currentState == "playing") playVideo();
-    if (currentState == "paused") pauseVideo();
+    if (currentState == "playing") iFrameRef.current.playVideo();
+    if (currentState == "paused") iFrameRef.current.pauseVideo();
   }, [currentState, isChangingTime, currentSong]);
 
   useEffect(() => {
@@ -84,43 +84,13 @@ export default function Video() {
     };
   }, [dispatch]);
 
-  function seekTo(arg: [number, boolean]) {
-    //'{"event":"command", "func":"seekTo", "args":[30,true]}'
-    const t = { event: "command", func: "seekTo", args: arg };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
-
-  function playVideo() {
-    //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "playVideo", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
-
-  function pauseVideo() {
-    //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "pauseVideo", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
-
-  function mute() {
-    //'{"event":"command", "func":"playVideo", "args": null}'
-    const t = { event: "command", func: "mute", args: null };
-    iFrameRef.current?.contentWindow?.postMessage(JSON.stringify(t), "*");
-  }
-
   function handleSeekTo(e: number) {
-    seekTo([e, true]);
+    iFrameRef.current?.seekTo([e, true]);
   }
 
   return (
     <>
-      <iframe
-        className="hidden"
-        ref={iFrameRef}
-        allow="autoplay"
-        width="640"
-        height="360"
-      ></iframe>
+      <IFrameYoutube ref={iFrameRef} />
 
       {currentState == "loading" || currentState == "idle" ? null : (
         <>
