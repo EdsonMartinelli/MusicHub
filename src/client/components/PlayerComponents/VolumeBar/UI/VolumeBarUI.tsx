@@ -1,7 +1,10 @@
 "use client";
+
+import InputRange, {
+  InputRangeProperties,
+} from "@/client/components/InputRange/InputRange";
 import { SpeakerLow, SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
 import { MouseEventHandler } from "react";
-import InputRange, { InputRangeProperties } from "../../InputRange/InputRange";
 
 type VolumeBarUIProps = {
   currentVolume: number;

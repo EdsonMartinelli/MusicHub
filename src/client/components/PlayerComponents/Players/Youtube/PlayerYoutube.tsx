@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import InputRange from "../InputRange/InputRange";
+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import {
@@ -13,7 +13,20 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistYoutubeSlice";
-import { IFrameYoutube, IFrameYoutubeRef } from "./IFrameYoutube";
+import {
+  IFrameYoutube,
+  IFrameYoutubeRef,
+} from "@/client/components/Teste/IFrameYoutube";
+import { allStates } from "@/client/redux/reducers/playlistReducers";
+import { ProgressBarYoutubeProps } from "../../ProgressBar/ProgressBarYoutube";
+import PlayerYoutubeUISkeleton from "./PlayerYoutubeUISkeleton";
+import PlayerYoutubeUI from "./PlayerYoutubeUI";
+
+type handlePlayerProps = {
+  currentState: allStates;
+  channel: string;
+  videoName: string;
+} & ProgressBarYoutubeProps;
 
 type eventMessageType =
   | "initialDelivery"
@@ -26,7 +39,7 @@ type eventMessageFunctions = Record<
   (info: Record<string, any> | null) => void
 >;
 
-export default function Video2() {
+export default function PlayerYoutube() {
   const iFrameRef = useRef<IFrameYoutubeRef>(null);
   const currentSong = useSelector(
     (state: RootState) => state.playlistYoutube.currentSong
@@ -36,12 +49,6 @@ export default function Video2() {
   );
   const isChangingTime = useSelector(
     (state: RootState) => state.playlistYoutube.isChangingTime
-  );
-  const duration = useSelector(
-    (state: RootState) => state.playlistYoutube.duration
-  );
-  const currentTime = useSelector(
-    (state: RootState) => state.playlistYoutube.currentTime
   );
   const isInLoop = useSelector(
     (state: RootState) => state.playlistYoutube.isInLoop
@@ -156,41 +163,48 @@ export default function Video2() {
     };
   }, [infoDelivery, initialDelivery, onReady]);
 
-  function handleSeekTo(e: number) {
-    iFrameRef.current?.seekTo([e, true]);
-  }
+  const setNewTime = useCallback((newTime: number) => {
+    if (iFrameRef.current == null) return;
+    iFrameRef.current.seekTo([newTime, true]);
+  }, []);
+
+  const channel = currentSong?.name.split(" - ")[0];
+  const videoName = currentSong?.name.split(" - ")[1];
 
   return (
     <>
       <IFrameYoutube ref={iFrameRef} />
-
-      {currentState == "loading" || currentState == "idle" ? null : (
-        <>
-          <button
-            onClick={() => dispatch(playSong())}
-            className="bg-red-700 text-white block"
-          >
-            Play Video
-          </button>
-
-          <button
-            onClick={() => dispatch(pauseSong())}
-            className="bg-red-700 text-white block"
-          >
-            Pause Video
-          </button>
-          <div>{duration}</div>
-          <div>{currentTime}</div>
-          <div className={"w-[400px]"}>
-            <InputRange
-              value={currentTime}
-              max={duration}
-              min={0}
-              onInput={(e) => handleSeekTo(e.value)}
-            />
-          </div>
-        </>
-      )}
+      <HandlePlayer
+        currentState={currentState}
+        setNewTime={setNewTime}
+        channel={channel ?? " "}
+        videoName={videoName ?? " "}
+      />
     </>
+  );
+}
+
+function HandlePlayer({
+  currentState,
+  setNewTime,
+  videoName,
+  channel,
+}: handlePlayerProps) {
+  if (currentState == "idle") return null;
+  return (
+    <div
+      className="fixed bottom-0 left-0 w-full h-28 lg:h-24 bg-zinc-900
+      border-t-[1px] border-zinc-700/50 animate-playerShow"
+    >
+      {currentState == "loading" ? (
+        <PlayerYoutubeUISkeleton />
+      ) : (
+        <PlayerYoutubeUI
+          artist={channel}
+          song={videoName}
+          setNewTime={setNewTime}
+        />
+      )}
+    </div>
   );
 }

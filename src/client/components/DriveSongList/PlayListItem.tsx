@@ -1,14 +1,14 @@
 "use client";
 
-import {
-  pauseSong,
-  playSong,
-  selectSong,
-} from "@/client/redux/slices/playlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowCounterClockwise, Pause, Play } from "@phosphor-icons/react";
 import { RootState } from "@/client/redux/store";
 import { SongInfo } from "@/client/redux/reducers/playlistReducers";
+import {
+  pauseSong,
+  playSong,
+  selectSong,
+} from "@/client/redux/slices/playlistDriveSlice";
 
 export default function PlayListItem({
   id,

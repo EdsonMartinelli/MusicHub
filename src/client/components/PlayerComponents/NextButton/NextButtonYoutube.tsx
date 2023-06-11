@@ -2,9 +2,9 @@
 
 import { useDispatch } from "react-redux";
 import NextButtonUI from "./UI/NextButtonUI";
-import { nextSong } from "@/client/redux/slices/playlistDriveSlice";
+import { nextSong } from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function NextButtonDrive() {
+export default function NextButtonYoutube() {
   const dispatch = useDispatch();
 
   function handleNext() {

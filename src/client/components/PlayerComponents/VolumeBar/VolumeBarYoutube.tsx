@@ -3,18 +3,18 @@ import { useCallback, MouseEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
 import { InputRangeProperties } from "../../InputRange/InputRange";
+import VolumeBarUI from "./UI/VolumeBarUI";
 import {
   setMuted,
   updateVolume,
-} from "@/client/redux/slices/playlistDriveSlice";
-import VolumeBarUI from "./UI/VolumeBarUI";
+} from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function VolumeBarDrive() {
+export default function VolumeBarYoutube() {
   const currentVolume = useSelector(
-    (state: RootState) => state.playlistDrive.volume
+    (state: RootState) => state.playlistYoutube.volume
   );
   const isMuted = useSelector(
-    (state: RootState) => state.playlistDrive.isMuted
+    (state: RootState) => state.playlistYoutube.isMuted
   );
   const dispatch = useDispatch();
 

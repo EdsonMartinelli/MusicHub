@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
+import PlayerDriveUI from "./PlayerDriveUI";
+import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
 import {
   endSong,
   loadSong,
@@ -10,9 +12,7 @@ import {
   playSong,
   setDuration,
   updateTime,
-} from "@/client/redux/slices/playlistSlice";
-import PlayerDriveUI from "./PlayerDriveUI";
-import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
+} from "@/client/redux/slices/playlistDriveSlice";
 
 export default function PlayerDrive() {
   const audioObject = useRef<HTMLAudioElement | null>(null);

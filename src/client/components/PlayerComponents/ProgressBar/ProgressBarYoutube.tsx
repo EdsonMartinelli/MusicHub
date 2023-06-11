@@ -3,37 +3,37 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import { InputRangeProperties } from "../../InputRange/InputRange";
-import { setChangeTime } from "@/client/redux/slices/playlistDriveSlice";
 import ProgressBarUI from "./UI/ProgressBarUI";
+import { setChangeTime } from "@/client/redux/slices/playlistYoutubeSlice";
 
-export type ProgressBarDriveProps = {
+export type ProgressBarYoutubeProps = {
   setNewTime: (newTime: number) => void;
 };
 
-export default function ProgressBarDrive({
+export default function ProgressBarYoutube({
   setNewTime,
-}: ProgressBarDriveProps) {
+}: ProgressBarYoutubeProps) {
   const currentTime = useSelector(
-    (state: RootState) => state.playlistDrive.currentTime
+    (state: RootState) => state.playlistYoutube.currentTime
   );
   const duration = useSelector(
-    (state: RootState) => state.playlistDrive.duration
+    (state: RootState) => state.playlistYoutube.duration
   );
   const dispatch = useDispatch();
 
   const returnToPlay = useCallback(
-    (_: InputRangeProperties) => {
+    (e: InputRangeProperties) => {
+      setNewTime(e.value);
       dispatch(setChangeTime(false));
     },
-    [dispatch]
+    [dispatch, setNewTime]
   );
 
   const setTimeOnPause = useCallback(
-    (e: InputRangeProperties) => {
+    (_: InputRangeProperties) => {
       dispatch(setChangeTime(true));
-      setNewTime(e.value);
     },
-    [dispatch, setNewTime]
+    [dispatch]
   );
 
   return (

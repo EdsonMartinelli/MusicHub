@@ -8,6 +8,7 @@ export type IFrameYoutubeRef = {
   playVideo: () => void;
   pauseVideo: () => void;
   mute: () => void;
+  setVolume: (arg: number) => void;
 };
 
 export type IFrameYoutubeProps = {};
@@ -73,6 +74,16 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
     );
   }, []);
 
+  const setVolume = useCallback((arg: number) => {
+    //'{"event":"command", "func":"setVolume", "args": [30]}'
+    const objEvent = { event: "command", func: "setVolume", args: [arg * 100] };
+    console.log(objEvent);
+    iFrameRef.current?.contentWindow?.postMessage(
+      JSON.stringify(objEvent),
+      "*"
+    );
+  }, []);
+
   useImperativeHandle(
     ref,
     () => {
@@ -84,9 +95,10 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
         playVideo,
         pauseVideo,
         mute,
+        setVolume,
       };
     },
-    [init, mute, pauseVideo, playVideo, remove, seekTo, setSrc]
+    [init, mute, pauseVideo, playVideo, remove, seekTo, setSrc, setVolume]
   );
 
   return (

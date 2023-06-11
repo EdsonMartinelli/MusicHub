@@ -3,11 +3,11 @@
 import { RootState } from "@/client/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import AutoPlayButtonUI from "./UI/AutoPlayButtonUI";
-import { setAutoPlay } from "@/client/redux/slices/playlistDriveSlice";
+import { setAutoPlay } from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function AutoPlayButtonDrive() {
+export default function AutoPlayButtonYoutube() {
   const autoPlay = useSelector(
-    (state: RootState) => state.playlistDrive.isInAutoPlay
+    (state: RootState) => state.playlistYoutube.isInAutoPlay
   );
   const dispatch = useDispatch();
 

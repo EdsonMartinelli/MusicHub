@@ -3,10 +3,12 @@
 import { RootState } from "@/client/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import LoopButtonUI from "./UI/LoopButtonUI";
-import { setLoop } from "@/client/redux/slices/playlistDriveSlice";
+import { setLoop } from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function LoopButtonDrive() {
-  const loop = useSelector((state: RootState) => state.playlistDrive.isInLoop);
+export default function LoopButtonYoutube() {
+  const loop = useSelector(
+    (state: RootState) => state.playlistYoutube.isInLoop
+  );
   const dispatch = useDispatch();
 
   function toogleLoop() {

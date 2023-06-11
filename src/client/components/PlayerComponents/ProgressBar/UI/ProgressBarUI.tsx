@@ -1,7 +1,9 @@
 "use client";
 
-import InputRange, { InputRangeProperties } from "../../InputRange/InputRange";
-import TimestampUI from "./TimestampUI";
+import InputRange, {
+  InputRangeProperties,
+} from "@/client/components/InputRange/InputRange";
+import TimestampUI from "../TimestampUI";
 
 type ProgressBarUIProps = {
   currentTime: number;

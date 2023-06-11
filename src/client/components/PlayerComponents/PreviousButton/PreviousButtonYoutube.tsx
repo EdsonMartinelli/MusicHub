@@ -2,9 +2,9 @@
 
 import { useDispatch } from "react-redux";
 import PreviousButtonUI from "./UI/PreviousButtonUI";
-import { previousSong } from "@/client/redux/slices/playlistDriveSlice";
+import { previousSong } from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function PreviousButtonDrive() {
+export default function PreviousButtonYoutube() {
   const dispatch = useDispatch();
 
   function handlePrevious() {

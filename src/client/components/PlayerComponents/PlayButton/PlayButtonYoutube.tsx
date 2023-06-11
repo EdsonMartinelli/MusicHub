@@ -4,11 +4,14 @@ import { RootState } from "@/client/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { checkReadyState } from "@/client/redux/reducers/playlistReducers";
 import PlayButtonUI from "./UI/PlayButtonUI";
-import { pauseSong, playSong } from "@/client/redux/slices/playlistDriveSlice";
+import {
+  pauseSong,
+  playSong,
+} from "@/client/redux/slices/playlistYoutubeSlice";
 
-export default function PlayButtonDrive() {
+export default function PlayButtonYoutube() {
   const currentState = useSelector(
-    (state: RootState) => state.playlistDrive.currentState
+    (state: RootState) => state.playlistYoutube.currentState
   );
   const dispatch = useDispatch();
 
