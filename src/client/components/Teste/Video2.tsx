@@ -5,7 +5,9 @@ import InputRange from "../InputRange/InputRange";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import {
+  endSong,
   loadSong,
+  nextSong,
   pauseSong,
   playSong,
   setDuration,
@@ -46,6 +48,14 @@ export default function Video2() {
     (state: RootState) => state.playlistYoutube.currentTime
   );
 
+  const isInLoop = useSelector(
+    (state: RootState) => state.playlistYoutube.isInLoop
+  );
+
+  const isInAutoPlay = useSelector(
+    (state: RootState) => state.playlistYoutube.isInAutoPlay
+  );
+
   const dispatch = useDispatch();
 
   const initialDelivery = useCallback(
@@ -58,19 +68,37 @@ export default function Video2() {
   );
 
   const onReady = useCallback(
-    (info: Record<string, any> | null) => {
+    (_info: Record<string, any> | null) => {
       dispatch(playSong());
     },
     [dispatch]
   );
 
+  const handleEnded = useCallback(() => {
+    if (isInLoop) {
+      iFrameRef.current?.seekTo([0, true]);
+      iFrameRef.current?.playVideo();
+      return;
+    }
+    if (isInAutoPlay) {
+      dispatch(nextSong());
+      return;
+    }
+    dispatch(endSong());
+  }, [dispatch, isInAutoPlay, isInLoop]);
+
   const infoDelivery = useCallback(
     (info: Record<string, any> | null) => {
       if (info == null) return;
       if (info.currentTime == undefined) return;
+
       dispatch(updateTime(info.currentTime));
+      //Loop
+      if (info.playerState == 0) {
+        handleEnded();
+      }
     },
-    [dispatch]
+    [dispatch, handleEnded]
   );
 
   useEffect(() => {
@@ -107,6 +135,7 @@ export default function Video2() {
     };
 
     function handleEvent(e: MessageEvent<any>) {
+      console.log(e.data);
       const data = JSON.parse(e.data) as {
         event: eventMessageType;
         info: Record<string, any> | null;
