@@ -8,7 +8,6 @@ import {
   endSong,
   loadSong,
   nextSong,
-  pauseSong,
   playSong,
   setDuration,
   updateTime,
@@ -86,18 +85,19 @@ export default function PlayerYoutube() {
     [dispatch]
   );
 
-  const handleEnded = useCallback(() => {
+  useEffect(() => {
+    if (currentState != "ended") return;
+    if (isChangingTime) return;
     if (isInLoop) {
       iFrameRef.current?.seekTo([0, true]);
-      iFrameRef.current?.playVideo();
+      dispatch(playSong());
       return;
     }
     if (isInAutoPlay) {
       dispatch(nextSong());
       return;
     }
-    dispatch(endSong());
-  }, [dispatch, isInAutoPlay, isInLoop]);
+  }, [dispatch, isInAutoPlay, isInLoop, isChangingTime, currentState]);
 
   const infoDelivery = useCallback(
     (info: Record<string, any> | null) => {
@@ -105,12 +105,12 @@ export default function PlayerYoutube() {
       if (info.currentTime == undefined) return;
 
       dispatch(updateTime(info.currentTime));
-      //Loop
+
       if (info.playerState == 0) {
-        handleEnded();
+        dispatch(endSong());
       }
     },
-    [dispatch, handleEnded]
+    [dispatch]
   );
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export default function PlayerYoutube() {
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
     videoPlayer.setSrc(
-      `https://www.youtube-nocookie.com/embed/${currentSong.id}?controls=0&origin=http://localhost:3000&enablejsapi=1`
+      `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=http://localhost:3000&enablejsapi=1`
     );
     videoPlayer.init();
     return () => {
@@ -147,7 +147,6 @@ export default function PlayerYoutube() {
     };
 
     function handleEvent(e: MessageEvent<any>) {
-      console.log(e.data);
       const data = JSON.parse(e.data) as {
         event: eventMessageType;
         info: Record<string, any> | null;

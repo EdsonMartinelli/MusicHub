@@ -77,7 +77,6 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef>(function IFrame(
   const setVolume = useCallback((arg: number) => {
     //'{"event":"command", "func":"setVolume", "args": [30]}'
     const objEvent = { event: "command", func: "setVolume", args: [arg * 100] };
-    console.log(objEvent);
     iFrameRef.current?.contentWindow?.postMessage(
       JSON.stringify(objEvent),
       "*"

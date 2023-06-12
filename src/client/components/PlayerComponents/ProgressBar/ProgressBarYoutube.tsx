@@ -22,18 +22,18 @@ export default function ProgressBarYoutube({
   const dispatch = useDispatch();
 
   const returnToPlay = useCallback(
-    (e: InputRangeProperties) => {
-      setNewTime(e.value);
+    (_: InputRangeProperties) => {
       dispatch(setChangeTime(false));
     },
-    [dispatch, setNewTime]
+    [dispatch]
   );
 
   const setTimeOnPause = useCallback(
-    (_: InputRangeProperties) => {
+    (e: InputRangeProperties) => {
       dispatch(setChangeTime(true));
+      setNewTime(e.value);
     },
-    [dispatch]
+    [dispatch, setNewTime]
   );
 
   return (
