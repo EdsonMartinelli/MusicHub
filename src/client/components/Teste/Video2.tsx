@@ -157,7 +157,7 @@ export default function Video2() {
   }, [infoDelivery, initialDelivery, onReady]);
 
   function handleSeekTo(e: number) {
-    iFrameRef.current?.seekTo([e, true]);
+    iFrameRef.current?.seekTo([duration, true]);
   }
 
   return (

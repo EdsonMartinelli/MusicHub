@@ -122,10 +122,16 @@ export default function PlayerDrive() {
     audioObject.current.loop = isInLoop;
   }, [isInLoop]);
 
-  const setNewTime = useCallback((newTime: number) => {
-    if (audioObject.current == null) return;
-    audioObject.current.currentTime = newTime;
-  }, []);
+  const setNewTime = useCallback(
+    (newTime: number) => {
+      if (audioObject.current == null) return;
+      audioObject.current.currentTime = newTime;
+      if (currentState == "ended") {
+        dispatch(playSong());
+      }
+    },
+    [currentState, dispatch]
+  );
 
   const songNamedFormated = currentSong?.name.replace(".mp3", "");
   const artist = songNamedFormated?.split(" - ")[0];

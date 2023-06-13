@@ -19,7 +19,8 @@ type PlayerYoutubeUIProps = {
 export default function PlayerYoutubeUI({
   song,
   artist,
-  setNewTime,
+  handleTimeOnInput,
+  handleTimeAfterInput,
 }: PlayerYoutubeUIProps) {
   return (
     <div className="flex flex-row items-center gap-4 w-full h-full text-white">
@@ -55,7 +56,10 @@ export default function PlayerYoutubeUI({
         </div>
 
         <div className="w-full h-fit">
-          <ProgressBarYoutube setNewTime={setNewTime} />
+          <ProgressBarYoutube
+            handleTimeOnInput={handleTimeOnInput}
+            handleTimeAfterInput={handleTimeAfterInput}
+          />
         </div>
       </div>
 

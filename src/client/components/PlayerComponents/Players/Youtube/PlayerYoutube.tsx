@@ -55,11 +55,18 @@ export default function PlayerYoutube() {
   const isInAutoPlay = useSelector(
     (state: RootState) => state.playlistYoutube.isInAutoPlay
   );
+  const duration = useSelector(
+    (state: RootState) => state.playlistYoutube.duration
+  );
   const isMuted = useSelector(
     (state: RootState) => state.playlistYoutube.isMuted
   );
   const volume = useSelector(
     (state: RootState) => state.playlistYoutube.volume
+  );
+
+  const currentTime = useSelector(
+    (state: RootState) => state.playlistYoutube.currentTime
   );
   const dispatch = useDispatch();
 
@@ -87,7 +94,6 @@ export default function PlayerYoutube() {
 
   useEffect(() => {
     if (currentState != "ended") return;
-    if (isChangingTime) return;
     if (isInLoop) {
       iFrameRef.current?.seekTo([0, true]);
       dispatch(playSong());
@@ -97,20 +103,20 @@ export default function PlayerYoutube() {
       dispatch(nextSong());
       return;
     }
-  }, [dispatch, isInAutoPlay, isInLoop, isChangingTime, currentState]);
+  }, [dispatch, isInAutoPlay, isInLoop, currentState]);
 
   const infoDelivery = useCallback(
     (info: Record<string, any> | null) => {
       if (info == null) return;
-      if (info.currentTime == undefined) return;
-
-      dispatch(updateTime(info.currentTime));
+      if (currentState == "ended") return;
+      if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
 
       if (info.playerState == 0) {
+        dispatch(updateTime(duration));
         dispatch(endSong());
       }
     },
-    [dispatch]
+    [currentState, dispatch, duration]
   );
 
   useEffect(() => {
@@ -136,6 +142,7 @@ export default function PlayerYoutube() {
     }
     if (currentState == "playing") iFrameRef.current.playVideo();
     if (currentState == "paused") iFrameRef.current.pauseVideo();
+    if (currentState == "ended") iFrameRef.current.pauseVideo();
   }, [currentState, isChangingTime]);
 
   useEffect(() => {
@@ -162,10 +169,20 @@ export default function PlayerYoutube() {
     };
   }, [infoDelivery, initialDelivery, onReady]);
 
-  const setNewTime = useCallback((newTime: number) => {
+  const handleTimeOnInput = useCallback(
+    (newTime: number) => {
+      dispatch(updateTime(newTime));
+    },
+    [dispatch]
+  );
+
+  function handleTimeAfterInput() {
     if (iFrameRef.current == null) return;
-    iFrameRef.current.seekTo([newTime, true]);
-  }, []);
+    iFrameRef.current.seekTo([currentTime, true]);
+    if (currentState == "ended") {
+      dispatch(playSong());
+    }
+  }
 
   const channel = currentSong?.name.split(" - ")[0];
   const videoName = currentSong?.name.split(" - ")[1];
@@ -175,7 +192,8 @@ export default function PlayerYoutube() {
       <IFrameYoutube ref={iFrameRef} />
       <HandlePlayer
         currentState={currentState}
-        setNewTime={setNewTime}
+        handleTimeOnInput={handleTimeOnInput}
+        handleTimeAfterInput={handleTimeAfterInput}
         channel={channel ?? " "}
         videoName={videoName ?? " "}
       />
@@ -185,7 +203,8 @@ export default function PlayerYoutube() {
 
 function HandlePlayer({
   currentState,
-  setNewTime,
+  handleTimeOnInput,
+  handleTimeAfterInput,
   videoName,
   channel,
 }: handlePlayerProps) {
@@ -201,7 +220,8 @@ function HandlePlayer({
         <PlayerYoutubeUI
           artist={channel}
           song={videoName}
-          setNewTime={setNewTime}
+          handleTimeOnInput={handleTimeOnInput}
+          handleTimeAfterInput={handleTimeAfterInput}
         />
       )}
     </div>
