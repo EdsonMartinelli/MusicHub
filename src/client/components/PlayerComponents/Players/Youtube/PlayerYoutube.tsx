@@ -73,55 +73,6 @@ export default function PlayerYoutube() {
   useEffect(() => {
     if (currentSong == null) return;
     if (iFrameRef.current == null) return;
-    iFrameRef.current.setVolume(isMuted ? 0 : volume);
-  }, [currentSong, volume, isMuted]);
-
-  const initialDelivery = useCallback(
-    (info: Record<string, any> | null) => {
-      if (info == null) return;
-      if (info.duration == undefined) return;
-      dispatch(setDuration(info.duration));
-    },
-    [dispatch]
-  );
-
-  const onReady = useCallback(
-    (_info: Record<string, any> | null) => {
-      dispatch(playSong());
-    },
-    [dispatch]
-  );
-
-  useEffect(() => {
-    if (currentState != "ended") return;
-    if (isInLoop) {
-      iFrameRef.current?.seekTo([0, true]);
-      dispatch(playSong());
-      return;
-    }
-    if (isInAutoPlay) {
-      dispatch(nextSong());
-      return;
-    }
-  }, [dispatch, isInAutoPlay, isInLoop, currentState]);
-
-  const infoDelivery = useCallback(
-    (info: Record<string, any> | null) => {
-      if (info == null) return;
-      if (currentState == "ended") return;
-      if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
-
-      if (info.playerState == 0) {
-        dispatch(updateTime(duration));
-        dispatch(endSong());
-      }
-    },
-    [currentState, dispatch, duration]
-  );
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (iFrameRef.current == null) return;
 
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
@@ -142,8 +93,52 @@ export default function PlayerYoutube() {
     }
     if (currentState == "playing") iFrameRef.current.playVideo();
     if (currentState == "paused") iFrameRef.current.pauseVideo();
-    if (currentState == "ended") iFrameRef.current.pauseVideo();
   }, [currentState, isChangingTime]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (iFrameRef.current == null) return;
+    iFrameRef.current.setVolume(isMuted ? 0 : volume);
+  }, [currentSong, volume, isMuted]);
+
+  const initialDelivery = useCallback(
+    (info: Record<string, any> | null) => {
+      if (info == null) return;
+      if (info.duration == undefined) return;
+      dispatch(setDuration(info.duration));
+    },
+    [dispatch]
+  );
+
+  const onReady = useCallback(
+    (_info: Record<string, any> | null) => {
+      dispatch(playSong());
+    },
+    [dispatch]
+  );
+
+  const infoDelivery = useCallback(
+    (info: Record<string, any> | null) => {
+      if (info == null) return;
+      if (currentState == "ended") return;
+      if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
+
+      if (info.playerState == 0) {
+        dispatch(updateTime(duration));
+        dispatch(endSong());
+        if (isInLoop) {
+          iFrameRef.current?.seekTo([0, true]);
+          dispatch(playSong());
+          return;
+        }
+        if (isInAutoPlay) {
+          dispatch(nextSong());
+          return;
+        }
+      }
+    },
+    [currentState, dispatch, duration, isInAutoPlay, isInLoop]
+  );
 
   useEffect(() => {
     const messageObject: eventMessageFunctions = {
