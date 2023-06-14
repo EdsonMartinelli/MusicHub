@@ -23,19 +23,6 @@ export default function ProgressBarYoutube({
   );
   const dispatch = useDispatch();
 
-  function returnToPlay(_: InputRangeProperties) {
-    dispatch(setChangeTime(false));
-    handleTimeAfterInput();
-  }
-
-  /*const returnToPlay = useCallback(
-    (_: InputRangeProperties) => {
-      dispatch(setChangeTime(false));
-      
-    },
-    [dispatch]
-  );*/
-
   const setTimeOnPause = useCallback(
     (e: InputRangeProperties) => {
       dispatch(setChangeTime(true));
@@ -43,6 +30,11 @@ export default function ProgressBarYoutube({
     },
     [dispatch, handleTimeOnInput]
   );
+
+  function returnToPlay(_: InputRangeProperties) {
+    handleTimeAfterInput();
+    dispatch(setChangeTime(false));
+  }
 
   return (
     <ProgressBarUI

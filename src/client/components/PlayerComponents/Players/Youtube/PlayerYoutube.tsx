@@ -91,8 +91,16 @@ export default function PlayerYoutube() {
       iFrameRef.current.pauseVideo();
       return;
     }
-    if (currentState == "playing") iFrameRef.current.playVideo();
-    if (currentState == "paused") iFrameRef.current.pauseVideo();
+    if (currentState == "playing") {
+      iFrameRef.current.playVideo();
+    }
+    if (currentState == "paused") {
+      iFrameRef.current.pauseVideo();
+    }
+    if (currentState == "ended") {
+      iFrameRef.current.seekTo([0, true]);
+      iFrameRef.current.pauseVideo();
+    }
   }, [currentState, isChangingTime]);
 
   useEffect(() => {
@@ -121,6 +129,7 @@ export default function PlayerYoutube() {
     (info: Record<string, any> | null) => {
       if (info == null) return;
       if (currentState == "ended") return;
+      if (isChangingTime) return;
       if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
 
       if (info.playerState == 0) {
@@ -137,7 +146,7 @@ export default function PlayerYoutube() {
         }
       }
     },
-    [currentState, dispatch, duration, isInAutoPlay, isInLoop]
+    [currentState, dispatch, duration, isChangingTime, isInAutoPlay, isInLoop]
   );
 
   useEffect(() => {
