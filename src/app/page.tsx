@@ -1,5 +1,3 @@
-import AudioPlayer from "@/client/components/AudioPlayer/AudioPlayer";
-
 import { driveFindFilesFactory } from "@/server/drive/factories/DriveFindFilesFactory";
 
 export default function Home() {

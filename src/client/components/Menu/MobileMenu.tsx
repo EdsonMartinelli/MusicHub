@@ -1,5 +1,9 @@
 "use client";
-import { SpotifyLogo, YoutubeLogo } from "@phosphor-icons/react";
+import {
+  GoogleDriveLogo,
+  SpotifyLogo,
+  YoutubeLogo,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import MenuItems from "./MenuItems";
 
@@ -21,9 +25,15 @@ export default function MobileMenu() {
               </div>
               Youtube
             </MenuItems>
-            <MenuItems path="spotify">
+            <MenuItems path="drive">
               <div className="h-full">
-                <SpotifyLogo size="100%" />
+                <GoogleDriveLogo size="100%" />
+              </div>
+              Google Drive
+            </MenuItems>
+            <MenuItems path="spotify" disabled>
+              <div className="h-full">
+                <SpotifyLogo size="100%" weight="fill" />
               </div>
               Spotify
             </MenuItems>

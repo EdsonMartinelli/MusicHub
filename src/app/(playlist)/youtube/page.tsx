@@ -1,7 +1,4 @@
 import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
-import TesteComp from "@/client/components/Teste/TesteComp";
-import Video from "@/client/components/Teste/Video";
-import Script from "next/script";
 
 export default function Teste() {
   const data = [
@@ -11,9 +8,9 @@ export default function Teste() {
       createdTime: "Feb, 2023",
     },
     {
-      id: "wNKmYTmRmG4",
-      name: "Leno Brega - Trepada Em Cuiabá",
-      createdTime: "Nov, 2019",
+      id: "GiT7fhfTrPQ",
+      name: "Deadmau5 - Strobe (Radio Edit)",
+      createdTime: "Fev, 2017",
     },
   ];
 

@@ -12,14 +12,14 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistYoutubeSlice";
-import {
-  IFrameYoutube,
-  IFrameYoutubeRef,
-} from "@/client/components/Teste/IFrameYoutube";
 import { allStates } from "@/client/redux/reducers/playlistReducers";
 import { ProgressBarYoutubeProps } from "../../ProgressBar/ProgressBarYoutube";
 import PlayerYoutubeUISkeleton from "./PlayerYoutubeUISkeleton";
 import PlayerYoutubeUI from "./PlayerYoutubeUI";
+import {
+  IFrameYoutube,
+  IFrameYoutubeRef,
+} from "@/client/components/Iframes/IFrameYoutube";
 
 type handlePlayerProps = {
   currentState: allStates;
@@ -64,7 +64,6 @@ export default function PlayerYoutube() {
   const volume = useSelector(
     (state: RootState) => state.playlistYoutube.volume
   );
-
   const currentTime = useSelector(
     (state: RootState) => state.playlistYoutube.currentTime
   );
@@ -91,12 +90,8 @@ export default function PlayerYoutube() {
       iFrameRef.current.pauseVideo();
       return;
     }
-    if (currentState == "playing") {
-      iFrameRef.current.playVideo();
-    }
-    if (currentState == "paused") {
-      iFrameRef.current.pauseVideo();
-    }
+    if (currentState == "playing") iFrameRef.current.playVideo();
+    if (currentState == "paused") iFrameRef.current.pauseVideo();
     if (currentState == "ended") {
       iFrameRef.current.seekTo([0, true]);
       iFrameRef.current.pauseVideo();
@@ -105,9 +100,10 @@ export default function PlayerYoutube() {
 
   useEffect(() => {
     if (currentSong == null) return;
+    if (currentState == "idle" || currentState == "loading") return;
     if (iFrameRef.current == null) return;
     iFrameRef.current.setVolume(isMuted ? 0 : volume);
-  }, [currentSong, volume, isMuted]);
+  }, [currentSong, volume, isMuted, currentState]);
 
   const initialDelivery = useCallback(
     (info: Record<string, any> | null) => {
@@ -128,8 +124,8 @@ export default function PlayerYoutube() {
   const infoDelivery = useCallback(
     (info: Record<string, any> | null) => {
       if (info == null) return;
-      if (currentState == "ended") return;
       if (isChangingTime) return;
+      if (currentState == "ended") return;
       if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
 
       if (info.playerState == 0) {

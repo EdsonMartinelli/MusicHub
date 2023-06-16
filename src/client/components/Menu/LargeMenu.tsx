@@ -1,5 +1,10 @@
 "use client";
-import { SpotifyLogo, Waveform, YoutubeLogo } from "@phosphor-icons/react";
+import {
+  GoogleDriveLogo,
+  SpotifyLogo,
+  Waveform,
+  YoutubeLogo,
+} from "@phosphor-icons/react";
 import MenuItems from "./MenuItems";
 import MenuList from "./MenuList";
 
@@ -20,13 +25,19 @@ export default function LargeMenu() {
         <MenuList name="Explore">
           <MenuItems path="youtube">
             <div className="h-full">
-              <YoutubeLogo size="100%" />
+              <YoutubeLogo size="100%" weight="fill" />
             </div>
             Youtube
           </MenuItems>
-          <MenuItems path="spotify">
+          <MenuItems path="drive">
             <div className="h-full">
-              <SpotifyLogo size="100%" />
+              <GoogleDriveLogo size="100%" weight="fill" />
+            </div>
+            Google Drive
+          </MenuItems>
+          <MenuItems path="spotify" disabled>
+            <div className="h-full">
+              <SpotifyLogo size="100%" weight="fill" />
             </div>
             Spotify
           </MenuItems>
