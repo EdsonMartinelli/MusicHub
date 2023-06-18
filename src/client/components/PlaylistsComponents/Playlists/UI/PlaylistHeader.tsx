@@ -1,7 +1,7 @@
 export default function PlayListHeader() {
   return (
     <div
-      className="hidden w-full text-zinc-200/50 p-3 px-4 lg:flex flex-row 
+      className="hidden w-full text-zinc-200/70 p-3 px-4 lg:flex flex-row 
             items-center justify-between text-sm border-b-[1px] border-zinc-700/50 
             mb-4"
     >
