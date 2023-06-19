@@ -23,19 +23,19 @@ export default function LargeMenu() {
         </div>
 
         <MenuList name="Explore">
-          <MenuItems path="youtube">
+          <MenuItems path="/youtube">
             <div className="h-full">
               <YoutubeLogo size="100%" weight="fill" />
             </div>
             Youtube
           </MenuItems>
-          <MenuItems path="drive">
+          <MenuItems path="/drive">
             <div className="h-full">
               <GoogleDriveLogo size="100%" weight="fill" />
             </div>
             Google Drive
           </MenuItems>
-          <MenuItems path="spotify" disabled>
+          <MenuItems path="/spotify" disabled>
             <div className="h-full">
               <SpotifyLogo size="100%" weight="fill" />
             </div>

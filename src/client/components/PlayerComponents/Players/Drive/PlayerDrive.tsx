@@ -75,6 +75,7 @@ export default function PlayerDrive() {
     audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
+      audioPlayer.pause();
       audioPlayer.removeEventListener("loadstart", handleLoadStart);
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);

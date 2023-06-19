@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -14,11 +15,12 @@ export default function MenuItems({
   path,
   disabled,
 }: MenuItemsProps) {
-  const pathname = usePathname().replace("/", "");
+  const pathname = usePathname();
   return (
     <>
-      <button
-        className={`w-full h-11 flex flex-row items-center justify-start 
+      <Link href={path} passHref>
+        <button
+          className={`w-full h-11 flex flex-row items-center justify-start 
         px-3 py-2 gap-5 text-sm font-semibold box-border 
         ${
           path == pathname
@@ -26,18 +28,19 @@ export default function MenuItems({
             : "hover:bg-zinc-800"
         } 
         ${disabled ? "text-white/40" : "text-white"}`}
-        disabled={disabled}
-      >
-        {children}
-        {disabled ? (
-          <p
-            className="text-green-300 text-xs font-normal bg-green-800/30 
+          disabled={disabled}
+        >
+          {children}
+          {disabled ? (
+            <p
+              className="text-green-300 text-xs font-normal bg-green-800/30 
           py-[2px] px-2 rounded border-[1px] border-white/10"
-          >
-            Coming
-          </p>
-        ) : null}
-      </button>
+            >
+              Coming
+            </p>
+          ) : null}
+        </button>
+      </Link>
     </>
   );
 }
