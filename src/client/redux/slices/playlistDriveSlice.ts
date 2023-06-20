@@ -25,6 +25,7 @@ export const playlistDriveSlice = createSlice({
 
 export const {
   addPlaylist,
+  resetState,
   selectSong,
   loadSong,
   endSong,
@@ -39,6 +40,7 @@ export const {
   updateTime,
   setChangeTime,
   setDuration,
+  autoplayFirstSong,
 } = playlistDriveSlice.actions;
 
 //export default playlistSlice.reducer

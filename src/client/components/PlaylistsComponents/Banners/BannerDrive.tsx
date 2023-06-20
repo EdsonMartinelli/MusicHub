@@ -14,7 +14,7 @@ export function BannerDrive() {
         >
           <div
             className="h-full w-full bg-white/40 text-sky-900 opacity-80 lg:p-2 
-        border-2 border-white/20"
+            border-2 border-white/20"
           >
             <GoogleDriveLogo size="100%" weight="fill" />
           </div>

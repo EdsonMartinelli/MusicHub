@@ -9,6 +9,7 @@ import {
   loadSong,
   nextSong,
   playSong,
+  resetState,
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistYoutubeSlice";
@@ -70,9 +71,15 @@ export default function PlayerYoutube() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    return () => {
+      dispatch(resetState());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (currentSong == null) return;
     if (iFrameRef.current == null) return;
-
+    iFrameRef.current.pauseVideo();
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
     videoPlayer.setSrc(
@@ -100,10 +107,9 @@ export default function PlayerYoutube() {
 
   useEffect(() => {
     if (currentSong == null) return;
-    if (currentState == "idle" || currentState == "loading") return;
     if (iFrameRef.current == null) return;
     iFrameRef.current.setVolume(isMuted ? 0 : volume);
-  }, [currentSong, volume, isMuted, currentState]);
+  }, [currentSong, volume, isMuted]);
 
   const initialDelivery = useCallback(
     (info: Record<string, any> | null) => {
@@ -116,9 +122,11 @@ export default function PlayerYoutube() {
 
   const onReady = useCallback(
     (_info: Record<string, any> | null) => {
+      if (iFrameRef.current == null) return;
+      iFrameRef.current.setVolume(isMuted ? 0 : volume);
       dispatch(playSong());
     },
-    [dispatch]
+    [dispatch, volume, isMuted]
   );
 
   const infoDelivery = useCallback(

@@ -10,6 +10,7 @@ import {
   loadSong,
   nextSong,
   playSong,
+  resetState,
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistDriveSlice";
@@ -36,6 +37,12 @@ export default function PlayerDrive() {
     (state: RootState) => state.playlistDrive.isChangingTime
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetState());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (currentSong == null) return;

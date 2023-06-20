@@ -36,7 +36,7 @@ export default function MobileMenu() {
             onClick={() => setIsClose(false)}
           />
           <div
-            className="absolute right-0 top-0 z-[50] h-screen w-64 bg-[#09090b]
+            className="fixed right-0 top-0 z-[50] h-screen w-64 bg-[#09090b]
             text-white box-border flex flex-col items-start gap-2"
           >
             <div

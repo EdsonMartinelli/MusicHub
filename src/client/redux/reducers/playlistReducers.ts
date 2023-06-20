@@ -34,6 +34,16 @@ export const reducers = {
     state.playlist = action.payload;
   },
 
+  resetState: (state: playlistState) => {
+    state.currentSong = null;
+    state.index = 0;
+    state.currentState = "idle";
+    state.currentTime = 0;
+    state.isChangingTime = false;
+    state.duration = 0;
+    state.isInLoop = false;
+  },
+
   loadSong: (state: playlistState) => {
     state.currentState = "loading";
   },
@@ -110,5 +120,13 @@ export const reducers = {
     state.currentSong = state.playlist[newIndex ?? 0];
     state.currentState = "loading";
     state.isInLoop = false;
+  },
+
+  autoplayFirstSong: (state: playlistState) => {
+    state.index = 0;
+    state.currentSong = state.playlist[0];
+    state.currentState = "loading";
+    state.isInLoop = false;
+    state.isInAutoPlay = true;
   },
 };

@@ -25,6 +25,7 @@ export const playlistYoutubeSlice = createSlice({
 
 export const {
   addPlaylist,
+  resetState,
   selectSong,
   loadSong,
   endSong,
@@ -39,6 +40,7 @@ export const {
   updateTime,
   setChangeTime,
   setDuration,
+  autoplayFirstSong,
 } = playlistYoutubeSlice.actions;
 
 //export default playlistSlice.reducer
