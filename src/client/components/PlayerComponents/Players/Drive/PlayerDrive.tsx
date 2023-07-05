@@ -36,6 +36,9 @@ export default function PlayerDrive() {
   const isChangingTime = useSelector(
     (state: RootState) => state.playlistDrive.isChangingTime
   );
+  const currentTime = useSelector(
+    (state: RootState) => state.playlistDrive.currentTime
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,15 +74,15 @@ export default function PlayerDrive() {
       dispatch(setDuration(audioObject.current?.duration ?? 0));
     }
 
-    function handleTime() {
+    /*function handleTime() {
       dispatch(updateTime(audioObject.current?.currentTime ?? 0));
-    }
+    }*/
 
     audioPlayer.addEventListener("loadstart", handleLoadStart);
     audioPlayer.addEventListener("loadeddata", handleLoadedData);
     audioPlayer.addEventListener("error", handleError);
     audioPlayer.addEventListener("durationchange", handleDuration);
-    audioPlayer.addEventListener("timeupdate", handleTime);
+    // audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
       audioPlayer.pause();
@@ -87,9 +90,26 @@ export default function PlayerDrive() {
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);
       audioPlayer.removeEventListener("durationchange", handleDuration);
-      audioPlayer.removeEventListener("timeupdate", handleTime);
+      //audioPlayer.removeEventListener("timeupdate", handleTime);
     };
   }, [currentSong, dispatch]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    const audioPlayer = audioObject.current;
+
+    function handleTime() {
+      if (isChangingTime) return;
+      dispatch(updateTime(audioPlayer.currentTime ?? 0));
+    }
+
+    audioPlayer.addEventListener("timeupdate", handleTime);
+
+    return () => {
+      audioPlayer.removeEventListener("timeupdate", handleTime);
+    };
+  }, [currentSong, isChangingTime, dispatch]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -130,16 +150,20 @@ export default function PlayerDrive() {
     audioObject.current.loop = isInLoop;
   }, [isInLoop]);
 
-  const setNewTime = useCallback(
+  const handleTimeOnInput = useCallback(
     (newTime: number) => {
-      if (audioObject.current == null) return;
-      audioObject.current.currentTime = newTime;
-      if (currentState == "ended") {
-        dispatch(playSong());
-      }
+      dispatch(updateTime(newTime));
     },
-    [currentState, dispatch]
+    [dispatch]
   );
+
+  function handleTimeAfterInput() {
+    if (audioObject.current == null) return;
+    audioObject.current.currentTime = currentTime;
+    if (currentState == "ended") {
+      dispatch(playSong());
+    }
+  }
 
   const songNamedFormated = currentSong?.name.replace(".mp3", "");
   const artist = songNamedFormated?.split(" - ")[0];
@@ -158,7 +182,8 @@ export default function PlayerDrive() {
         <PlayerDriveUI
           artist={artist ?? ""}
           song={songName ?? ""}
-          setNewTime={setNewTime}
+          handleTimeOnInput={handleTimeOnInput}
+          handleTimeAfterInput={handleTimeAfterInput}
         />
       )}
     </div>

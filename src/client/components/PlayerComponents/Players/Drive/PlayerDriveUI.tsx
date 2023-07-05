@@ -18,7 +18,8 @@ type PlayerDriveUIProps = {
 export default function PlayerDriveUI({
   song,
   artist,
-  setNewTime,
+  handleTimeOnInput,
+  handleTimeAfterInput,
 }: PlayerDriveUIProps) {
   return (
     <div className="flex flex-row items-center gap-4 w-full h-full text-white">
@@ -54,7 +55,10 @@ export default function PlayerDriveUI({
         </div>
 
         <div className="w-full h-fit">
-          <ProgressBarDrive setNewTime={setNewTime} />
+          <ProgressBarDrive
+            handleTimeOnInput={handleTimeOnInput}
+            handleTimeAfterInput={handleTimeAfterInput}
+          />
         </div>
       </div>
 

@@ -7,11 +7,13 @@ import { setChangeTime } from "@/client/redux/slices/playlistDriveSlice";
 import ProgressBarUI from "./UI/ProgressBarUI";
 
 export type ProgressBarDriveProps = {
-  setNewTime: (newTime: number) => void;
+  handleTimeOnInput: (newTime: number) => void;
+  handleTimeAfterInput: () => void;
 };
 
 export default function ProgressBarDrive({
-  setNewTime,
+  handleTimeOnInput,
+  handleTimeAfterInput,
 }: ProgressBarDriveProps) {
   const currentTime = useSelector(
     (state: RootState) => state.playlistDrive.currentTime
@@ -21,20 +23,18 @@ export default function ProgressBarDrive({
   );
   const dispatch = useDispatch();
 
-  const returnToPlay = useCallback(
-    (_: InputRangeProperties) => {
-      dispatch(setChangeTime(false));
-    },
-    [dispatch]
-  );
-
   const setTimeOnPause = useCallback(
     (e: InputRangeProperties) => {
       dispatch(setChangeTime(true));
-      setNewTime(e.value);
+      handleTimeOnInput(e.value);
     },
-    [dispatch, setNewTime]
+    [dispatch, handleTimeOnInput]
   );
+
+  function returnToPlay(_: InputRangeProperties) {
+    handleTimeAfterInput();
+    dispatch(setChangeTime(false));
+  }
 
   return (
     <ProgressBarUI
