@@ -7,24 +7,27 @@ import { BannerDrive } from "../Banners/BannerDrive";
 import PlayListHeader from "./UI/PlaylistHeader";
 import PlayFirstButtonDrive from "../PlayFirstButton/PlayFirstButtonDrive";
 import { useState } from "react";
+import SearchBarUI from "../SearchBar/UI/SearchBarUI";
 
 export function PlaylistDrive() {
   const playlist = useSelector(
     (state: RootState) => state.playlistDrive.playlist
   );
 
-  const [search, setSearch] = useState<string>("let");
-
-  const filteredPlaylist = playlist.map((x, index) => {
-    if (x.name.toLowerCase().includes(search.toLowerCase())) {
-      return {
-        index,
-        id: x.id,
-        name: x.name,
-        createdTime: x.createdTime,
-      };
-    }
+  const [search, setSearch] = useState<string>("");
+  const searchLowerCase = search.toLowerCase();
+  const indexedPlaylist = playlist.map((item, index) => {
+    return {
+      index,
+      id: item.id,
+      name: item.name,
+      createdTime: item.createdTime,
+    };
   });
+
+  const filteredPlaylist = indexedPlaylist.filter((item) =>
+    item.name.toLowerCase().includes(searchLowerCase)
+  );
 
   return (
     <>
@@ -34,13 +37,12 @@ export function PlaylistDrive() {
         from-0% to-[150px] w-full"
       >
         <div className="p-5 pt-7 lg:p-10 lg:pt-7">
-          <div className="mb-6">
+          <div className="mb-6 flex flex-row items-center justify-between">
             <PlayFirstButtonDrive />
-            <input onChange={(x) => setSearch(x.target.value)} />
+            <SearchBarUI onChange={setSearch} />
           </div>
           <PlayListHeader />
           {filteredPlaylist.map((item) => {
-            if (item == null) return null;
             return (
               <ItemDrive
                 id={item.id}

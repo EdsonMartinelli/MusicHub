@@ -1,6 +1,6 @@
 import ProviderWrapperDrive from "@/client/components/Providers/ProviderWrapperDrive";
 
-export default function Teste() {
+export default function Drive() {
   const data = [
     {
       id: "1TZi8nYn9k_Cb1e2VSDxSiB9o6DSTZjXI",

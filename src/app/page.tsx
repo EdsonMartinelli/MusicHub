@@ -1,3 +1,4 @@
+import MainPage from "@/client/components/MainPage/MainPage";
 import { driveFindFilesFactory } from "@/server/drive/factories/DriveFindFilesFactory";
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
 
   //return <AudioPlayer />;
 
-  return <h1>Página inicial</h1>;
+  return <MainPage />;
 }
 
 //https://www.behance.net/gallery/163951635/NFT-Landing-Page-Design?tracking_source=search_projects%7Cwebiste+ux
