@@ -21,13 +21,13 @@ export default function MenuItems({
       <Link href={path} passHref>
         <button
           className={`w-full h-11 flex flex-row items-center justify-start 
-        px-3 py-2 gap-5 text-sm font-semibold box-border 
+        px-3 pl-6 py-2 gap-3 text-sm box-border 
         ${
           path == pathname
-            ? "bg-zinc-700 hover:bg-zinc-600"
-            : "hover:bg-zinc-800"
+            ? "bg-gradient-to-r from-orange-600/50 from-0% to-10% border-l-4 border-orange-600 text-orange-500"
+            : "border-l-4 border-transparent hover:bg-zinc-800"
         } 
-        ${disabled ? "text-white/40" : "text-white"}`}
+        ${disabled ? "text-white/40" : ""}`}
           disabled={disabled}
         >
           {children}

@@ -31,27 +31,25 @@ export function PlaylistYoutube() {
   return (
     <>
       <BannerYoutube />
-      <div
-        className="min-h-[calc(100vh-18rem)] bg-gradient-to-b from-rose-900/30 
-        from-0% to-[150px] w-full"
-      >
-        <div className="p-5 pt-7 lg:p-10 lg:pt-7">
+      <div className="min-h-[calc(100vh-18rem)] w-full">
+        <div className="pt-7 lg:pt-7">
           <div className="mb-6 flex flex-row items-center justify-between">
             <PlayFirstButtonYoutube />
             <SearchBarUI onChange={setSearch} />
           </div>
-          <PlayListHeader />
-          {filteredPlaylist.map((item) => {
-            return (
-              <ItemYoutube
-                id={item.id}
-                name={item.name}
-                createdTime={item.createdTime}
-                index={item.index + 1}
-                key={item.id}
-              />
-            );
-          })}
+          <PlayListHeader>
+            {filteredPlaylist.map((item) => {
+              return (
+                <ItemYoutube
+                  id={item.id}
+                  name={item.name}
+                  createdTime={item.createdTime}
+                  index={item.index + 1}
+                  key={item.id}
+                />
+              );
+            })}
+          </PlayListHeader>
         </div>
       </div>
     </>

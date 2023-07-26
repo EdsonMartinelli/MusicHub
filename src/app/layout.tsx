@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={lato.className}>
-      <body className="bg-zinc-900 flex justify-center">
+      <body className="bg-zinc-950 flex justify-center">
         <div className="w-screen">{children}</div>
       </body>
     </html>

@@ -5,7 +5,7 @@ export function BannerDrive() {
     <div
       className="h-64 bg-gradient-to-b from-sky-600 from-10% to-sky-900 border-b-[1px]
       border-zinc-700/50 flex flex-col lg:flex-row px-9 py-7 lg:py-0 lg:items-center 
-      justify-between lg:gap-9"
+      justify-between lg:gap-9 rounded-lg"
     >
       <div className="flex flex-row items-center gap-3">
         <div

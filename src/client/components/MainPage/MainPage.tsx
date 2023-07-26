@@ -150,36 +150,6 @@ function ButtonMainPage({
   setBg,
   children,
 }: ButtonMainPageProps) {
-  /* if (isDisabled)
-    return (
-      <button
-        onMouseEnter={() => setBg(type)}
-        onMouseLeave={() => setBg("idle")}
-        onTouchStart={() => setBg(type)}
-        onTouchEnd={() => setBg("idle")}
-        className={`${fontColor[type]} capitalize font-bold gap-2 flex flex-row h-14 w-36
-        items-center justify-center bg-zinc-200 p-2 rounded-md shadow-inner shadow-black/5`}
-      >
-        {children}
-        {type}
-      </button>
-    );
-  return (
-    <Link href={`/${type}`}>
-      <button
-        onMouseEnter={() => setBg(type)}
-        onMouseLeave={() => setBg("idle")}
-        onTouchStart={() => setBg(type)}
-        onTouchEnd={() => setBg("idle")}
-        className={`${fontColor[type]} capitalize font-bold gap-2 flex flex-row h-14 w-36
-        items-center justify-center bg-zinc-200 p-2 rounded-md shadow-inner shadow-black/5`}
-      >
-        {children}
-        {type}
-      </button>
-    </Link>
-  );*/
-
   if (isDisabled)
     return (
       <button
@@ -188,7 +158,8 @@ function ButtonMainPage({
         onTouchStart={() => setBg(type)}
         onTouchEnd={() => setBg("idle")}
         className={`capitalize font-bold gap-2 flex flex-row h-14 w-36 items-center
-        justify-center bg-transparent p-2 rounded-md bg-zinc-100 text-orange-600`}
+        justify-center bg-transparent p-2 rounded-md bg-zinc-200 hover:bg-zinc-100
+        text-orange-700`}
       >
         {children}
         {type}
@@ -203,7 +174,7 @@ function ButtonMainPage({
         onTouchStart={() => setBg(type)}
         onTouchEnd={() => setBg("idle")}
         className={`capitalize font-bold gap-2 flex flex-row h-14 w-36 items-center
-        justify-center bg-transparent p-2 rounded-md bg-orange-600 text-white`}
+        justify-center p-2 rounded-md bg-orange-600 hover:bg-orange-500 text-white`}
       >
         {children}
         {type}
