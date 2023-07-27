@@ -174,7 +174,7 @@ function ButtonMainPage({
         onTouchStart={() => setBg(type)}
         onTouchEnd={() => setBg("idle")}
         className={`capitalize font-bold gap-2 flex flex-row h-14 w-36 items-center
-        justify-center p-2 rounded-md bg-orange-600 hover:bg-orange-500 text-white`}
+        justify-center p-2 rounded-md bg-orange-700 hover:bg-orange-600 text-white`}
       >
         {children}
         {type}

@@ -9,7 +9,9 @@ export default function MenuLayout({
     <>
       <Menu />
       <div className="lg:pl-64 w-full overflow-hidden">
-        <div className="w-full px-5 lg:px-10 box-border">{children}</div>
+        <div className="w-full px-5 lg:px-10 lg:pl-14 box-border">
+          {children}
+        </div>
       </div>
     </>
   );

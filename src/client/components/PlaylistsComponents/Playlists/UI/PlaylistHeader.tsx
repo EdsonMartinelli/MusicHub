@@ -8,7 +8,7 @@ export default function PlayListHeader({ children }: PlayListHeaderProps) {
     <>
       <div
         className="w-full text-zinc-200/70 p-3 px-4 flex flex-row 
-            items-center justify-between text-sm font-medium"
+            items-center justify-between text-sm font-medium border-b-[1px] border-zinc-700/50"
       >
         <div className="w-1/2 flex flex-row gap-4 items-center justify-star">
           <p className="hidden lg:block w-7 text-center shrink-0">#</p>
@@ -16,12 +16,7 @@ export default function PlayListHeader({ children }: PlayListHeaderProps) {
         </div>
         <p>Created At</p>
       </div>
-      <div
-        className="bg-gradient-to-b from-orange-600/10 from-0% to-[100px] 
-        border-t border-orange-600 pt-5"
-      >
-        {children}
-      </div>
+      <div className=" pt-5  pb-36 lg:pb-32">{children}</div>
     </>
   );
 }

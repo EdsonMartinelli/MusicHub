@@ -12,7 +12,7 @@ export default function MenuMainPage() {
 
       <button
         className="flex flex-row gap-2 px-3 p-2 items-center font-bold
-        justify-center bg-transparent text-orange-600 rounded-md border border-orange-600"
+        justify-center bg-transparent text-orange-700 rounded-md border border-orange-700"
       >
         <span className="font-medium">More</span>
         <div className="w-4 h-4">

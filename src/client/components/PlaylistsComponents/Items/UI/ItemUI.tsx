@@ -36,7 +36,7 @@ export default function ItemUI({
       onClick={handleClick}
       className={`w-full text-white p-2 px-4 flex flex-row items-center 
       justify-between rounded-md mb-1  ${
-        isCurrent ? "bg-zinc-700 hover:bg-zinc-600" : "hover:bg-zinc-700"
+        isCurrent ? "bg-orange-700 hover:bg-orange-600" : "hover:bg-zinc-800"
       }`}
     >
       <div className="w-1/2 flex flex-row gap-4 items-center justify-start">
@@ -50,16 +50,16 @@ export default function ItemUI({
             currentState={currentState}
           />
         </div>
-        <div className="w-full flex flex-col text-white items-start">
+        <div className="w-full flex flex-col text-zinc-100 items-start">
           <p className="w-full text-left truncate text-xs lg:text-sm mb-1">
             {title}
           </p>
-          <p className="w-full text-left truncate text-xs text-white/60">
+          <p className="w-full text-left truncate text-xs text-zinc-300">
             {source}
           </p>
         </div>
       </div>
-      <p className="text-xs lg:text-xs text-white/60">{createdTime}</p>
+      <p className="text-xs lg:text-xs text-zinc-100">{createdTime}</p>
     </button>
   );
 }

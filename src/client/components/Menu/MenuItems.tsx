@@ -21,11 +21,11 @@ export default function MenuItems({
       <Link href={path} passHref>
         <button
           className={`w-full h-11 flex flex-row items-center justify-start 
-        px-3 pl-6 py-2 gap-3 text-sm box-border 
+        px-3 pl-6 py-2 gap-3 text-sm box-border bg-gradient-to-r from-0% to-10% border-l-4
         ${
           path == pathname
-            ? "bg-gradient-to-r from-orange-600/50 from-0% to-10% border-l-4 border-orange-600 text-orange-500"
-            : "border-l-4 border-transparent hover:bg-zinc-800"
+            ? " from-orange-700/50 border-orange-700 text-orange-500 hover:from-orange-600/50 hover:border-orange-600"
+            : " hover:from-orange-800/50 border-transparent hover:border-orange-700"
         } 
         ${disabled ? "text-white/40" : ""}`}
           disabled={disabled}
