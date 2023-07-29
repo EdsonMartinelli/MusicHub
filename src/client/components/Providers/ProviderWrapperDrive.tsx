@@ -9,6 +9,7 @@ import { PlaylistDrive } from "../PlaylistsComponents/Playlists/PlaylistDrive";
 
 export default function ProviderWrapperDrive(data: { playlist: SongInfo[] }) {
   store.dispatch(addPlaylist(data.playlist));
+
   return (
     <>
       <Provider store={store}>

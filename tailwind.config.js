@@ -44,9 +44,9 @@ module.exports = {
                       radial-gradient(circle 600px at right bottom, ${colors.sky[900]}, transparent),
                       radial-gradient(circle 600px at calc(50% - 600px) calc(100% - 100px), ${colors.pink[600]}, ${colors.pink[900]}, transparent)`,
 
-        radial:`radial-gradient(circle 350px at left center, ${colors.amber[600]}, ${colors.amber[900]}, transparent),
-                radial-gradient(circle 350px at 450px calc(50% - 250px), ${colors.orange[600]}, ${colors.orange[900]}, transparent),
-                radial-gradient(circle 380px at 500px calc(50% + 150px), ${colors.red[600]}, ${colors.red[900]}, transparent)`,
+        radial:`radial-gradient(circle 350px at left center, ${colors.orange[700]}, ${colors.orange[900]}, transparent),
+                radial-gradient(circle 350px at 450px calc(50% - 250px), ${colors.orange[700]}, ${colors.orange[900]}, transparent),
+                radial-gradient(circle 380px at 500px calc(50% + 150px), ${colors.orange[700]}, ${colors.orange[900]}, transparent)`,
       }
     },
   },

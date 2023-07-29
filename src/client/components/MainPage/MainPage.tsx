@@ -6,7 +6,6 @@ import imgHome from "../../../../public/imgHome.jpg";
 import {
   GoogleDriveLogo,
   SpotifyLogo,
-  Waveform,
   YoutubeLogo,
 } from "@phosphor-icons/react";
 import Link from "next/link";
@@ -26,12 +25,6 @@ type ButtonMainPageProps = {
   isDisabled?: boolean;
   setBg: (bgType: bgTypes) => void;
   children: ReactNode;
-};
-
-const fontColor: Record<buttonTypes, string> = {
-  drive: "text-sky-600",
-  youtube: "text-rose-600",
-  spotify: "text-green-600",
 };
 
 const backgroundColor: Record<bgTypes, string> = {

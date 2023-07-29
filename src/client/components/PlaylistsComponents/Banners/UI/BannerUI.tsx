@@ -9,10 +9,10 @@ type BannerUIProps = {
 
 export function BannerUI({ children, type, name, info }: BannerUIProps) {
   return (
-    <div className="h-64 bg-orange-950 rounded-lg mt-5 overflow-hidden">
+    <div className="h-64 bg-zinc-900 rounded-lg mt-5 overflow-hidden">
       <div
         className="h-full w-full flex flex-col lg:flex-row px-9 py-7 lg:py-0 lg:items-center 
-        justify-between lg:gap-9 bg-radial"
+        justify-between lg:gap-9"
       >
         <div className="flex flex-row items-center gap-3">
           <div

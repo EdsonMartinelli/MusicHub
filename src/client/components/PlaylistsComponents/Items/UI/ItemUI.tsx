@@ -34,9 +34,9 @@ export default function ItemUI({
   return (
     <button
       onClick={handleClick}
-      className={`w-full text-white p-2 px-4 flex flex-row items-center 
-      justify-between rounded-md mb-1  ${
-        isCurrent ? "bg-orange-700 hover:bg-orange-600" : "hover:bg-zinc-800"
+      className={`w-full h-14 text-white p-2 px-4 flex flex-row items-center 
+      justify-between rounded-md mb-1 ${
+        isCurrent ? "bg-zinc-800 hover:bg-zinc-700" : "hover:bg-zinc-800"
       }`}
     >
       <div className="w-1/2 flex flex-row gap-4 items-center justify-start">
