@@ -39,49 +39,48 @@ export default function Main() {
 
   return (
     <>
-      <LightColorBackGround bg="idle" currentBg={bg} />
-      <LightColorBackGround bg="drive" currentBg={bg} />
-      <LightColorBackGround bg="youtube" currentBg={bg} />
-      <LightColorBackGround bg="spotify" currentBg={bg} />
-
-      <div className="absolute top-0 left-0 h-screen w-full">
+      <div className="absolute top-0 left-0 h-fit min-h-screen w-full">
         <MenuMainPage />
-        <div className="absolute h-screen w-full  z-[2]"></div>
+        <LightColorBackGround bg="idle" currentBg={bg} />
+        <LightColorBackGround bg="drive" currentBg={bg} />
+        <LightColorBackGround bg="youtube" currentBg={bg} />
+        <LightColorBackGround bg="spotify" currentBg={bg} />
         <div
           className="relative h-screen w-full flex items-center justify-center gap-24
-          z-[3]"
+          mt-20 px-5 lg:mt-0 lg:px-0 z-[3]"
         >
           <div
-            className="w-72 h-96 bg-orange-600 rounded-lg overflow-hidden
+            className="hidden lg:block w-72 h-96 bg-orange-600 rounded-lg overflow-hidden
             outline outline-2 outline-offset-8 outline-zinc-600"
           >
             <Image
               src={imgHome}
               alt="Picture of the author"
               className="object-cover w-72 h-96"
+              priority={true}
             />
           </div>
 
           <div
-            className="w-1/2 max-w-2xl flex flex-col gap-10 justify-center 
-            items-center"
+            className="w-full lg:w-1/2 max-w-2xl flex flex-col gap-10
+            justify-center items-center"
           >
             <div className="w-full flex flex-col gap-10">
               <p
-                className="text-5xl  leading-snug text-left text-orange-600 
+                className="text-4xl lg:text-5xl leading-snug text-center lg:text-left text-orange-600 
                 font-bold"
               >
                 Listen my favorite songs and playlists of all platforms in just
                 one place.
               </p>
-              <p className="text-zinc-400 text-xl text-left">
+              <p className="text-zinc-400 text-lg text-center lg:text-xl lg:text-left">
                 This is my personal site for songs, it has mixed playlists with
                 rock, eletronic, acoustic metal and more. If you like my musical
                 taste you will love it.
               </p>
             </div>
 
-            <div className="w-full items-center justify-start flex flex-row gap-4">
+            <div className="w-full items-center justify-start flex flex-col lg:flex-row gap-4">
               <ButtonMainPage type="drive" setBg={setBg}>
                 <div className="h-8 w-8">
                   <GoogleDriveLogo size="100%" weight="fill" />
@@ -129,7 +128,7 @@ function LightColorBackGround({ bg, currentBg }: LightColorBackGroundProps) {
       ref={x}
       className={`${
         isHidden ? "hidden" : ""
-      } absolute z-[1] top-0 left-0 h-screen w-full bg-gradient-to-t 
+      } absolute z-[1] bottom-0 left-0 h-fit min-h-screen w-full bg-gradient-to-t 
         ${backgroundColor[bg]} from-0% to-50% ${
         currentBg == bg ? "animate-fadeIn" : "animate-fadeOut"
       }`}
@@ -150,12 +149,18 @@ function ButtonMainPage({
         onMouseLeave={() => setBg("idle")}
         onTouchStart={() => setBg(type)}
         onTouchEnd={() => setBg("idle")}
-        className={`capitalize font-bold gap-2 flex flex-row h-14 w-36 items-center
+        className={`capitalize font-bold gap-2 flex flex-row h-14 w-44 items-center
         justify-center bg-transparent p-2 rounded-md bg-zinc-200 hover:bg-zinc-100
-        text-orange-700`}
+        text-zinc-700`}
       >
         {children}
         {type}
+        <p
+          className="text-orange-900 text-xs font-normal bg-orange-800/30 
+          py-[2px] px-2 rounded border-[1px] border-white/10"
+        >
+          Coming
+        </p>
       </button>
     );
 
@@ -166,7 +171,7 @@ function ButtonMainPage({
         onMouseLeave={() => setBg("idle")}
         onTouchStart={() => setBg(type)}
         onTouchEnd={() => setBg("idle")}
-        className={`capitalize font-bold gap-2 flex flex-row h-14 w-36 items-center
+        className={`capitalize font-bold gap-2 flex flex-row h-14 w-44 items-center
         justify-center p-2 rounded-md bg-orange-700 hover:bg-orange-600 text-white`}
       >
         {children}

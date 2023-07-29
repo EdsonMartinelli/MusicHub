@@ -10,21 +10,32 @@ import {
 import { useState } from "react";
 import MenuItems from "./MenuItems";
 import MenuList from "./MenuList";
+import Link from "next/link";
 
 export default function MobileMenu() {
   const [isClose, setIsClose] = useState(false);
   return (
     <>
-      <div className="w-full flex flex-row items-center justify-between p-3 px-5">
-        <div className="flex flex-row items-center gap-2 text-white">
-          <div className="w-8 h-8">
-            <Waveform size="100%" />
-          </div>
-          <p className="font-bold text-md">MusicHub</p>
-        </div>
-        <button className="text-white" onClick={() => setIsClose(true)}>
-          <div className="h-8 w-8">
-            <List size="100%" />
+      <div
+        className="w-full flex flex-row items-center justify-between p-4 px-8
+        border-b-[1px] border-zinc-600"
+      >
+        <Link href={"/"} passHref>
+          <button className="flex flex-row items-center gap-2 text-white">
+            <div className="w-8 h-8">
+              <Waveform size="100%" weight="bold" />
+            </div>
+            <p className="font-bold text-xl text-white">MusicHub</p>
+          </button>
+        </Link>
+        <button
+          className="flex flex-row gap-2 p-2 items-center font-bold
+          justify-center bg-transparent text-orange-700 rounded-md border
+          border-orange-700 hover:bg-zinc-800"
+          onClick={() => setIsClose(true)}
+        >
+          <div className="h-6 w-6">
+            <List size="100%" weight="bold" />
           </div>
         </button>
       </div>
@@ -43,9 +54,14 @@ export default function MobileMenu() {
               className="w-full flex flex-row items-center justify-between p-3
               px-5 mb-4"
             >
-              <p className="font-bold text-sm">Menu</p>
-              <button onClick={() => setIsClose(false)}>
-                <div className="h-8 w-8">
+              <p className="font-bold text-xl">Menu</p>
+              <button
+                className="flex flex-row gap-2 p-2 items-center font-bold
+                justify-center bg-transparent text-orange-700 rounded-md border
+              border-orange-700 hover:bg-zinc-800"
+                onClick={() => setIsClose(false)}
+              >
+                <div className="h-6 w-6">
                   <X size="100%" />
                 </div>
               </button>

@@ -2,18 +2,7 @@ import MainPage from "@/client/components/MainPage/MainPage";
 import { driveFindFilesFactory } from "@/server/drive/factories/DriveFindFilesFactory";
 
 export default function Home() {
-  /* const files = await driveFindFilesFactory().handle();
-  return (
-    <>
-      {files.list.map((file) => {
-        return <div key={file.id}>{file.name}</div>;
-      })}
-      <AudioPlayer />
-    </>
-  );*/
-  //return <DriveListItem name="Eminem - Berserk" />;
-
-  //return <AudioPlayer />;
+  // const files = await driveFindFilesFactory().handle();
 
   return <MainPage />;
 }
