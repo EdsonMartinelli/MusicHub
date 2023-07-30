@@ -4,10 +4,16 @@ type BannerUIProps = {
   children: ReactNode;
   type: string;
   name: string;
-  info: string;
+  by: string;
+  info: LinkInfoProps[];
 };
 
-export function BannerUI({ children, type, name, info }: BannerUIProps) {
+type LinkInfoProps = {
+  name: string;
+  link: string;
+};
+
+export function BannerUI({ children, type, name, by, info }: BannerUIProps) {
   return (
     <div className="h-64 bg-zinc-900 rounded-lg mt-5 overflow-hidden">
       <div
@@ -38,10 +44,28 @@ export function BannerUI({ children, type, name, info }: BannerUIProps) {
           >
             {name}
           </p>
-          <p className="text-md text-white/70">{info}</p>
-          <p className="text-md text-white/70">{info}</p>
+          <p className="text-md text-white/70">{by}</p>
+          <p className="text-md text-white/70 flex flex-row gap-2">
+            Information:
+            {info.map((item, index) => {
+              return <LinkInfo key={index} name={item.name} link={item.link} />;
+            })}
+          </p>
         </div>
       </div>
     </div>
+  );
+}
+
+function LinkInfo({ name, link }: LinkInfoProps) {
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener"
+      className="bg-zinc-700 text-zinc-200 rounded p-1 px-2 text-xs hover:bg-zinc-800 "
+    >
+      {name}
+    </a>
   );
 }

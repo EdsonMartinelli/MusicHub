@@ -74,15 +74,10 @@ export default function PlayerDrive() {
       dispatch(setDuration(audioObject.current?.duration ?? 0));
     }
 
-    /*function handleTime() {
-      dispatch(updateTime(audioObject.current?.currentTime ?? 0));
-    }*/
-
     audioPlayer.addEventListener("loadstart", handleLoadStart);
     audioPlayer.addEventListener("loadeddata", handleLoadedData);
     audioPlayer.addEventListener("error", handleError);
     audioPlayer.addEventListener("durationchange", handleDuration);
-    // audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
       audioPlayer.pause();
@@ -90,7 +85,6 @@ export default function PlayerDrive() {
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
       audioPlayer.removeEventListener("error", handleError);
       audioPlayer.removeEventListener("durationchange", handleDuration);
-      //audioPlayer.removeEventListener("timeupdate", handleTime);
     };
   }, [currentSong, dispatch]);
 

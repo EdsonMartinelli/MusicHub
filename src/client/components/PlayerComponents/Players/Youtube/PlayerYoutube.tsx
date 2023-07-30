@@ -32,7 +32,8 @@ type eventMessageType =
   | "initialDelivery"
   | "onReady"
   | "infoDelivery"
-  | "apiInfoDelivery";
+  | "apiInfoDelivery"
+  | "onError";
 
 type eventMessageFunctions = Record<
   eventMessageType,
@@ -153,12 +154,20 @@ export default function PlayerYoutube() {
     [currentState, dispatch, duration, isChangingTime, isInAutoPlay, isInLoop]
   );
 
+  const onError = useCallback(
+    (_: Record<string, any> | null) => {
+      dispatch(loadSong());
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     const messageObject: eventMessageFunctions = {
       initialDelivery,
       onReady,
       infoDelivery,
       apiInfoDelivery: (_info) => {},
+      onError,
     };
 
     function handleEvent(e: MessageEvent<any>) {
@@ -175,7 +184,7 @@ export default function PlayerYoutube() {
     return () => {
       window.removeEventListener("message", handleEvent);
     };
-  }, [infoDelivery, initialDelivery, onReady]);
+  }, [infoDelivery, initialDelivery, onReady, onError]);
 
   const handleTimeOnInput = useCallback(
     (newTime: number) => {
