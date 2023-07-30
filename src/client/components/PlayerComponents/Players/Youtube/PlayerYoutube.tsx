@@ -156,6 +156,7 @@ export default function PlayerYoutube() {
 
   const onError = useCallback(
     (_: Record<string, any> | null) => {
+      // ERROR 404, audio element is input by the network error.
       dispatch(loadSong());
     },
     [dispatch]

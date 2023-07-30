@@ -66,8 +66,15 @@ export default function PlayerDrive() {
     }
 
     function handleError() {
-      dispatch(loadSong());
-      audioPlayer.load();
+      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_NO_SOURCE) {
+        audioPlayer.setAttribute("src", "");
+        // ERROR 404, audio element is input by the network error.
+      }
+
+      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_NO_SOURCE) {
+        dispatch(loadSong());
+        audioPlayer.load();
+      }
     }
 
     function handleDuration() {
