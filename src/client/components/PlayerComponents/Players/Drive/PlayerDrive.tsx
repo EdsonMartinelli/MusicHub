@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
 import PlayerDriveUI from "./PlayerDriveUI";
 import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
 import {
   endSong,
+  errorSong,
   loadSong,
   nextSong,
   playSong,
@@ -14,6 +15,8 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistDriveSlice";
+import PlayerDriveUIError from "./PlayerDriveUIError";
+import { PlayerBackgroundUI } from "../UI/PlayerBackgroundUI";
 
 export default function PlayerDrive() {
   const audioObject = useRef<HTMLAudioElement | null>(null);
@@ -65,32 +68,18 @@ export default function PlayerDrive() {
       dispatch(playSong());
     }
 
-    function handleError() {
-      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_NO_SOURCE) {
-        audioPlayer.setAttribute("src", "");
-        // ERROR 404, audio element is input by the network error.
-      }
-
-      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_NO_SOURCE) {
-        dispatch(loadSong());
-        audioPlayer.load();
-      }
-    }
-
     function handleDuration() {
       dispatch(setDuration(audioObject.current?.duration ?? 0));
     }
 
     audioPlayer.addEventListener("loadstart", handleLoadStart);
     audioPlayer.addEventListener("loadeddata", handleLoadedData);
-    audioPlayer.addEventListener("error", handleError);
     audioPlayer.addEventListener("durationchange", handleDuration);
 
     return () => {
       audioPlayer.pause();
       audioPlayer.removeEventListener("loadstart", handleLoadStart);
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
-      audioPlayer.removeEventListener("error", handleError);
       audioPlayer.removeEventListener("durationchange", handleDuration);
     };
   }, [currentSong, dispatch]);
@@ -111,6 +100,35 @@ export default function PlayerDrive() {
       audioPlayer.removeEventListener("timeupdate", handleTime);
     };
   }, [currentSong, isChangingTime, dispatch]);
+
+  useEffect(() => {
+    if (currentSong == null) return;
+    if (audioObject.current == null) return;
+    const audioPlayer = audioObject.current;
+
+    function handleError() {
+      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_NO_SOURCE) {
+        dispatch(errorSong());
+        if (isInAutoPlay) {
+          const timeout = setTimeout(() => {
+            dispatch(nextSong());
+            clearTimeout(timeout);
+          }, 2000);
+        }
+      }
+
+      if (audioPlayer.networkState == HTMLMediaElement.NETWORK_IDLE) {
+        dispatch(loadSong());
+        audioPlayer.load();
+      }
+    }
+
+    audioPlayer.addEventListener("error", handleError);
+
+    return () => {
+      audioPlayer.removeEventListener("error", handleError);
+    };
+  }, [currentSong, dispatch, isInAutoPlay]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -170,23 +188,30 @@ export default function PlayerDrive() {
   const artist = songNamedFormated?.split(" - ")[0];
   const songName = songNamedFormated?.split(" - ")[1];
 
-  if (currentSong == null || currentState == "idle") return null;
+  if (currentState == "idle") return null;
+
+  if (currentState == "loading")
+    return (
+      <PlayerBackgroundUI>
+        <PlayerDriveUISkeleton />
+      </PlayerBackgroundUI>
+    );
+
+  if (currentState == "error")
+    return (
+      <PlayerBackgroundUI>
+        <PlayerDriveUIError />
+      </PlayerBackgroundUI>
+    );
 
   return (
-    <div
-      className="fixed bottom-0 left-0 w-full h-28 lg:h-24 bg-zinc-900
-      border-t-[1px] border-zinc-700/50 animate-playerShow"
-    >
-      {currentState == "loading" ? (
-        <PlayerDriveUISkeleton />
-      ) : (
-        <PlayerDriveUI
-          artist={artist ?? ""}
-          song={songName ?? ""}
-          handleTimeOnInput={handleTimeOnInput}
-          handleTimeAfterInput={handleTimeAfterInput}
-        />
-      )}
-    </div>
+    <PlayerBackgroundUI>
+      <PlayerDriveUI
+        artist={artist ?? ""}
+        song={songName ?? ""}
+        handleTimeOnInput={handleTimeOnInput}
+        handleTimeAfterInput={handleTimeAfterInput}
+      />
+    </PlayerBackgroundUI>
   );
 }

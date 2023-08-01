@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import {
   endSong,
+  errorSong,
   loadSong,
   nextSong,
   playSong,
@@ -21,6 +22,8 @@ import {
   IFrameYoutube,
   IFrameYoutubeRef,
 } from "@/client/components/Iframes/IFrameYoutube";
+import { PlayerBackgroundUI } from "../UI/PlayerBackgroundUI";
+import PlayerYoutubeUIError from "./PlayerYoutubeUIError";
 
 type handlePlayerProps = {
   currentState: allStates;
@@ -156,10 +159,15 @@ export default function PlayerYoutube() {
 
   const onError = useCallback(
     (_: Record<string, any> | null) => {
-      // ERROR 404, audio element is input by the network error.
-      dispatch(loadSong());
+      dispatch(errorSong());
+      if (isInAutoPlay) {
+        const timeout = setTimeout(() => {
+          dispatch(nextSong());
+          clearTimeout(timeout);
+        }, 2000);
+      }
     },
-    [dispatch]
+    [dispatch, isInAutoPlay]
   );
 
   useEffect(() => {
@@ -227,21 +235,29 @@ function HandlePlayer({
   channel,
 }: handlePlayerProps) {
   if (currentState == "idle") return null;
-  return (
-    <div
-      className="fixed bottom-0 left-0 w-full h-28 lg:h-24 bg-zinc-900
-      border-t-[1px] border-zinc-700/50 animate-playerShow"
-    >
-      {currentState == "loading" ? (
+
+  if (currentState == "loading")
+    return (
+      <PlayerBackgroundUI>
         <PlayerYoutubeUISkeleton />
-      ) : (
-        <PlayerYoutubeUI
-          artist={channel}
-          song={videoName}
-          handleTimeOnInput={handleTimeOnInput}
-          handleTimeAfterInput={handleTimeAfterInput}
-        />
-      )}
-    </div>
+      </PlayerBackgroundUI>
+    );
+
+  if (currentState == "error")
+    return (
+      <PlayerBackgroundUI>
+        <PlayerYoutubeUIError />
+      </PlayerBackgroundUI>
+    );
+
+  return (
+    <PlayerBackgroundUI>
+      <PlayerYoutubeUI
+        artist={channel}
+        song={videoName}
+        handleTimeOnInput={handleTimeOnInput}
+        handleTimeAfterInput={handleTimeAfterInput}
+      />
+    </PlayerBackgroundUI>
   );
 }

@@ -27,6 +27,7 @@ export const {
   addPlaylist,
   resetState,
   selectSong,
+  errorSong,
   loadSong,
   endSong,
   playSong,

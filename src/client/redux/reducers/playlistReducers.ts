@@ -7,7 +7,7 @@ export type SongInfo = {
   createdTime: string;
 };
 
-const controlStates = ["idle", "loading"] as const;
+const controlStates = ["idle", "loading", "error"] as const;
 export type readyStates = "playing" | "paused" | "ended";
 export type allStates = (typeof controlStates)[number] | readyStates;
 
@@ -44,6 +44,10 @@ export const reducers = {
     state.isInLoop = false;
   },
 
+  errorSong: (state: playlistState) => {
+    state.currentState = "error";
+  },
+
   loadSong: (state: playlistState) => {
     state.currentState = "loading";
   },
@@ -59,10 +63,6 @@ export const reducers = {
   pauseSong: (state: playlistState) => {
     state.currentState = "paused";
   },
-
-  /*setStateTo:  (state: playlistState, action: PayloadAction<allStates>) => {
-    state.currentState = action.payload;
-  },*/
 
   setLoop: (state: playlistState, action: PayloadAction<boolean>) => {
     state.isInLoop = action.payload;
