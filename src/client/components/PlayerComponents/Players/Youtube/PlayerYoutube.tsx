@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import {
@@ -16,14 +15,14 @@ import {
 } from "@/client/redux/slices/playlistYoutubeSlice";
 import { allStates } from "@/client/redux/reducers/playlistReducers";
 import { ProgressBarYoutubeProps } from "../../ProgressBar/ProgressBarYoutube";
-import PlayerYoutubeUISkeleton from "./PlayerYoutubeUISkeleton";
 import PlayerYoutubeUI from "./PlayerYoutubeUI";
 import {
   IFrameYoutube,
   IFrameYoutubeRef,
 } from "@/client/components/Iframes/IFrameYoutube";
 import { PlayerBackgroundUI } from "../UI/PlayerBackgroundUI";
-import PlayerYoutubeUIError from "./PlayerYoutubeUIError";
+import PlayerUIError from "../UI/PlayerUIError";
+import PlayerUISkeleton from "../UI/PlayerUISkeleton";
 
 type handlePlayerProps = {
   currentState: allStates;
@@ -186,6 +185,7 @@ export default function PlayerYoutube() {
       };
       const event = data.event;
       const info = data.info;
+      console.log(event);
       messageObject[event](info);
     }
     window.addEventListener("message", handleEvent);
@@ -239,14 +239,14 @@ function HandlePlayer({
   if (currentState == "loading")
     return (
       <PlayerBackgroundUI>
-        <PlayerYoutubeUISkeleton />
+        <PlayerUISkeleton />
       </PlayerBackgroundUI>
     );
 
   if (currentState == "error")
     return (
       <PlayerBackgroundUI>
-        <PlayerYoutubeUIError />
+        <PlayerUIError />
       </PlayerBackgroundUI>
     );
 

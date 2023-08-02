@@ -1,10 +1,9 @@
 "use client";
 
-import { ReactNode, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/client/redux/store";
 import PlayerDriveUI from "./PlayerDriveUI";
-import PlayerDriveUISkeleton from "./PlayerDriveUISkeleton";
 import {
   endSong,
   errorSong,
@@ -15,8 +14,9 @@ import {
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistDriveSlice";
-import PlayerDriveUIError from "./PlayerDriveUIError";
 import { PlayerBackgroundUI } from "../UI/PlayerBackgroundUI";
+import PlayerUIError from "../UI/PlayerUIError";
+import PlayerUISkeleton from "../UI/PlayerUISkeleton";
 
 export default function PlayerDrive() {
   const audioObject = useRef<HTMLAudioElement | null>(null);
@@ -193,14 +193,14 @@ export default function PlayerDrive() {
   if (currentState == "loading")
     return (
       <PlayerBackgroundUI>
-        <PlayerDriveUISkeleton />
+        <PlayerUISkeleton />
       </PlayerBackgroundUI>
     );
 
   if (currentState == "error")
     return (
       <PlayerBackgroundUI>
-        <PlayerDriveUIError />
+        <PlayerUIError />
       </PlayerBackgroundUI>
     );
 

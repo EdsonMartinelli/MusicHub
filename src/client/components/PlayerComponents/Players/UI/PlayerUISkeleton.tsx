@@ -8,7 +8,7 @@ import PreviousButtonUISkeleton from "../../PreviousButton/UI/PreviousButtonUISk
 import ProgressBarUISkeleton from "../../ProgressBar/UI/ProgressBarUISkeleton";
 import VolumeBarUISkeleton from "../../VolumeBar/UI/VolumeBarUISkeleton";
 
-export default function PlayerDriveUISkeleton() {
+export default function PlayerUISkeleton() {
   return (
     <div className="flex flex-row items-center gap-4 animate-pulse w-full h-full">
       <div className="w-1/3 h-full hidden lg:flex items-center gap-4">
