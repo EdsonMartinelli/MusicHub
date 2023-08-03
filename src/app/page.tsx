@@ -1,10 +1,5 @@
 import MainPage from "@/client/components/MainPage/MainPage";
-import { driveFindFilesFactory } from "@/server/drive/factories/DriveFindFilesFactory";
 
 export default function Home() {
-  // const files = await driveFindFilesFactory().handle();
-
   return <MainPage />;
 }
-
-//https://www.behance.net/gallery/163951635/NFT-Landing-Page-Design?tracking_source=search_projects%7Cwebiste+ux

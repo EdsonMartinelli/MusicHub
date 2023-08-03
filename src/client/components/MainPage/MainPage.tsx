@@ -1,6 +1,5 @@
 "use client";
-// https://dribbble.com/shots/22078976-Music-Streaming-Dashboard
-// https://dribbble.com/shots/20796139-Music-Dashboard
+
 import Image from "next/image";
 import imgHome from "../../../../public/imgHome.jpg";
 import {

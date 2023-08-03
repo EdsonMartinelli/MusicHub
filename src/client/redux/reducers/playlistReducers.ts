@@ -44,24 +44,27 @@ export const reducers = {
     state.isInLoop = false;
   },
 
-  errorSong: (state: playlistState) => {
-    state.currentState = "error";
-  },
-
   loadSong: (state: playlistState) => {
     state.currentState = "loading";
   },
 
-  endSong: (state: playlistState) => {
-    state.currentState = "ended";
+  errorSong: (state: playlistState) => {
+    state.currentState = "error";
   },
 
   playSong: (state: playlistState) => {
+    if (state.currentState == "error") return;
     state.currentState = "playing";
   },
 
   pauseSong: (state: playlistState) => {
+    if (state.currentState == "error") return;
     state.currentState = "paused";
+  },
+
+  endSong: (state: playlistState) => {
+    if (state.currentState == "error") return;
+    state.currentState = "ended";
   },
 
   setLoop: (state: playlistState, action: PayloadAction<boolean>) => {
