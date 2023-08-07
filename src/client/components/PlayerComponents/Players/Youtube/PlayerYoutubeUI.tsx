@@ -12,13 +12,13 @@ import NextButtonYoutube from "../../NextButton/NextButtonYoutube";
 import VolumeBarYoutube from "../../VolumeBar/VolumeBarYoutube";
 
 type PlayerYoutubeUIProps = {
-  artist: string;
-  song: string;
+  channel: string;
+  title: string;
 } & ProgressBarYoutubeProps;
 
 export default function PlayerYoutubeUI({
-  song,
-  artist,
+  title,
+  channel,
   handleTimeOnInput,
   handleTimeAfterInput,
 }: PlayerYoutubeUIProps) {
@@ -30,10 +30,10 @@ export default function PlayerYoutubeUI({
         </div>
         <div className="w-full flex flex-col gap-1 overflow-hidden">
           <p className="h-7 font-semibold text-lg whitespace-nowrap truncate">
-            {song}
+            {title}
           </p>
           <span className="text-sm text-white/70 h-5 whitespace-nowrap truncate">
-            {artist}
+            {channel}
           </span>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function PlayerYoutubeUI({
         gap-2 lg:w-1/3"
       >
         <p className="block lg:hidden w-full font-semibold text-md lg:text-lg whitespace-nowrap truncate text-center">
-          {artist} - {song}
+          {title} - {channel}
         </p>
 
         <div className="flex flex-row w-full items-center justify-center gap-4">

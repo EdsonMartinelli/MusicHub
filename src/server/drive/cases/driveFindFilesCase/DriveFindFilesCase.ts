@@ -1,67 +1,74 @@
 import { IDriveFindFilesCase } from "./IDriveFindFilesCase";
-type responseFetchItemType = {
+type responseDriveItemType = {
   mimeType: string;
   id: string;
   name: string;
   createdTime: string;
 };
 
-type responseFetchType = {
+type responseDriveType = {
   nextPageToken?: string;
-  files: responseFetchItemType[];
+  files: responseDriveItemType[];
 };
 
-type formatedResponseItemType = {
-  name: string;
+type formatedItemType = {
+  title: string;
+  author: string;
   id: string;
-  createdTime: string;
+  createdAt: string;
 };
 
-type formatedResponseType = {
-  files: formatedResponseItemType[];
+type formatedReturnType = {
+  files: formatedItemType[];
   nextPageToken?: string;
 };
 
 export class DriveFindFilesCase implements IDriveFindFilesCase {
   async execute() {
-    const response = await this.fetchFunction();
-    let newPageToken = response.nextPageToken;
-    const listOfSong = { list: response.files };
+    const { files, nextPageToken } = await this.driveFetch();
+    let newPageToken = nextPageToken;
+    let list = files;
 
     while (newPageToken != null) {
-      const newResponse = await this.fetchFunction(newPageToken);
-      newPageToken = newResponse.nextPageToken;
-      listOfSong.list = listOfSong.list.concat(newResponse.files);
+      const { files: newFiles, nextPageToken: newNextPageToken } =
+        await this.driveFetch(nextPageToken);
+      newPageToken = newNextPageToken;
+      list = [...list, ...newFiles];
     }
 
-    return listOfSong;
+    return { list };
   }
 
-  async fetchFunction(pageToken?: string): Promise<formatedResponseType> {
+  async driveFetch(pageToken?: string): Promise<formatedReturnType> {
     const key = process.env.GOOGLE_KEY;
     const corpora = "user";
     const folderId = "196avRwiYuQuEILLXn1Oi_xaYYQnS252S";
     const q = `'${folderId}' in parents`;
     const fields = "nextPageToken%2Cfiles(id%2Cname%2CmimeType%2CcreatedTime)";
     const url = `https://www.googleapis.com/drive/v3/files?corpora=${corpora}&q=${q}&&fields=${fields}&key=${key}`;
-    const urlWithPageToken = `https://www.googleapis.com/drive/v3/files?corpora=${corpora}&q=${q}&&fields=${fields}&key=${key}&pageToken=${pageToken}`;
-    const response = await fetch(pageToken == null ? url : urlWithPageToken);
-    const responseJSON: responseFetchType = await response.json();
+    const response = await fetch(
+      pageToken == null ? url : `${url}&pageToken=${pageToken}`
+    );
+    const responseJSON: responseDriveType = await response.json();
 
-    const filteredResponse: responseFetchItemType[] = responseJSON.files.filter(
+    const filteredResponse: responseDriveItemType[] = responseJSON.files.filter(
       (item: any) => item.mimeType == "audio/mpeg"
     );
 
     const formatedResponse = filteredResponse.map(
-      (item: responseFetchItemType) => {
+      (item: responseDriveItemType) => {
         const date = new Date(item.createdTime);
         const shortDate = `${date.toLocaleString("en-US", {
           month: "short",
         })}, ${date.getFullYear()}`;
+
+        const [author, title] = item.name.replace(".mp3", "").split(" - ");
+
         return {
-          name: item.name,
           id: item.id,
-          createdTime: shortDate,
+          title,
+          author,
+          createdAt: shortDate,
         };
       }
     );

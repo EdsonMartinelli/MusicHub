@@ -3,8 +3,10 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type SongInfo = {
   id: string;
-  name: string;
-  createdTime: string;
+  //name: string;
+  title: string;
+  author: string;
+  createdAt: string;
 };
 
 const controlStates = ["idle", "loading", "error"] as const;

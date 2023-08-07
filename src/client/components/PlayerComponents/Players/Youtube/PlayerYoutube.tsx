@@ -210,8 +210,8 @@ export default function PlayerYoutube() {
     }
   }
 
-  const channel = currentSong?.name.split(" - ")[0];
-  const videoName = currentSong?.name.split(" - ")[1];
+  const channel = currentSong?.author;
+  const videoName = currentSong?.title;
 
   return (
     <>
@@ -253,8 +253,8 @@ function HandlePlayer({
   return (
     <PlayerBackgroundUI>
       <PlayerYoutubeUI
-        artist={channel}
-        song={videoName}
+        channel={channel}
+        title={videoName}
         handleTimeOnInput={handleTimeOnInput}
         handleTimeAfterInput={handleTimeAfterInput}
       />

@@ -12,11 +12,11 @@ import AutoPlayButtonDrive from "../../AutoPlayButton/AutoPlayButtonDrive";
 
 type PlayerDriveUIProps = {
   artist: string;
-  song: string;
+  title: string;
 } & ProgressBarDriveProps;
 
 export default function PlayerDriveUI({
-  song,
+  title,
   artist,
   handleTimeOnInput,
   handleTimeAfterInput,
@@ -29,7 +29,7 @@ export default function PlayerDriveUI({
         </div>
         <div className="w-full flex flex-col gap-1 overflow-hidden">
           <p className="h-7 font-semibold text-lg whitespace-nowrap truncate">
-            {song}
+            {title}
           </p>
           <span className="text-sm text-white/70 h-5 whitespace-nowrap truncate">
             {artist}
@@ -41,7 +41,7 @@ export default function PlayerDriveUI({
         gap-2 lg:w-1/3"
       >
         <p className="block lg:hidden w-full font-semibold text-md lg:text-lg whitespace-nowrap truncate text-center">
-          {artist} - {song}
+          {artist} - {title}
         </p>
 
         <div className="flex flex-row w-full items-center justify-center gap-4">

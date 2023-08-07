@@ -12,8 +12,9 @@ import {
 
 export default function ItemYoutube({
   id,
-  name,
-  createdTime,
+  title,
+  author,
+  createdAt,
   index,
 }: SongInfo & { index: number }) {
   const currentSong = useSelector(
@@ -24,10 +25,6 @@ export default function ItemYoutube({
   );
 
   const dispatch = useDispatch();
-
-  const songNamedFormated = name.replace(".mp3", "");
-  const artist = songNamedFormated.split(" - ")[0];
-  const songName = songNamedFormated.split(" - ")[1];
 
   function handleClick() {
     if (currentSong?.id != id) {
@@ -43,9 +40,9 @@ export default function ItemYoutube({
   return (
     <ItemUI
       index={index}
-      title={songName}
-      source={artist}
-      createdTime={createdTime}
+      title={title}
+      author={author}
+      createdAt={createdAt}
       currentState={currentState}
       isCurrent={currentSong?.id == id}
       handleClick={handleClick}

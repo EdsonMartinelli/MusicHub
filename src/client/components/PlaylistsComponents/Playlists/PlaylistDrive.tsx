@@ -21,13 +21,16 @@ export function PlaylistDrive() {
     return {
       index,
       id: item.id,
-      name: item.name,
-      createdTime: item.createdTime,
+      title: item.title,
+      author: item.author,
+      createdAt: item.createdAt,
     };
   });
 
-  const filteredPlaylist = indexedPlaylist.filter((item) =>
-    item.name.toLowerCase().includes(searchLowerCase)
+  const filteredPlaylist = indexedPlaylist.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchLowerCase) ||
+      item.author.toLowerCase().includes(searchLowerCase)
   );
 
   return (
@@ -44,8 +47,9 @@ export function PlaylistDrive() {
               return (
                 <ItemDrive
                   id={item.id}
-                  name={item.name}
-                  createdTime={item.createdTime}
+                  title={item.title}
+                  author={item.author}
+                  createdAt={item.createdAt}
                   index={item.index + 1}
                   key={item.id}
                 />

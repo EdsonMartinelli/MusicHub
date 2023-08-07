@@ -184,9 +184,8 @@ export default function PlayerDrive() {
     }
   }
 
-  const songNamedFormated = currentSong?.name.replace(".mp3", "");
-  const artist = songNamedFormated?.split(" - ")[0];
-  const songName = songNamedFormated?.split(" - ")[1];
+  const artist = currentSong?.author;
+  const title = currentSong?.title;
 
   if (currentState == "idle") return null;
 
@@ -208,7 +207,7 @@ export default function PlayerDrive() {
     <PlayerBackgroundUI>
       <PlayerDriveUI
         artist={artist ?? ""}
-        song={songName ?? ""}
+        title={title ?? ""}
         handleTimeOnInput={handleTimeOnInput}
         handleTimeAfterInput={handleTimeAfterInput}
       />

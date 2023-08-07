@@ -9,8 +9,8 @@ import {
 type ItemUIProps = {
   index: number;
   title: string;
-  source: string;
-  createdTime: string;
+  author: string;
+  createdAt: string;
   handleClick: () => void;
   isCurrent: boolean;
   currentState: allStates;
@@ -25,8 +25,8 @@ type ItemIndicationUIProps = {
 export default function ItemUI({
   index,
   title,
-  source,
-  createdTime,
+  author,
+  createdAt,
   handleClick,
   isCurrent = false,
   currentState,
@@ -55,11 +55,11 @@ export default function ItemUI({
             {title}
           </p>
           <p className="w-full text-left truncate text-xs text-zinc-300">
-            {source}
+            {author}
           </p>
         </div>
       </div>
-      <p className="text-xs lg:text-xs text-zinc-100">{createdTime}</p>
+      <p className="text-xs lg:text-xs text-zinc-100">{createdAt}</p>
     </button>
   );
 }
