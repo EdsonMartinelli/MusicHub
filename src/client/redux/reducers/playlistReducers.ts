@@ -1,13 +1,6 @@
 "use client";
+import { SongInfo } from "@/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-export type SongInfo = {
-  id: string;
-  //name: string;
-  title: string;
-  author: string;
-  createdAt: string;
-};
 
 const controlStates = ["idle", "loading", "error"] as const;
 export type readyStates = "playing" | "paused" | "ended";

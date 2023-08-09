@@ -1,8 +1,8 @@
-import { driveFindFilesFactory } from "@/server/drive/factories/DriveFindFilesFactory";
+import { driveFindFiles } from "@/server/drive/driveFindFiles";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   console.log("TESTE");
-  const response = await driveFindFilesFactory().handle();
+  const response = await driveFindFiles();
   return NextResponse.json(response);
 }
