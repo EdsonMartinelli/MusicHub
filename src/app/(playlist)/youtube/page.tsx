@@ -1,3 +1,4 @@
+import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
 import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
 import { youtubeFindPlaylist } from "@/server/youtube/youtubeFindPlaylist";
 import { SongInfo, handledResponse } from "@/types";
@@ -51,9 +52,9 @@ export default async function Teste() {
       list: [...acc.list, ...playlist.list],
     };
   }, {} as handledResponse);
-
+  
   if (!(infoPlaylists.error == null))
-    return <div className="text-white"> Error </div>; */
+    return <ErrorPage /> */
 
   return (
     <>

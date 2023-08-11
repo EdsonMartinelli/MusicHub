@@ -1,3 +1,4 @@
+import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
 import ProviderWrapperDrive from "@/client/components/Providers/ProviderWrapperDrive";
 import { driveFindFiles } from "@/server/drive/driveFindFiles";
 import { SongInfo, handledResponse } from "@/types";
@@ -80,7 +81,7 @@ export default async function Drive() {
   }, {} as handledResponse);
 
   if (!(infoFolders.error == null))
-    return <div className="text-white"> Error </div>; */
+    return <ErrorPage />; */
 
   return (
     <>
