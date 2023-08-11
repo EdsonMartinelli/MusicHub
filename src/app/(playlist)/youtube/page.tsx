@@ -1,6 +1,8 @@
 import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
+import { youtubeFindPlaylist } from "@/server/youtube/youtubeFindPlaylist";
+import { SongInfo, handledResponse } from "@/types";
 
-export default function Teste() {
+export default async function Teste() {
   const data = [
     {
       id: "vO-6OWBUxxo",
@@ -28,9 +30,34 @@ export default function Teste() {
     },
   ];
 
+  const infoPlaylists = {
+    list: data,
+  };
+
+  /* const playlistsId = [
+    "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
+    "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
+  ];
+
+  const promisedPlaylists = playlistsId.map((playlistId) =>
+    youtubeFindPlaylist(playlistId)
+  );
+  const responsedPlaylists = await Promise.all(promisedPlaylists);
+
+  const infoPlaylists = responsedPlaylists.reduce((acc, playlist) => {
+    if (!(acc.error == null)) return { list: [], error: acc.error };
+    if (!(playlist.error == null)) return { list: [], error: playlist.error };
+    return {
+      list: [...acc.list, ...playlist.list],
+    };
+  }, {} as handledResponse);
+
+  if (!(infoPlaylists.error == null))
+    return <div className="text-white"> Error </div>; */
+
   return (
     <>
-      <ProviderWrapperYoutube playlist={data} />
+      <ProviderWrapperYoutube playlist={infoPlaylists.list} />
     </>
   );
 }

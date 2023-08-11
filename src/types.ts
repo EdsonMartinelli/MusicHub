@@ -4,3 +4,5 @@ export type SongInfo = {
   author: string;
   createdAt: string;
 };
+
+export type handledResponse = { list: SongInfo[]; error?: string };
