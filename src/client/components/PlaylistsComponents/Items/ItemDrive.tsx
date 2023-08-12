@@ -2,13 +2,13 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
-import { SongInfo } from "@/client/redux/reducers/playlistReducers";
 import {
   pauseSong,
   playSong,
   selectSong,
 } from "@/client/redux/slices/playlistDriveSlice";
 import ItemUI from "./UI/ItemUI";
+import { SongInfo } from "@/types";
 
 export default function ItemDrive({
   id,
