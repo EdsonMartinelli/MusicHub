@@ -2,6 +2,17 @@ import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
 import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
 import { youtubeFindPlaylist } from "@/server/youtube/youtubeFindPlaylist";
 import { SongInfo, handledResponse } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Music Hub",
+  description: "A simples site with my favorites songs",
+  icons: {
+    icon: ["/icon.png"],
+    apple: ["/icon.png"],
+    shortcut: ["/icon.png"],
+  },
+};
 
 export default async function Teste() {
   const data = [
