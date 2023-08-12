@@ -5,7 +5,7 @@ import { SongInfo, handledResponse } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Music Hub",
+  title: "Music Hub - Drive",
   description: "A simples site with my favorites songs",
   icons: {
     icon: ["/icon.png"],
