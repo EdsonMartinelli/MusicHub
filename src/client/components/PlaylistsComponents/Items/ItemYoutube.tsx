@@ -2,13 +2,13 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
-import { SongInfo } from "@/client/redux/reducers/playlistReducers";
 import ItemUI from "./UI/ItemUI";
 import {
   pauseSong,
   playSong,
   selectSong,
 } from "@/client/redux/slices/playlistYoutubeSlice";
+import { SongInfo } from "@/types";
 
 export default function ItemYoutube({
   id,
