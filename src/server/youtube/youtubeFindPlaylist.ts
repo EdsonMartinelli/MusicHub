@@ -46,7 +46,6 @@ async function youtubeFetch(
   pageToken?: string
 ): Promise<videosWithNextPage> {
   const key = process.env.GOOGLE_KEY;
-  //const playlist = "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL";
   const part = "snippet";
   const maxResults = 50;
   const fields =
@@ -58,9 +57,14 @@ async function youtubeFetch(
   );
 
   if (!response.ok) throw new URLError();
+
   const responseJSON: responseYoutube = await response.json();
 
-  let videos = responseJSON.items.map((item: responseYoutubeItem) => {
+  const filteredResponse: responseYoutubeItem[] = responseJSON.items.filter(
+    (item) => !(item.snippet.videoOwnerChannelTitle == undefined)
+  );
+
+  let videos = filteredResponse.map((item: responseYoutubeItem) => {
     return {
       title: item.snippet.title,
       author: item.snippet.videoOwnerChannelTitle,

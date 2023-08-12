@@ -41,32 +41,11 @@ export default async function Drive() {
     list: data,
   };
 
-  /*const folderId1 = "196avRwiYuQuEILLXn1Oi_xaYYQnS252S";
-  const folderId2 = "17QnutWbjP0y9PnXqUCtj9yLOA2zSYI9U";
-
-  const filesFolder1 = await driveFindFiles(folderId1);
-  const filesFolder2 = await driveFindFiles(folderId2);
-
-  if (!(filesFolder1.error == null) || !(filesFolder2.error == null)) {
-    return <div className="text-white"> Error </div>;
-  }
-
-  const data = [
-    ...filesFolder1.list,
-    ...filesFolder2.list,
-  ] satisfies SongInfo[];*/
-
   /*const foldersId = [
     "196avRwiYuQuEILLXn1Oi_xaYYQnS252S",
     "17QnutWbjP0y9PnXqUCtj9yLOA2zSYI9U",
   ];
 
-
-
-
-
-
-  
   const promisedPlaylists = foldersId.map((folderId) =>
     driveFindFiles(folderId)
   );

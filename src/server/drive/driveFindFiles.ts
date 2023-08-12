@@ -11,7 +11,7 @@ type responseDriveItem = {
 
 type responseDrive = {
   nextPageToken?: string;
-  files: responseDriveItem[];
+  items: responseDriveItem[];
 };
 
 type filesWithNextPage = {
@@ -46,7 +46,6 @@ async function driveFetch(
 ): Promise<filesWithNextPage> {
   const key = process.env.GOOGLE_KEY;
   const corpora = "user";
-  // const folderId = "196avRwiYuQuEILLXn1Oi_xaYYQnS252S";
   const q = `'${folderId}' in parents`;
   const fields = "nextPageToken%2Cfiles(id%2Cname%2CmimeType%2CcreatedTime)";
   const url = `https://www.googleapis.com/drive/v3/files?corpora=${corpora}&q=${q}&&fields=${fields}&key=${key}`;
@@ -59,11 +58,11 @@ async function driveFetch(
 
   const responseJSON: responseDrive = await response.json();
 
-  const filteredResponse: responseDriveItem[] = responseJSON.files.filter(
-    (item: any) => item.mimeType == "audio/mpeg"
+  const filteredResponse: responseDriveItem[] = responseJSON.items.filter(
+    (item) => item.mimeType == "audio/mpeg"
   );
 
-  const formatedResponse = filteredResponse.map((item: responseDriveItem) => {
+  const files = filteredResponse.map((item: responseDriveItem) => {
     const [author, title] = item.name.replace(".mp3", "").split(" - ");
     return {
       id: item.id,
@@ -73,10 +72,10 @@ async function driveFetch(
     };
   });
 
-  if (responseJSON.nextPageToken == null) return { files: formatedResponse };
+  if (responseJSON.nextPageToken == null) return { files };
 
   return {
-    files: formatedResponse,
+    files,
     nextPageToken: responseJSON.nextPageToken,
   };
 }
