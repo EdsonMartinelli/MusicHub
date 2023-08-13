@@ -1,7 +1,7 @@
 import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
 import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
 import { youtubeFindPlaylist } from "@/server/youtube/youtubeFindPlaylist";
-import { SongInfo, handledResponse } from "@/types";
+import { handledResponse } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Teste() {
-  const data = [
+export default async function Youtube() {
+  /*const data = [
     {
       id: "vO-6OWBUxxo",
       title: "Disco Metal",
@@ -44,9 +44,9 @@ export default async function Teste() {
 
   const infoPlaylists = {
     list: data,
-  };
+  };*/
 
-  /* const playlistsId = [
+  const playlistsId = [
     "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
     "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
   ];
@@ -63,9 +63,8 @@ export default async function Teste() {
       list: [...acc.list, ...playlist.list],
     };
   }, {} as handledResponse);
-  
-  if (!(infoPlaylists.error == null))
-    return <ErrorPage /> */
+
+  if (!(infoPlaylists.error == null)) return <ErrorPage />;
 
   return (
     <>

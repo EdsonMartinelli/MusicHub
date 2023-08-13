@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Drive() {
-  const data = [
+  /*const data = [
     {
       id: "1TZi8nYn9k_Cb1e2VSDxSiB9o6DSTZjXI",
       title: "Berzerk",
@@ -50,9 +50,9 @@ export default async function Drive() {
 
   const infoFolders = {
     list: data,
-  };
+  };*/
 
-  /*const foldersId = [
+  const foldersId = [
     "196avRwiYuQuEILLXn1Oi_xaYYQnS252S",
     "17QnutWbjP0y9PnXqUCtj9yLOA2zSYI9U",
   ];
@@ -70,8 +70,7 @@ export default async function Drive() {
     };
   }, {} as handledResponse);
 
-  if (!(infoFolders.error == null))
-    return <ErrorPage />; */
+  if (!(infoFolders.error == null)) return <ErrorPage />;
 
   return (
     <>
