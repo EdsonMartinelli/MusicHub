@@ -42,7 +42,10 @@ type eventMessageFunctions = Record<
   (info: Record<string, any> | null) => void
 >;
 
-export default function PlayerYoutube() {
+type PlayerYoutubeProps = {
+  isInProduction: boolean;
+};
+export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
   const iFrameRef = useRef<IFrameYoutubeRef>(null);
   const currentSong = useSelector(
     (state: RootState) => state.playlistYoutube.currentSong
@@ -85,14 +88,21 @@ export default function PlayerYoutube() {
     iFrameRef.current.pauseVideo();
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
-    videoPlayer.setSrc(
-      `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=http://localhost:3000&enablejsapi=1`
-    );
+    if (isInProduction) {
+      videoPlayer.setSrc(
+        `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=https://musichub-edson.vercel.app&enablejsapi=1`
+      );
+    } else {
+      videoPlayer.setSrc(
+        `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=http://localhost:3000&enablejsapi=1`
+      );
+    }
+
     videoPlayer.init();
     return () => {
       videoPlayer.remove();
     };
-  }, [currentSong, dispatch]);
+  }, [currentSong, dispatch, isInProduction]);
 
   useEffect(() => {
     if (iFrameRef.current == null) return;
@@ -185,7 +195,6 @@ export default function PlayerYoutube() {
       };
       const event = data.event;
       const info = data.info;
-      console.log(event);
       messageObject[event](info);
     }
     window.addEventListener("message", handleEvent);

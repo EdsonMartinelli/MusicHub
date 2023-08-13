@@ -7,13 +7,21 @@ import PlayerYoutube from "../PlayerComponents/Players/Youtube/PlayerYoutube";
 import { PlaylistYoutube } from "../PlaylistsComponents/Playlists/PlaylistYoutube";
 import { SongInfo } from "@/types";
 
-export default function ProviderWrapperYoutube(data: { playlist: SongInfo[] }) {
-  store.dispatch(addPlaylist(data.playlist));
+type ProviderWrapperYoutubeProps = {
+  playlist: SongInfo[];
+  isInProduction: boolean;
+};
+
+export default function ProviderWrapperYoutube({
+  playlist,
+  isInProduction,
+}: ProviderWrapperYoutubeProps) {
+  store.dispatch(addPlaylist(playlist));
   return (
     <>
       <Provider store={store}>
         <PlaylistYoutube />
-        <PlayerYoutube />
+        <PlayerYoutube isInProduction={isInProduction} />
       </Provider>
     </>
   );

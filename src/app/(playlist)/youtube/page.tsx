@@ -46,6 +46,8 @@ export default async function Youtube() {
     list: data,
   };*/
 
+  const env = process.env.NEXT_APP_ENV || "development";
+
   const playlistsId = [
     "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
     "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
@@ -71,7 +73,10 @@ export default async function Youtube() {
 
   return (
     <>
-      <ProviderWrapperYoutube playlist={infoPlaylists.list} />
+      <ProviderWrapperYoutube
+        playlist={infoPlaylists.list}
+        isInProduction={env == "development" ? false : true}
+      />
     </>
   );
 }
