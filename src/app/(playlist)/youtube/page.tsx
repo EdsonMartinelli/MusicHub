@@ -56,13 +56,16 @@ export default async function Youtube() {
   );
   const responsedPlaylists = await Promise.all(promisedPlaylists);
 
-  const infoPlaylists = responsedPlaylists.reduce((acc, playlist) => {
-    if (!(acc.error == null)) return { list: [], error: acc.error };
-    if (!(playlist.error == null)) return { list: [], error: playlist.error };
-    return {
-      list: [...acc.list, ...playlist.list],
-    };
-  }, {} as handledResponse);
+  const infoPlaylists = responsedPlaylists.reduce(
+    (acc, playlist) => {
+      if (!(acc.error == null)) return { list: [], error: acc.error };
+      if (!(playlist.error == null)) return { list: [], error: playlist.error };
+      return {
+        list: [...acc.list, ...playlist.list],
+      };
+    },
+    { list: [] } as handledResponse
+  );
 
   if (!(infoPlaylists.error == null)) return <ErrorPage />;
 

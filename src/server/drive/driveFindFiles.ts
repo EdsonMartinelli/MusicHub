@@ -11,7 +11,7 @@ type responseDriveItem = {
 
 type responseDrive = {
   nextPageToken?: string;
-  items: responseDriveItem[];
+  files: responseDriveItem[];
 };
 
 type filesWithNextPage = {
@@ -58,7 +58,7 @@ async function driveFetch(
 
   const responseJSON: responseDrive = await response.json();
 
-  const filteredResponse: responseDriveItem[] = responseJSON.items.filter(
+  const filteredResponse: responseDriveItem[] = responseJSON.files.filter(
     (item) => item.mimeType == "audio/mpeg"
   );
 

@@ -60,15 +60,19 @@ export default async function Drive() {
   const promisedPlaylists = foldersId.map((folderId) =>
     driveFindFiles(folderId)
   );
+
   const responsedFolders = await Promise.all(promisedPlaylists);
 
-  const infoFolders = responsedFolders.reduce((acc, folder) => {
-    if (!(acc.error == null)) return { list: [], error: acc.error };
-    if (!(folder.error == null)) return { list: [], error: folder.error };
-    return {
-      list: [...acc.list, ...folder.list],
-    };
-  }, {} as handledResponse);
+  const infoFolders = responsedFolders.reduce(
+    (acc, folder) => {
+      if (!(acc.error == null)) return { list: [], error: acc.error };
+      if (!(folder.error == null)) return { list: [], error: folder.error };
+      return {
+        list: [...acc.list, ...folder.list],
+      };
+    },
+    { list: [] } as handledResponse
+  );
 
   if (!(infoFolders.error == null)) return <ErrorPage />;
 
