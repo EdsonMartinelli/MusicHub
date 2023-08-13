@@ -196,6 +196,7 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
       };
       const event = data.event;
       const info = data.info;
+      console.log(event);
       messageObject[event](info);
     }
     window.addEventListener("message", handleEvent);
