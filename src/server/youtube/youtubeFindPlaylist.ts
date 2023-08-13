@@ -3,11 +3,13 @@ import { getShortDate } from "../utils";
 import { URLError } from "../errors/URLError";
 
 type responseYoutubeItem = {
-  id: string;
   snippet: {
     publishedAt: string;
     title: string;
     videoOwnerChannelTitle: string;
+    resourceId: {
+      videoId: string;
+    };
   };
 };
 
@@ -49,7 +51,7 @@ async function youtubeFetch(
   const part = "snippet";
   const maxResults = 50;
   const fields =
-    "items/id, items/snippet/title, items/snippet/publishedAt, items/snippet/videoOwnerChannelTitle, nextPageToken";
+    "items/snippet/resourceId/videoId, items/snippet/title, items/snippet/publishedAt, items/snippet/videoOwnerChannelTitle, nextPageToken";
   const url = `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${playlistId}&key=${key}&part=${part}&maxResults=${maxResults}&fields=${fields}`;
   const response = await fetch(
     pageToken == null ? url : `${url}&pageToken=${pageToken}`,
@@ -68,7 +70,7 @@ async function youtubeFetch(
     return {
       title: item.snippet.title,
       author: item.snippet.videoOwnerChannelTitle,
-      id: item.id,
+      id: item.snippet.resourceId.videoId,
       createdAt: getShortDate(item.snippet.publishedAt),
     };
   });

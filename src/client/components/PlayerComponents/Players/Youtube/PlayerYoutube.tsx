@@ -89,7 +89,6 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
     if (isInProduction) {
-      console.log("IS IN PRODUCTION");
       videoPlayer.setSrc(
         `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=https://musichub-edson.vercel.app&enablejsapi=1`
       );
@@ -98,7 +97,6 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
         `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=http://localhost:3000&enablejsapi=1`
       );
     }
-
     videoPlayer.init();
     return () => {
       videoPlayer.remove();
@@ -196,7 +194,6 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
       };
       const event = data.event;
       const info = data.info;
-      console.log(event);
       messageObject[event](info);
     }
     window.addEventListener("message", handleEvent);
