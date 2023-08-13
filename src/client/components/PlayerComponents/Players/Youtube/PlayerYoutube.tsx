@@ -89,6 +89,7 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
     if (isInProduction) {
+      console.log("IS IN PRODUCTION");
       videoPlayer.setSrc(
         `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=https://musichub-edson.vercel.app&enablejsapi=1`
       );
