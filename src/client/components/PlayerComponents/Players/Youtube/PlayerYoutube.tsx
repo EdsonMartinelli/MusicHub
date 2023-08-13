@@ -141,11 +141,28 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     [dispatch, volume, isMuted]
   );
 
+  const onError = useCallback(
+    (_: Record<string, any> | null) => {
+      dispatch(errorSong());
+      if (isInAutoPlay) {
+        const timeout = setTimeout(() => {
+          dispatch(nextSong());
+          clearTimeout(timeout);
+        }, 2000);
+      }
+    },
+    [dispatch, isInAutoPlay]
+  );
+
   const infoDelivery = useCallback(
     (info: Record<string, any> | null) => {
       if (info == null) return;
       if (isChangingTime) return;
       if (currentState == "ended") return;
+      if (info?.videoData?.errorCode == "api.invalidparam") {
+        onError(info);
+        return;
+      }
       if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
 
       if (info.playerState == 0) {
@@ -162,20 +179,15 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
         }
       }
     },
-    [currentState, dispatch, duration, isChangingTime, isInAutoPlay, isInLoop]
-  );
-
-  const onError = useCallback(
-    (_: Record<string, any> | null) => {
-      dispatch(errorSong());
-      if (isInAutoPlay) {
-        const timeout = setTimeout(() => {
-          dispatch(nextSong());
-          clearTimeout(timeout);
-        }, 2000);
-      }
-    },
-    [dispatch, isInAutoPlay]
+    [
+      currentState,
+      dispatch,
+      duration,
+      isChangingTime,
+      isInAutoPlay,
+      isInLoop,
+      onError,
+    ]
   );
 
   useEffect(() => {
@@ -192,6 +204,7 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
         event: eventMessageType;
         info: Record<string, any> | null;
       };
+      console.log(data);
       const event = data.event;
       const info = data.info;
       messageObject[event](info);
