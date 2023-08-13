@@ -90,7 +90,7 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     const videoPlayer = iFrameRef.current;
     if (isInProduction) {
       videoPlayer.setSrc(
-        `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=https://musichub-edson.vercel.app&enablejsapi=1`
+        `https://www.youtube-nocookie.com/embed/${currentSong.id}?loop=0&controls=0&origin=https://musichubproject.vercel.app&enablejsapi=1`
       );
     } else {
       videoPlayer.setSrc(
