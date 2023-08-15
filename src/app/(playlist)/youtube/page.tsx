@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Youtube() {
-  /*const data = [
+  const data = [
     {
       id: "vO-6OWBUxxo",
       title: "Disco Metal",
@@ -50,11 +50,11 @@ export default async function Youtube() {
 
   const infoPlaylists = {
     list: data,
-  };*/
+  };
 
   const env = process.env.NEXT_APP_ENV || "development";
 
-  const playlistsId = [
+  /*const playlistsId = [
     "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
     "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
   ];
@@ -75,7 +75,7 @@ export default async function Youtube() {
     { list: [] } as handledResponse
   );
 
-  if (!(infoPlaylists.error == null)) return <ErrorPage />;
+  if (!(infoPlaylists.error == null)) return <ErrorPage />;*/
 
   return (
     <>

@@ -9,12 +9,13 @@ const initialState: playlistState = {
   currentState: "idle",
   isInLoop: false,
   isInAutoPlay: false,
-  volume: 0.2,
+  volume: 0.5,
   isMuted: false,
   currentTime: 0,
   isChangingTime: false,
   duration: 0,
   playlist: [],
+  numberOfSongs: 0,
 };
 
 export const playlistDriveSlice = createSlice({

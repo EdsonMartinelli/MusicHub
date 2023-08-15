@@ -1,24 +1,21 @@
-import { GoogleDriveLogo } from "@phosphor-icons/react";
+"use client";
+
 import { BannerUI } from "./UI/BannerUI";
+import { useSelector } from "react-redux";
+import { RootState } from "@/client/redux/store";
+import PlayFirstButtonDrive from "../PlayFirstButton/PlayFirstButtonDrive";
 
 export function BannerDrive() {
+  const numberOfSongs = useSelector(
+    (state: RootState) => state.playlistDrive.numberOfSongs
+  );
   return (
     <BannerUI
-      type="Playlist"
-      name="Google Drive"
-      by="by Edson Gomes Martinelli"
-      info={[
-        {
-          name: "Playlist 1",
-          link: "https://drive.google.com/drive/u/0/folders/196avRwiYuQuEILLXn1Oi_xaYYQnS252S",
-        },
-        {
-          name: "Playlist 2",
-          link: "https://drive.google.com/drive/u/0/folders/17QnutWbjP0y9PnXqUCtj9yLOA2zSYI9U",
-        },
-      ]}
+      source="Google Drive"
+      by="Edson Gomes Martinelli"
+      numberOfSongs={numberOfSongs}
     >
-      <GoogleDriveLogo size="100%" weight="fill" />
+      <PlayFirstButtonDrive />
     </BannerUI>
   );
 }

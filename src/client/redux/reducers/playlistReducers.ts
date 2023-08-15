@@ -22,11 +22,13 @@ export type playlistState = {
   currentTime: number;
   duration: number;
   playlist: SongInfo[];
+  numberOfSongs: number;
 };
 
 export const reducers = {
   addPlaylist: (state: playlistState, action: PayloadAction<SongInfo[]>) => {
     state.playlist = action.payload;
+    state.numberOfSongs = action.payload.length;
   },
 
   resetState: (state: playlistState) => {

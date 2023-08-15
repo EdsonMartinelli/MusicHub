@@ -1,24 +1,21 @@
-import { YoutubeLogo } from "@phosphor-icons/react";
+"use client";
+
 import { BannerUI } from "./UI/BannerUI";
+import { useSelector } from "react-redux";
+import { RootState } from "@/client/redux/store";
+import PlayFirstButtonYoutube from "../PlayFirstButton/PlayFirstButtonYoutube";
 
 export function BannerYoutube() {
+  const numberOfSongs = useSelector(
+    (state: RootState) => state.playlistYoutube.numberOfSongs
+  );
   return (
     <BannerUI
-      type="Playlist"
-      name="Youtube"
-      by="by Edson Gomes Martinelli"
-      info={[
-        {
-          name: "Playlist 1",
-          link: "https://www.youtube.com/playlist?list=PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
-        },
-        {
-          name: "Playlist 2",
-          link: "https://www.youtube.com/playlist?list=PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
-        },
-      ]}
+      source="Youtube"
+      by="Edson Gomes Martinelli"
+      numberOfSongs={numberOfSongs}
     >
-      <YoutubeLogo size="100%" weight="fill" />
+      <PlayFirstButtonYoutube />
     </BannerUI>
   );
 }

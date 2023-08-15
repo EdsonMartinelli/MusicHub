@@ -45,8 +45,8 @@ export default function Main() {
         <LightColorBackGround bg="youtube" currentBg={bg} />
         <LightColorBackGround bg="spotify" currentBg={bg} />
         <div
-          className="relative h-screen w-full flex items-center justify-center gap-24
-          mt-20 px-5 lg:mt-0 lg:px-0 z-[3]"
+          className="relative h-fit min-h-screen w-full flex items-center justify-center gap-24
+          mt-20 px-5 lg:mt-0 lg:px-0 z-[3] py-5 lg:py-0"
         >
           <div
             className="hidden lg:block w-72 h-96 bg-orange-600 rounded-lg overflow-hidden

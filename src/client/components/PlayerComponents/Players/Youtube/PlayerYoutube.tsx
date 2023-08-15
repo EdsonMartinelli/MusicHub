@@ -204,7 +204,6 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
         event: eventMessageType;
         info: Record<string, any> | null;
       };
-      console.log(data);
       const event = data.event;
       const info = data.info;
       messageObject[event](info);
