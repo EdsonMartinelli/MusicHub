@@ -14,50 +14,67 @@ export const metadata: Metadata = {
   },
 };
 
+const data = [
+  {
+    id: "vO-6OWBUxxo",
+    title: "Disco Metal",
+    author: "Nanowar of Steel",
+    createdAt: "Feb, 2023",
+  },
+  {
+    id: "GiT7fhfTrPQ",
+    title: "Strobe (Radio Edit)",
+    author: "Deadmau5",
+    createdAt: "Fev, 2017",
+  },
+  {
+    id: "O5Hn0df4sda",
+    title: "Teste",
+    author: "Teste",
+    createdAt: "Jul, 2023",
+  },
+  {
+    id: "O5Hn0df4sdasdfsadfsdfsadfsadfsadfsfsadfsdf",
+    title: "Teste2",
+    author: "Teste2",
+    createdAt: "Jul, 2023",
+  },
+  {
+    id: "7QU1nvuxaMA",
+    title: "Like a Stone",
+    author: "Audioslave",
+    createdAt: "Out, 2009",
+  },
+];
+
+const playlistsId = [
+  "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
+  "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
+];
+
 export default async function Youtube() {
-  const data = [
-    {
-      id: "vO-6OWBUxxo",
-      title: "Disco Metal",
-      author: "Nanowar of Steel",
-      createdAt: "Feb, 2023",
-    },
-    {
-      id: "GiT7fhfTrPQ",
-      title: "Strobe (Radio Edit)",
-      author: "Deadmau5",
-      createdAt: "Fev, 2017",
-    },
-    {
-      id: "O5Hn0df4sda",
-      title: "Teste",
-      author: "Teste",
-      createdAt: "Jul, 2023",
-    },
-    {
-      id: "O5Hn0df4sdasdfsadfsdfsadfsadfsadfsfsadfsdf",
-      title: "Teste2",
-      author: "Teste2",
-      createdAt: "Jul, 2023",
-    },
-    {
-      id: "7QU1nvuxaMA",
-      title: "Like a Stone",
-      author: "Audioslave",
-      createdAt: "Out, 2009",
-    },
-  ];
-
-  const infoPlaylists = {
-    list: data,
-  };
-
   const env = process.env.NEXT_APP_ENV || "development";
 
-  /*const playlistsId = [
-    "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
-    "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
-  ];
+  const infoPlaylists = await environmentLock(env);
+
+  if (!(infoPlaylists.error == null)) return <ErrorPage />;
+
+  return (
+    <>
+      <ProviderWrapperYoutube
+        playlist={infoPlaylists.list}
+        isInProduction={env == "development" ? false : true}
+      />
+    </>
+  );
+}
+
+async function environmentLock(env: string): Promise<handledResponse> {
+  if (env == "development") {
+    return {
+      list: data,
+    };
+  }
 
   const promisedPlaylists = playlistsId.map((playlistId) =>
     youtubeFindPlaylist(playlistId)
@@ -75,14 +92,5 @@ export default async function Youtube() {
     { list: [] } as handledResponse
   );
 
-  if (!(infoPlaylists.error == null)) return <ErrorPage />;*/
-
-  return (
-    <>
-      <ProviderWrapperYoutube
-        playlist={infoPlaylists.list}
-        isInProduction={env == "development" ? false : true}
-      />
-    </>
-  );
+  return infoPlaylists;
 }
