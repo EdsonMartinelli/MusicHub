@@ -25,12 +25,12 @@ export function BannerUI({
 
         <div className="w-full flex flex-col gap-1">
           <p
-            className="w-full text-4xl lg:text-6xl font-black truncate
+            className="w-full text-4xl lg:text-6xl p-1 font-black truncate
             text-white"
           >
             {source}
           </p>
-          <p className="text-sm text-white/70 truncate">
+          <p className="text-sm text-white/70 truncate px-1">
             by {by} • {numberOfSongs} songs
           </p>
         </div>
