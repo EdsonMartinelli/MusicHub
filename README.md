@@ -1,7 +1,7 @@
 # MusicHub ![Nextjs Version](https://img.shields.io/badge/nextjs-v13.2.4-blue?style=flat&color=000000&logo=nextdotjs) ![TailwindCSS Version](https://img.shields.io/badge/tailwind-v5.0.2-blue?style=flat&color=06B6D4&logo=tailwindcss) ![Redux Toolkit Version](https://img.shields.io/badge/redux_toolkit-v1.9.3-blue?style=flat&color=764ABC&logo=redux)
 
 
-This repository is dedicated to my personal project [MusicHub](https://www.musichubproject.vercel.app), a site where my Youtube and Google Drive playlists are together, allowing a easy search, avoiding duplication, with greater convenience. 
+This repository is dedicated to my personal project [MusicHub](https://musichubproject.vercel.app/), a site where my Youtube and Google Drive playlists are together, allowing a easy search, avoiding duplication, with greater convenience. 
 
 ## ⚔️ Objective
 
