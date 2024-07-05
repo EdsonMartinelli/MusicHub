@@ -88,11 +88,7 @@ export default function Main() {
   );
 }
 
-function ButtonMainPage({
-  isDisabled = false,
-  type,
-  children,
-}: ButtonMainPageProps) {
+function ButtonMainPage({ type, children }: ButtonMainPageProps) {
   return (
     <Link href={`/${type}`}>
       <button
