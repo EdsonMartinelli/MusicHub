@@ -1,5 +1,4 @@
-import { driveDownloadFile } from "@/server/drive/driveDownloadFiles";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function GET(
   _request: NextRequest,
@@ -11,5 +10,3 @@ export async function GET(
   );
   return res;
 }
-
-//http://localhost:3000/api/drive/downloadFile/AIzaSyCTIsy1XgV-liSv-7sY2_UBn0kR0txpdCQ

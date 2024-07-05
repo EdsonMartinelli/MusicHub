@@ -63,7 +63,7 @@ module.exports = {
         fadeIn: 'fadeIn 1000ms cubic-bezier(0.16, 1, 0.3, 1)',
         fadeOut: 'fadeOut 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
         rotatePlayButton: 'rotate 1500ms linear infinite',
-        rotateMainPageButton: 'rotateCentered 5s cubic-bezier(.33,.2,.91,.73) infinite'
+        rotateMainPageButton: 'rotateCentered 2500ms linear infinite'
       },
       
       backgroundImage: {

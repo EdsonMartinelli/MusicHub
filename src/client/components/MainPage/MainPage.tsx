@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import imgHome from "../../../../public/imgHome.png";
 import { GoogleDriveLogo, YoutubeLogo } from "@phosphor-icons/react";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -14,8 +13,6 @@ type ButtonMainPageProps = {
   isDisabled?: boolean;
   children: ReactNode;
 };
-
-//from-pink-600/10
 
 export default function Main() {
   return (
@@ -111,19 +108,6 @@ function ButtonMainPage({ type, children }: ButtonMainPageProps) {
           {children}
           {type}
         </div>
-      </button>
-    </Link>
-  );
-
-  return (
-    <Link href={`/${type}`}>
-      <button
-        className={`capitalize font-bold gap-2 flex flex-row h-14 w-44 items-center
-        justify-center p-2 rounded-xl bg-primary hover:bg-primary-hover text-text-primary
-        bg-gradient-to-br from-secondary/30 hover:from-secondary-hover/30 from-0% to-100%`}
-      >
-        {children}
-        {type}
       </button>
     </Link>
   );
