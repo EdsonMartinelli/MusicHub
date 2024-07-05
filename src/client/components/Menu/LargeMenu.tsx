@@ -16,14 +16,16 @@ export default function LargeMenu() {
         className="fixed top-0 left-0 h-screen w-64 bg-transparent
         text-white box-border flex flex-col items-start gap-2"
       >
-        <Link href={"/"} passHref>
-          <button className="w-full flex flex-row items-center gap-2 mt-5 mb-10 pl-3">
-            <div className="w-10 h-10">
-              <Waveform size="100%" />
-            </div>
-            <p className="font-bold text-xl">MusicHub</p>
-          </button>
-        </Link>
+        <div className="w-full h-fit flex items-center pl-10 my-10">
+          <Link href={"/"} passHref>
+            <button className="w-full flex flex-row items-center">
+              <div className="w-12 h-12">
+                <Waveform size="100%" weight="bold" />
+              </div>
+              <p className="font-bold text-2xl">MusicHub</p>
+            </button>
+          </Link>
+        </div>
 
         <MenuList name="Explore">
           <MenuItems path="/youtube">
@@ -37,12 +39,6 @@ export default function LargeMenu() {
               <GoogleDriveLogo size="100%" />
             </div>
             Google Drive
-          </MenuItems>
-          <MenuItems path="/spotify" disabled>
-            <div className="h-full">
-              <SpotifyLogo size="100%" />
-            </div>
-            Spotify
           </MenuItems>
         </MenuList>
       </div>

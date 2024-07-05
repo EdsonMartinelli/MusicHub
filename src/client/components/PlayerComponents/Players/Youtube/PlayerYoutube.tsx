@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import {
@@ -30,21 +30,10 @@ type handlePlayerProps = {
   videoName: string;
 } & ProgressBarYoutubeProps;
 
-type eventMessageType =
-  | "initialDelivery"
-  | "onReady"
-  | "infoDelivery"
-  | "apiInfoDelivery"
-  | "onError";
-
-type eventMessageFunctions = Record<
-  eventMessageType,
-  (info: Record<string, any> | null) => void
->;
-
 type PlayerYoutubeProps = {
   isInProduction: boolean;
 };
+
 export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
   const iFrameRef = useRef<IFrameYoutubeRef>(null);
   const currentSong = useSelector(
@@ -52,9 +41,6 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
   );
   const currentState = useSelector(
     (state: RootState) => state.playlistYoutube.currentState
-  );
-  const isChangingTime = useSelector(
-    (state: RootState) => state.playlistYoutube.isChangingTime
   );
   const isInLoop = useSelector(
     (state: RootState) => state.playlistYoutube.isInLoop
@@ -83,9 +69,9 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("Teste");
     if (currentSong == null) return;
     if (iFrameRef.current == null) return;
-    iFrameRef.current.pauseVideo();
     dispatch(loadSong());
     const videoPlayer = iFrameRef.current;
     if (isInProduction) {
@@ -105,17 +91,13 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
 
   useEffect(() => {
     if (iFrameRef.current == null) return;
-    if (isChangingTime) {
-      iFrameRef.current.pauseVideo();
-      return;
-    }
     if (currentState == "playing") iFrameRef.current.playVideo();
     if (currentState == "paused") iFrameRef.current.pauseVideo();
     if (currentState == "ended") {
       iFrameRef.current.seekTo([0, true]);
       iFrameRef.current.pauseVideo();
     }
-  }, [currentState, isChangingTime]);
+  }, [currentState]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -123,20 +105,12 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     iFrameRef.current.setVolume(isMuted ? 0 : volume);
   }, [currentSong, volume, isMuted]);
 
-  const initialDelivery = useCallback(
-    (info: Record<string, any> | null) => {
-      if (info == null) return;
-      if (info.duration == undefined) return;
-      dispatch(setDuration(info.duration));
-    },
-    [dispatch]
-  );
-
   const onReady = useCallback(
     (_info: Record<string, any> | null) => {
       if (iFrameRef.current == null) return;
+      dispatch(setDuration(iFrameRef.current.getDuration()));
       iFrameRef.current.setVolume(isMuted ? 0 : volume);
-      dispatch(playSong());
+      iFrameRef.current?.playVideo();
     },
     [dispatch, volume, isMuted]
   );
@@ -154,69 +128,39 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
     [dispatch, isInAutoPlay]
   );
 
-  const infoDelivery = useCallback(
-    (info: Record<string, any> | null) => {
-      if (info == null) return;
-      if (isChangingTime) return;
-      if (currentState == "ended") return;
-      if (info?.videoData?.errorCode == "api.invalidparam") {
-        onError(info);
-        return;
-      }
-      if (info.currentTime != undefined) dispatch(updateTime(info.currentTime));
+  const onTimeUpdate = useCallback(
+    (currentTime: number) => {
+      if (iFrameRef.current?.getPlayerState() == 1 && currentState == "loading")
+        dispatch(playSong());
 
-      if (info.playerState == 0) {
-        dispatch(updateTime(duration));
-        dispatch(endSong());
-        if (isInLoop) {
-          iFrameRef.current?.seekTo([0, true]);
-          dispatch(playSong());
-          return;
-        }
-        if (isInAutoPlay) {
-          dispatch(nextSong());
-          return;
-        }
-      }
+      if (currentState == "ended") return;
+
+      if (iFrameRef.current?.getPlayerState() != 2)
+        dispatch(updateTime(currentTime));
     },
-    [
-      currentState,
-      dispatch,
-      duration,
-      isChangingTime,
-      isInAutoPlay,
-      isInLoop,
-      onError,
-    ]
+    [currentState, dispatch]
   );
 
-  useEffect(() => {
-    const messageObject: eventMessageFunctions = {
-      initialDelivery,
-      onReady,
-      infoDelivery,
-      apiInfoDelivery: (_info) => {},
-      onError,
-    };
-
-    function handleEvent(e: MessageEvent<any>) {
-      const data = JSON.parse(e.data) as {
-        event: eventMessageType;
-        info: Record<string, any> | null;
-      };
-      const event = data.event;
-      const info = data.info;
-      messageObject[event](info);
+  const onEnded = useCallback(() => {
+    dispatch(updateTime(duration));
+    console.log("Acabou");
+    if (isInLoop) {
+      iFrameRef.current?.seekTo([0, true]);
+      dispatch(playSong());
+      return;
     }
-    window.addEventListener("message", handleEvent);
-
-    return () => {
-      window.removeEventListener("message", handleEvent);
-    };
-  }, [infoDelivery, initialDelivery, onReady, onError]);
+    if (isInAutoPlay) {
+      dispatch(nextSong());
+      return;
+    }
+    dispatch(endSong());
+  }, [dispatch, isInAutoPlay, isInLoop, duration]);
 
   const handleTimeOnInput = useCallback(
     (newTime: number) => {
+      if (iFrameRef.current?.getPlayerState() != 2)
+        iFrameRef.current?.pauseVideo();
+
       dispatch(updateTime(newTime));
     },
     [dispatch]
@@ -225,9 +169,9 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
   function handleTimeAfterInput() {
     if (iFrameRef.current == null) return;
     iFrameRef.current.seekTo([currentTime, true]);
-    if (currentState == "ended") {
-      dispatch(playSong());
-    }
+    if (currentState == "playing") iFrameRef.current?.playVideo();
+    if (currentState == "paused") iFrameRef.current?.pauseVideo();
+    if (currentState == "ended") dispatch(playSong());
   }
 
   const channel = currentSong?.author;
@@ -235,7 +179,13 @@ export default function PlayerYoutube({ isInProduction }: PlayerYoutubeProps) {
 
   return (
     <>
-      <IFrameYoutube ref={iFrameRef} />
+      <IFrameYoutube
+        ref={iFrameRef}
+        onReady={onReady}
+        onError={onError}
+        onTimeUpdate={onTimeUpdate}
+        onEnded={onEnded}
+      />
       <HandlePlayer
         currentState={currentState}
         handleTimeOnInput={handleTimeOnInput}

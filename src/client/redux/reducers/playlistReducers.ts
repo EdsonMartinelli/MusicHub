@@ -16,7 +16,6 @@ export type playlistState = {
   isInLoop: boolean;
   isInAutoPlay: boolean;
   currentState: allStates;
-  isChangingTime: boolean;
   volume: number;
   isMuted: boolean;
   currentTime: number;
@@ -36,7 +35,6 @@ export const reducers = {
     state.index = 0;
     state.currentState = "idle";
     state.currentTime = 0;
-    state.isChangingTime = false;
     state.duration = 0;
     state.isInLoop = false;
   },
@@ -84,10 +82,6 @@ export const reducers = {
     state.currentTime = action.payload;
   },
 
-  setChangeTime: (state: playlistState, action: PayloadAction<boolean>) => {
-    state.isChangingTime = action.payload;
-  },
-
   setDuration: (state: playlistState, action: PayloadAction<number>) => {
     state.duration = action.payload;
   },
@@ -123,9 +117,11 @@ export const reducers = {
   },
 
   autoplayFirstSong: (state: playlistState) => {
-    state.index = 0;
-    state.currentSong = state.playlist[0];
-    state.currentState = "loading";
+    if (state.index != 0) {
+      state.index = 0;
+      state.currentState = "loading";
+      state.currentSong = state.playlist[0];
+    }
     state.isInLoop = false;
     state.isInAutoPlay = true;
   },

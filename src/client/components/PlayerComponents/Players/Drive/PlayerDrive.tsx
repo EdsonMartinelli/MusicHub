@@ -36,9 +36,6 @@ export default function PlayerDrive() {
   const isMuted = useSelector(
     (state: RootState) => state.playlistDrive.isMuted
   );
-  const isChangingTime = useSelector(
-    (state: RootState) => state.playlistDrive.isChangingTime
-  );
   const currentTime = useSelector(
     (state: RootState) => state.playlistDrive.currentTime
   );
@@ -53,10 +50,9 @@ export default function PlayerDrive() {
   useEffect(() => {
     if (currentSong == null) return;
     audioObject.current?.pause();
-    audioObject.current = new Audio(
-      `https://drive.google.com/u/0/uc?id=${currentSong.id}&export=download`
-    );
-    //audioObject.current = new Audio(`api/drive/downloadFile/${currentSong.id}`);
+    audioObject.current = new Audio(`api/drive/downloadFile/${currentSong.id}`);
+    //`https://drive.google.com/u/0/uc?id=${currentSong.id}&export=download`
+    //`https://drive.usercontent.google.com/download?id=${currentSong.id}&export=download&authuser=0`;
     const audioPlayer = audioObject.current;
     audioPlayer.load();
 
@@ -65,41 +61,26 @@ export default function PlayerDrive() {
     }
 
     function handleLoadedData() {
+      dispatch(setDuration(audioObject.current?.duration ?? 0));
       dispatch(playSong());
     }
 
-    function handleDuration() {
-      dispatch(setDuration(audioObject.current?.duration ?? 0));
+    function handleTime() {
+      if (audioPlayer.paused) return;
+      dispatch(updateTime(audioPlayer.currentTime ?? 0));
     }
 
     audioPlayer.addEventListener("loadstart", handleLoadStart);
     audioPlayer.addEventListener("loadeddata", handleLoadedData);
-    audioPlayer.addEventListener("durationchange", handleDuration);
+    audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
       audioPlayer.pause();
       audioPlayer.removeEventListener("loadstart", handleLoadStart);
       audioPlayer.removeEventListener("loadeddata", handleLoadedData);
-      audioPlayer.removeEventListener("durationchange", handleDuration);
-    };
-  }, [currentSong, dispatch]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
-    const audioPlayer = audioObject.current;
-
-    function handleTime() {
-      if (isChangingTime) return;
-      dispatch(updateTime(audioPlayer.currentTime ?? 0));
-    }
-
-    audioPlayer.addEventListener("timeupdate", handleTime);
-
-    return () => {
       audioPlayer.removeEventListener("timeupdate", handleTime);
     };
-  }, [currentSong, isChangingTime, dispatch]);
+  }, [currentSong, dispatch]);
 
   useEffect(() => {
     if (currentSong == null) return;
@@ -133,12 +114,6 @@ export default function PlayerDrive() {
   useEffect(() => {
     if (currentSong == null) return;
     if (audioObject.current == null) return;
-    audioObject.current.volume = isMuted ? 0 : volume;
-  }, [currentSong, volume, isMuted]);
-
-  useEffect(() => {
-    if (currentSong == null) return;
-    if (audioObject.current == null) return;
 
     function handleEnded() {
       if (!isInLoop && isInAutoPlay) {
@@ -156,13 +131,14 @@ export default function PlayerDrive() {
 
   useEffect(() => {
     if (audioObject.current == null) return;
-    if (isChangingTime) {
-      audioObject.current.pause();
-      return;
-    }
+    audioObject.current.volume = isMuted ? 0 : volume;
+  }, [volume, isMuted]);
+
+  useEffect(() => {
+    if (audioObject.current == null) return;
     if (currentState == "playing") audioObject.current.play();
     if (currentState == "paused") audioObject.current.pause();
-  }, [currentState, isChangingTime]);
+  }, [currentState]);
 
   useEffect(() => {
     if (audioObject.current == null) return;
@@ -171,6 +147,7 @@ export default function PlayerDrive() {
 
   const handleTimeOnInput = useCallback(
     (newTime: number) => {
+      if (audioObject.current?.played) audioObject.current.pause();
       dispatch(updateTime(newTime));
     },
     [dispatch]
@@ -179,9 +156,9 @@ export default function PlayerDrive() {
   function handleTimeAfterInput() {
     if (audioObject.current == null) return;
     audioObject.current.currentTime = currentTime;
-    if (currentState == "ended") {
-      dispatch(playSong());
-    }
+    if (currentState == "playing") audioObject.current.play();
+    if (currentState == "paused") audioObject.current.pause();
+    if (currentState == "ended") dispatch(playSong());
   }
 
   const artist = currentSong?.author;

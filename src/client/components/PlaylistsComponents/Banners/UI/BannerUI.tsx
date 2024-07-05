@@ -18,7 +18,7 @@ export function BannerUI({
   return (
     <>
       <div
-        className="h-40 bg-gradient-to-r from-orange-700 to-orange-950 lg:from-orange-950 lg:to-orange-700 rounded-lg
+        className="h-40 bg-gradient-to-r from-indigo-700 to-indigo-950 lg:from-indigo-950 lg:to-indigo-700 rounded-lg
         mt-5 overflow-hidden flex flex-row items-center px-10 gap-10"
       >
         <div className="hidden lg:block shrink-0 h-fit">{children}</div>

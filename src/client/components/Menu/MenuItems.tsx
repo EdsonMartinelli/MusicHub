@@ -22,7 +22,7 @@ export default function MenuItems({
       <button
         className="marker:w-full h-11 flex flex-row items-center justify-start 
         px-3 pl-6 py-2 gap-3 text-sm box-border bg-gradient-to-r from-0% to-10% 
-        border-l-4 hover:from-orange-800/50 border-transparent hover:border-orange-700
+        border-l-4 hover:from-indigo-800/50 border-transparent hover:border-indigo-700
         text-white/40"
         disabled={disabled}
       >
@@ -34,15 +34,23 @@ export default function MenuItems({
     <>
       <Link href={path} passHref>
         <button
-          className={`w-full h-11 flex flex-row items-center justify-start 
-        px-3 pl-6 py-2 gap-3 text-sm box-border bg-gradient-to-r from-0% to-10% border-l-4
-        ${
-          path == pathname
-            ? " from-orange-700/50 border-orange-700 text-orange-500 hover:from-orange-600/50 hover:border-orange-600"
-            : " hover:from-orange-800/50 border-transparent hover:border-orange-700"
-        }`}
+          className={`w-full h-12 flex flex-row items-center justify-start 
+          px-2 text-sm box-border bg-gradient-to-r from-0% to-15% border-l-8 
+          ${
+            path == pathname
+              ? `border-secondary hover:border-secondary-hover from-secondary-hover/40
+                 text-text-primary hover:from-secondary-hover/40`
+              : " border-transparent pr-4"
+          }`}
         >
-          {children}
+          <div
+            className={`w-full h-full flex flex-row rounded-lg items-center justify-start
+            text-sm font-semibold py-2 gap-3 pl-8 ${
+              path == pathname ? "" : " hover:bg-secondary-background "
+            }`}
+          >
+            {children}
+          </div>
         </button>
       </Link>
     </>
@@ -52,7 +60,7 @@ export default function MenuItems({
 function ComingTag() {
   return (
     <p
-      className="text-orange-400 text-xs font-normal bg-orange-800/30 
+      className="text-indigo-400 text-xs font-normal bg-indigo-800/30 
       py-[2px] px-2 rounded border-[1px] border-white/10"
     >
       Coming

@@ -8,6 +8,7 @@ type AutoPlayButtonUIProps = {
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
+//"bg-indigo-800 hover:bg-indigo-700"
 export default function AutoPlayButtonUI({
   isInAutoPlay,
   onClick,
@@ -18,17 +19,16 @@ export default function AutoPlayButtonUI({
         onClick={onClick}
         className={`w-6 h-6 lg:w-8 lg:h-8 rounded-full flex items-center justify-center
         p-1 lg:p-2 ${
-          isInAutoPlay ? "bg-white" : "bg-transparent"
-        } hover:after:absolute 
+          isInAutoPlay
+            ? "text-secondary hover:bg-active-hover hover:text-text-primary"
+            : "bg-transparent hover:bg-primary-hover text-text-primary"
+        } hover:after:absolute
         hover:after:content-['Autoplay'] hover:after:w-fit hover:after:h-fit
-       hover:after:bg-zinc-600 hover:after:py-1 hover:after:px-2
-        hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs`}
+        hover:after:bg-popover hover:after:py-1 hover:after:px-2
+        hover:after:-translate-y-9 hover:after:rounded-md hover:after:text-xs
+        hover:after:text-text-primary`}
       >
-        <ArrowUUpRight
-          className={`${isInAutoPlay ? "text-zinc-900" : "text-white"}`}
-          weight="fill"
-          size={"100%"}
-        />
+        <ArrowUUpRight weight="fill" size={"100%"} />
       </button>
     </>
   );

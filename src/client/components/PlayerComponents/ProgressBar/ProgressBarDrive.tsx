@@ -1,9 +1,8 @@
 "use client";
 import { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/client/redux/store";
 import { InputRangeProperties } from "../../InputRange/InputRange";
-import { setChangeTime } from "@/client/redux/slices/playlistDriveSlice";
 import ProgressBarUI from "./UI/ProgressBarUI";
 
 export type ProgressBarDriveProps = {
@@ -21,19 +20,16 @@ export default function ProgressBarDrive({
   const duration = useSelector(
     (state: RootState) => state.playlistDrive.duration
   );
-  const dispatch = useDispatch();
 
   const setTimeOnPause = useCallback(
     (e: InputRangeProperties) => {
-      dispatch(setChangeTime(true));
       handleTimeOnInput(e.value);
     },
-    [dispatch, handleTimeOnInput]
+    [handleTimeOnInput]
   );
 
   function returnToPlay(_: InputRangeProperties) {
     handleTimeAfterInput();
-    dispatch(setChangeTime(false));
   }
 
   return (

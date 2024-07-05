@@ -21,7 +21,7 @@ export default function MobileMenu() {
         border-b-[1px] border-zinc-600"
       >
         <Link href={"/"} passHref>
-          <button className="flex flex-row items-center gap-2 text-white">
+          <button className="flex flex-row items-center text-white">
             <div className="w-8 h-8">
               <Waveform size="100%" weight="bold" />
             </div>
@@ -30,8 +30,8 @@ export default function MobileMenu() {
         </Link>
         <button
           className="flex flex-row gap-2 p-2 items-center font-bold
-          justify-center bg-transparent text-orange-700 rounded-md border
-          border-orange-700 hover:bg-zinc-800"
+          justify-center bg-transparent text-white bg-indigo-950 rounded-md border
+          border-indigo-600 hover:bg-indigo-900/70"
           onClick={() => setIsClose(true)}
         >
           <div className="h-6 w-6">
@@ -57,8 +57,8 @@ export default function MobileMenu() {
               <p className="font-bold text-xl">Menu</p>
               <button
                 className="flex flex-row gap-2 p-2 items-center font-bold
-                justify-center bg-transparent text-orange-700 rounded-md border
-              border-orange-700 hover:bg-zinc-800"
+                justify-center bg-transparent text-white bg-indigo-950 rounded-md border
+                border-indigo-600 hover:bg-indigo-900/70"
                 onClick={() => setIsClose(false)}
               >
                 <div className="h-6 w-6">
@@ -78,12 +78,6 @@ export default function MobileMenu() {
                   <GoogleDriveLogo size="100%" />
                 </div>
                 Google Drive
-              </MenuItems>
-              <MenuItems path="/spotify" disabled>
-                <div className="h-full">
-                  <SpotifyLogo size="100%" weight="fill" />
-                </div>
-                Spotify
               </MenuItems>
             </MenuList>
           </div>

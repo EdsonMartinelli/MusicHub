@@ -23,7 +23,7 @@ export default function Progress({
   return (
     <div
       style={isVertical ? vertical : horizontal}
-      className={`bg-orange-600 rounded-lg flex items-center justify-center ${
+      className={`bg-pink-600 rounded-lg flex items-center justify-center ${
         isVertical ? "w-[2px]" : "h-[2px]"
       }`}
     >

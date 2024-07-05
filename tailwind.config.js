@@ -9,6 +9,26 @@ module.exports = {
   theme: {
     extend: {
       colors:{
+        "primary-background": "rgb(7, 6, 19)",
+        "secondary-background": " rgb(18, 16, 45)",
+
+        "primary": `${colors.indigo[600]}`,
+        "secondary": `${colors.rose[600]}`,
+
+        "primary-hover": `${colors.indigo[700]}`,
+        "secondary-hover": `${colors.rose[700]}`,
+
+        "text-primary": `${colors.white}`,
+        "text-secondary": `${colors.zinc[400]}`,
+
+        "popover": `${colors.indigo[900]}`,
+
+        "border-color": `${colors.indigo[900]}`,
+
+        "active-hover": `${colors.rose[600]}`,
+
+        "skeleton-color":`rgb(21, 19, 52)`
+
       },
 
       gridTemplateColumns: {
@@ -28,12 +48,22 @@ module.exports = {
         fadeOut:{
           from: {opacity: "1" },
           to: {opacity: "0"},
+        },
+        rotate:{
+          from: {transform: "rotate(0deg)" },
+          to: {transform: "rotate(360deg)" },
+        },
+        rotateCentered:{
+          from: {transform: "translate(-50%, -50%) rotate(0deg) " },
+          to: {transform: "translate(-50%, -50%) rotate(360deg) " },
         }
       },
       animation: {
         playerShow: 'playerShow 500ms cubic-bezier(0.16, 1, 0.3, 1)',
         fadeIn: 'fadeIn 1000ms cubic-bezier(0.16, 1, 0.3, 1)',
-        fadeOut: 'fadeOut 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards'
+        fadeOut: 'fadeOut 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        rotatePlayButton: 'rotate 1500ms linear infinite',
+        rotateMainPageButton: 'rotateCentered 5s cubic-bezier(.33,.2,.91,.73) infinite'
       },
       
       backgroundImage: {
@@ -47,6 +77,8 @@ module.exports = {
         radial:`radial-gradient(circle 350px at left center, ${colors.orange[700]}, ${colors.orange[900]}, transparent),
                 radial-gradient(circle 350px at 450px calc(50% - 250px), ${colors.orange[700]}, ${colors.orange[900]}, transparent),
                 radial-gradient(circle 380px at 500px calc(50% + 150px), ${colors.orange[700]}, ${colors.orange[900]}, transparent)`,
+
+        teste: `conic-gradient(from 180deg at 50% 50%,#e92a67 0deg, ${colors.rose[600]} 112.5deg, ${colors.indigo[600]} 228.75deg,rgba(255,255,255,0) 360deg)`
       }
     },
   },
