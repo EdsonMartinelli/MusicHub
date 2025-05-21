@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 
 export default async function Teste() {
   const playlistInfo = await getPlaylistYT();
+  console.log(playlistInfo);
 
   if (!(playlistInfo.error == null)) return <ErrorPage />;
 
