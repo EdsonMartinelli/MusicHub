@@ -7,6 +7,12 @@ import {
 } from "react";
 
 type PlayerStateType = -1 | 0 | 1 | 2 | 3 | 4 | 5;
+// -1 (unstarted)
+//  0 (ended)
+//  1 (playing)
+//  2 (paused)
+//  3 (buffering)
+//  5 (video cued)
 
 export type IFrameYoutubeRef = {
   init: () => void;
@@ -43,7 +49,7 @@ type IFrameYoutubeProps = {
 export const IFrameYoutube = forwardRef<IFrameYoutubeRef, IFrameYoutubeProps>(
   function IFrame({ onReady, onError, onTimeUpdate, onEnded }, ref) {
     const iFrameRef = useRef<HTMLIFrameElement>(null);
-    const playerState = useRef<PlayerStateType>(5);
+    const playerState = useRef<PlayerStateType>(-1);
     const duration = useRef<number>(0);
 
     const listening = useCallback(() => {
@@ -109,6 +115,7 @@ export const IFrameYoutube = forwardRef<IFrameYoutubeRef, IFrameYoutubeProps>(
     const remove = useCallback(() => {
       if (iFrameRef.current == null) return;
       iFrameRef.current.removeEventListener("load", listening);
+      playerState.current = -1;
     }, [listening]);
 
     const setSrc = useCallback((url: string) => {

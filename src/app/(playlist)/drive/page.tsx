@@ -1,12 +1,14 @@
 import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
-import ProviderWrapperDrive from "@/client/components/Providers/ProviderWrapperDrive";
+import { ProviderWrapperDrive } from "@/client/components/Providers/ProviderWrapperDrive";
+import { DRIVE_FOLDER_ID, ENV_TYPE } from "@/env";
+import { dataDrive } from "@/fakeData";
 import { driveFindFiles } from "@/server/drive/driveFindFiles";
-import { handledResponse } from "@/types";
+import { PlaylistInfo } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Music Hub - Drive",
-  description: "A simples site with my favorites songs",
+  description: "A simple site for my favorites songs",
   icons: {
     icon: ["/icon.png"],
     apple: ["/icon.png"],
@@ -14,80 +16,41 @@ export const metadata: Metadata = {
   },
 };
 
-const data = [
-  {
-    id: "1TZi8nYn9k_Cb1e2VSDxSiB9o6DSTZjXI",
-    title: "Berzerk",
-    author: "Eminem",
-    createdAt: "Jan, 2022",
-  },
-  {
-    id: "1W3yG1O2TB3dscfQBrFV42e_kgHXhh5AG",
-    title: "Bad Intruder Song",
-    author: "The Grogory Brother",
-    createdAt: "Jan, 2022",
-  },
-  {
-    id: "1BuoQ27EMwC9CnwsPX_7JZnrCF7Bmk9DS",
-    title: "Survivor",
-    author: "Zebrahead",
-    createdAt: "Jan, 2022",
-  },
-  {
-    id: "sdfsadfsdfasdfsdfsdfsdf",
-    title: "Teste",
-    author: "Teste",
-    createdAt: "Jan, 2022",
-  },
-  {
-    id: "1Wl361Rp8njz9Wdh_42qnBUkLRLp-rNEG",
-    title: "Let Me Go (Official Music Video)",
-    author: "Stone Broken",
-    createdAt: "Jan, 2022",
-  },
-];
-
-const foldersId = [
-  "196avRwiYuQuEILLXn1Oi_xaYYQnS252S",
-  "17QnutWbjP0y9PnXqUCtj9yLOA2zSYI9U",
-];
-
 export default async function Drive() {
-  const env = process.env.NEXT_APP_ENV || "development";
+  const playlistInfo = await getPlaylistDrive();
 
-  const infoFolders = await environmentLock(env);
-
-  if (!(infoFolders.error == null)) return <ErrorPage />;
+  if (!(playlistInfo.error == null)) return <ErrorPage />;
 
   return (
     <>
-      <ProviderWrapperDrive playlist={infoFolders.list} />
+      <ProviderWrapperDrive playlist={playlistInfo.songs} />
     </>
   );
 }
 
-async function environmentLock(env: string): Promise<handledResponse> {
-  if (env == "development") {
+async function getPlaylistDrive(): Promise<PlaylistInfo> {
+  if (ENV_TYPE == "development") {
     return {
-      list: data,
+      songs: dataDrive,
     };
   }
 
-  const promisedPlaylists = foldersId.map((folderId) =>
+  const promisedPlaylists = DRIVE_FOLDER_ID.map((folderId) =>
     driveFindFiles(folderId)
   );
 
-  const responsedFolders = await Promise.all(promisedPlaylists);
+  const playlists = await Promise.all(promisedPlaylists);
 
-  const infoFolders = responsedFolders.reduce(
-    (acc, folder) => {
-      if (!(acc.error == null)) return { list: [], error: acc.error };
-      if (!(folder.error == null)) return { list: [], error: folder.error };
+  const infoFolders = playlists.reduce(
+    (acc, playlist) => {
+      if (!(acc.error == null)) return { songs: [], error: acc.error };
+      if (!(playlist.error == null))
+        return { songs: [], error: playlist.error };
       return {
-        list: [...acc.list, ...folder.list],
+        songs: [...acc.songs, ...playlist.songs],
       };
     },
-    { list: [] } as handledResponse
+    { songs: [] } as PlaylistInfo
   );
 
   return infoFolders;

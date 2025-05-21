@@ -1,81 +1,83 @@
-import { SongInfo, handledResponse } from "@/types";
+import { PlaylistInfo, SongInfo, SongsPageInfo } from "@/types";
 import { getShortDate } from "../utils";
-import { URLError } from "../errors/URLError";
 
-type responseDriveItem = {
+type FileInfoDrive = {
   mimeType: string;
   id: string;
   name: string;
   createdTime: string;
 };
 
-type responseDrive = {
-  nextPageToken?: string;
-  files: responseDriveItem[];
-};
-
-type filesWithNextPage = {
-  files: SongInfo[];
+type PageInfoDrive = {
+  files: FileInfoDrive[];
   nextPageToken?: string;
 };
 
-export async function driveFindFiles(
-  folderId: string
-): Promise<handledResponse> {
-  try {
-    const { files, nextPageToken } = await driveFetch(folderId);
-    let newPageToken = nextPageToken;
-    let list = files;
+export async function driveFindFiles(folderId: string): Promise<PlaylistInfo> {
+  let nextPageToken: string | undefined = undefined;
+  let songsList: SongInfo[] = [];
 
-    while (newPageToken != null) {
-      const { files: newFiles, nextPageToken: newNextPageToken } =
-        await driveFetch(folderId, nextPageToken);
-      newPageToken = newNextPageToken;
-      list = [...list, ...newFiles];
+  do {
+    const {
+      songs,
+      nextPageToken: newNextPageToken,
+      error,
+    } = await driveFetch(folderId, nextPageToken);
+
+    if (error != null) {
+      return { songs: songsList, error };
     }
 
-    return { list };
-  } catch (error: any) {
-    return { list: [], error: error.message };
-  }
+    nextPageToken = newNextPageToken;
+    songsList = [...songsList, ...songs];
+  } while (nextPageToken != null);
+
+  return { songs: songsList };
 }
 
 async function driveFetch(
   folderId: string,
   pageToken?: string
-): Promise<filesWithNextPage> {
+): Promise<SongsPageInfo> {
   const key = process.env.GOOGLE_KEY;
   const corpora = "user";
   const q = `'${folderId}' in parents`;
   const fields = "nextPageToken%2Cfiles(id%2Cname%2CmimeType%2CcreatedTime)";
   const url = `https://www.googleapis.com/drive/v3/files?corpora=${corpora}&q=${q}&&fields=${fields}&key=${key}`;
-  const response = await fetch(
+  const pageInfo = await fetch(
     pageToken == null ? url : `${url}&pageToken=${pageToken}`,
     { next: { revalidate: 60 * 60 * 24 * 15 } } // 15 days in seconds
   );
 
-  if (!response.ok) throw new URLError();
+  if (!pageInfo.ok) return { songs: [], error: "URLError" };
 
-  const responseJSON: responseDrive = await response.json();
+  let pageInfoJSON: PageInfoDrive;
 
-  const filteredResponse: responseDriveItem[] = responseJSON.files.filter(
-    (item) => item.mimeType == "audio/mpeg"
+  try {
+    pageInfoJSON = await pageInfo.json();
+  } catch (exception) {
+    return { songs: [], error: "JSONParseError" };
+  }
+
+  const filteredSongs = pageInfoJSON.files.filter(
+    (file) => file.mimeType == "audio/mpeg"
   );
 
-  const files = filteredResponse.map((item: responseDriveItem) => {
-    const [author, title] = item.name.replace(".mp3", "").split(" - ");
+  const songs = filteredSongs.map((song) => {
+    const [author, title] = song.name.replace(".mp3", "").split(" - ");
     return {
-      id: item.id,
+      id: song.id,
       title: title ?? "",
       author: author ?? "",
-      createdAt: getShortDate(item.createdTime),
-    };
+      createdAt: getShortDate(song.createdTime),
+      source: "drive",
+    } satisfies SongInfo;
   });
 
-  if (responseJSON.nextPageToken == null) return { files };
+  if (pageInfoJSON.nextPageToken == null) return { songs };
 
   return {
-    files,
-    nextPageToken: responseJSON.nextPageToken,
+    songs,
+    nextPageToken: pageInfoJSON.nextPageToken,
   };
 }

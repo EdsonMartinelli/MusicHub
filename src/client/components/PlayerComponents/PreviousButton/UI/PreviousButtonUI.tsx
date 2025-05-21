@@ -6,7 +6,7 @@ import { MouseEventHandler } from "react";
 type PreviousButtonUIProps = {
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
-export default function PreviousButtonUI({ onClick }: PreviousButtonUIProps) {
+export function PreviousButtonUI({ onClick }: PreviousButtonUIProps) {
   return (
     <>
       <button

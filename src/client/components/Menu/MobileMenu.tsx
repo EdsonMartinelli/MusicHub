@@ -2,7 +2,6 @@
 import {
   GoogleDriveLogo,
   List,
-  SpotifyLogo,
   Waveform,
   X,
   YoutubeLogo,

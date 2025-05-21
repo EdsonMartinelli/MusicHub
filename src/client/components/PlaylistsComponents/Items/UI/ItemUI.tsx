@@ -1,16 +1,17 @@
 import { allStates } from "@/client/redux/reducers/playlistReducers";
+import { SongInfo } from "@/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   ArrowCounterClockwise,
   CircleNotch,
   Pause,
   Play,
 } from "@phosphor-icons/react";
+import { CSSProperties } from "react";
 
-type ItemUIProps = {
+type ItemUIProps = SongInfo & {
   index: number;
-  title: string;
-  author: string;
-  createdAt: string;
   handleClick: () => void;
   isCurrent: boolean;
   currentState: allStates;
@@ -22,8 +23,9 @@ type ItemIndicationUIProps = {
   currentState: allStates;
 };
 
-export default function ItemUI({
+export function ItemUI({
   index,
+  id,
   title,
   author,
   createdAt,
@@ -31,8 +33,31 @@ export default function ItemUI({
   isCurrent = false,
   currentState,
 }: ItemUIProps) {
+  const {
+    transform,
+    transition,
+    setNodeRef,
+    isDragging,
+    attributes,
+    listeners,
+  } = useSortable({
+    id: id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform), //let dnd-kit do its thing
+    transition: transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+    position: "relative",
+  };
+
   return (
     <button
+      {...attributes}
+      {...listeners}
+      ref={setNodeRef}
+      style={style}
       onClick={handleClick}
       className={`w-full h-14 text-white p-2 px-4 flex flex-row items-center 
       justify-between rounded-md mb-1 ${
@@ -41,7 +66,7 @@ export default function ItemUI({
           : "hover:bg-secondary-background"
       }`}
     >
-      <div className="w-1/2 flex flex-row gap-4 items-center justify-start">
+      <div className="flex flex-row gap-4 items-center justify-start">
         <div
           className="hidden lg:flex w-7 h-7 p-1 text-white items-center text-xs
               shrink-0"

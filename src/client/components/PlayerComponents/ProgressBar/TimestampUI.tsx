@@ -4,7 +4,7 @@ type TimestampUIProps = {
   time: number;
 };
 
-export default function TimestampUI({ time }: TimestampUIProps) {
+export function TimestampUI({ time }: TimestampUIProps) {
   const minutes = Math.floor(time / 60);
   const seconds = Math.floor(time % 60);
   return (

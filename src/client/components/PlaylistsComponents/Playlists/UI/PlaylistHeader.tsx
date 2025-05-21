@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
-import { ItemUISkeleton } from "../../Items/UI/ItemUISkeleton";
 
 type PlayListHeaderProps = {
   children: ReactNode;
 };
-export default function PlayListHeader({ children }: PlayListHeaderProps) {
+export function PlayListHeader({ children }: PlayListHeaderProps) {
   return (
     <>
       <div
@@ -17,7 +16,7 @@ export default function PlayListHeader({ children }: PlayListHeaderProps) {
         </div>
         <p>Created At</p>
       </div>
-      <div className=" pt-5  pb-36 lg:pb-32">{children}</div>
+      <div className=" pt-5 pb-36 lg:pb-32">{children}</div>
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-export default function NextButtonUISkeleton() {
+export function NextButtonUISkeleton() {
   return (
     <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-skeleton-color" />
   );

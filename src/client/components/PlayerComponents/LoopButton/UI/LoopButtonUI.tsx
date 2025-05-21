@@ -7,7 +7,7 @@ type LoopButtonUIProps = {
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
-export default function LoopButtonUI({ isInLoop, onClick }: LoopButtonUIProps) {
+export function LoopButtonUI({ isInLoop, onClick }: LoopButtonUIProps) {
   return (
     <>
       <button

@@ -1,11 +1,11 @@
 import { BannerUISkeleton } from "../../Banners/UI/BannerUISkeleton";
 import { ItemUISkeleton } from "../../Items/UI/ItemUISkeleton";
-import PlayFirstButtonUISkeleton from "../../PlayFirstButton/UI/PlayFirstButtonUISkeleton";
+import { PlayFirstButtonUISkeleton } from "../../PlayFirstButton/UI/PlayFirstButtonUISkeleton";
 import SearchBarUISkeleton from "../../SearchBar/UI/SearchBarUISkeleton";
-import PlayListHeader from "./PlaylistHeader";
+import { PlayListHeader } from "./PlaylistHeader";
 
 const N_ITENS_SKELETON = 5;
-export default function PlaylistUISkeleton() {
+export function PlaylistUISkeleton() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
     <div className="animate-pulse">

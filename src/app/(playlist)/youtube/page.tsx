@@ -1,12 +1,14 @@
 import ErrorPage from "@/client/components/ErrorPage/ErrorPage";
-import ProviderWrapperYoutube from "@/client/components/Providers/ProviderWrapperYoutube";
+import { ProviderWrapperYoutube } from "@/client/components/Providers/ProviderWrapperYoutube";
+import { ENV_TYPE, YT_PLAYLIST_ID } from "@/env";
+import { dataYT } from "@/fakeData";
 import { youtubeFindPlaylist } from "@/server/youtube/youtubeFindPlaylist";
-import { handledResponse } from "@/types";
+import { PlaylistInfo } from "@/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Music Hub - Youtube",
-  description: "A simples site with my favorites songs",
+  description: "A simple site for my favorites songs",
   icons: {
     icon: ["/icon.png"],
     apple: ["/icon.png"],
@@ -14,82 +16,40 @@ export const metadata: Metadata = {
   },
 };
 
-const data = [
-  {
-    id: "vO-6OWBUxxo",
-    title: "Disco Metal",
-    author: "Nanowar of Steel",
-    createdAt: "Feb, 2023",
-  },
-  {
-    id: "GiT7fhfTrPQ",
-    title: "Strobe (Radio Edit)",
-    author: "Deadmau5",
-    createdAt: "Fev, 2017",
-  },
-  {
-    id: "O5Hn0df4sda",
-    title: "Teste",
-    author: "Teste",
-    createdAt: "Jul, 2023",
-  },
-  {
-    id: "O5Hn0df4sdasdfsadfsdfsadfsadfsadfsfsadfsdf",
-    title: "Teste2",
-    author: "Teste2",
-    createdAt: "Jul, 2023",
-  },
-  {
-    id: "7QU1nvuxaMA",
-    title: "Like a Stone",
-    author: "Audioslave",
-    createdAt: "Out, 2009",
-  },
-];
-
-const playlistsId = [
-  "PLY3DcCkHnjbGk0irgvqcLKRT2D5TdK_tL",
-  "PLY3DcCkHnjbFYnB77TpHJ9KMPHZxyC0xw",
-];
-
 export default async function Youtube() {
-  const env = process.env.NEXT_APP_ENV || "development";
+  const playlistInfo = await getPlaylistYT();
 
-  const infoPlaylists = await environmentLock(env);
-
-  if (!(infoPlaylists.error == null)) return <ErrorPage />;
+  if (!(playlistInfo.error == null)) return <ErrorPage />;
 
   return (
     <>
-      <ProviderWrapperYoutube
-        playlist={infoPlaylists.list}
-        isInProduction={env == "development" ? false : true}
-      />
+      <ProviderWrapperYoutube playlist={playlistInfo.songs} />
     </>
   );
 }
 
-async function environmentLock(env: string): Promise<handledResponse> {
-  if (env == "development") {
+async function getPlaylistYT(): Promise<PlaylistInfo> {
+  if (ENV_TYPE == "development") {
     return {
-      list: data,
+      songs: dataYT,
     };
   }
 
-  const promisedPlaylists = playlistsId.map((playlistId) =>
+  const promisedPlaylists = YT_PLAYLIST_ID.map((playlistId) =>
     youtubeFindPlaylist(playlistId)
   );
   const responsedPlaylists = await Promise.all(promisedPlaylists);
 
   const infoPlaylists = responsedPlaylists.reduce(
     (acc, playlist) => {
-      if (!(acc.error == null)) return { list: [], error: acc.error };
-      if (!(playlist.error == null)) return { list: [], error: playlist.error };
+      if (!(acc.error == null)) return { songs: [], error: acc.error };
+      if (!(playlist.error == null))
+        return { songs: [], error: playlist.error };
       return {
-        list: [...acc.list, ...playlist.list],
+        songs: [...acc.songs, ...playlist.songs],
       };
     },
-    { list: [] } as handledResponse
+    { songs: [] } as PlaylistInfo
   );
 
   return infoPlaylists;

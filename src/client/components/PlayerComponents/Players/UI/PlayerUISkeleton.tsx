@@ -1,14 +1,14 @@
 "use client";
 
-import AutoPlayButtonUISkeleton from "../../AutoPlayButton/UI/AutoPlayButtonUISkeleton";
-import LoopButtonUISkeleton from "../../LoopButton/UI/LoopButtonUISkeleton";
-import NextButtonUISkeleton from "../../NextButton/UI/NextButtonUISkeleton";
-import PlayButtonUISkeleton from "../../PlayButton/UI/PlayButtonUISkeleton";
-import PreviousButtonUISkeleton from "../../PreviousButton/UI/PreviousButtonUISkeleton";
-import ProgressBarUISkeleton from "../../ProgressBar/UI/ProgressBarUISkeleton";
-import VolumeBarUISkeleton from "../../VolumeBar/UI/VolumeBarUISkeleton";
+import { AutoPlayButtonUISkeleton } from "../../AutoPlayButton/UI/AutoPlayButtonUISkeleton";
+import { LoopButtonUISkeleton } from "../../LoopButton/UI/LoopButtonUISkeleton";
+import { NextButtonUISkeleton } from "../../NextButton/UI/NextButtonUISkeleton";
+import { PlayButtonUISkeleton } from "../../PlayButton/UI/PlayButtonUISkeleton";
+import { PreviousButtonUISkeleton } from "../../PreviousButton/UI/PreviousButtonUISkeleton";
+import { ProgressBarUISkeleton } from "../../ProgressBar/UI/ProgressBarUISkeleton";
+import { VolumeBarUISkeleton } from "../../VolumeBar/UI/VolumeBarUISkeleton";
 
-export default function PlayerUISkeleton() {
+export function PlayerUISkeleton() {
   return (
     <div className="flex flex-row items-center gap-4 animate-pulse w-full h-full">
       <div className="w-1/3 h-full hidden lg:flex items-center gap-4">

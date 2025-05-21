@@ -24,7 +24,7 @@ function IconVolumeUI({ currentVolume, isMuted }: IconVolumeUIProps) {
   return <SpeakerLow size="100%" />;
 }
 
-export default function VolumeBarUI({
+export function VolumeBarUI({
   currentVolume,
   isMuted,
   muteEvent,

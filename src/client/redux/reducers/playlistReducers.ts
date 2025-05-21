@@ -26,17 +26,48 @@ export type playlistState = {
 
 export const reducers = {
   addPlaylist: (state: playlistState, action: PayloadAction<SongInfo[]>) => {
-    state.playlist = action.payload;
-    state.numberOfSongs = action.payload.length;
+    // state.playlist = action.payload;
+    // state.numberOfSongs = action.payload.length;
+
+    const newState = {
+      currentSong: null,
+      index: -1,
+      currentState: "idle",
+      isInLoop: false,
+      isInAutoPlay: false,
+      volume: 0.5,
+      isMuted: false,
+      currentTime: 0,
+      duration: 0,
+      playlist: action.payload,
+      numberOfSongs: action.payload.length,
+    };
+
+    Object.assign(state, newState);
   },
 
-  resetState: (state: playlistState) => {
-    state.currentSong = null;
-    state.index = 0;
-    state.currentState = "idle";
-    state.currentTime = 0;
-    state.duration = 0;
-    state.isInLoop = false;
+  changePlaylistPositions: (
+    state: playlistState,
+    action: PayloadAction<{ fromIndex: number; toIndex: number }>
+  ) => {
+    const fromIndex = action.payload.fromIndex;
+    const toIndex = action.payload.toIndex;
+    const fromItem: SongInfo = state.playlist[action.payload.fromIndex];
+    const toItem: SongInfo = state.playlist[action.payload.toIndex];
+
+    if (fromItem.id == state.currentSong?.id) state.index = toIndex;
+
+    if (toItem.id == state.currentSong?.id) state.index = fromIndex;
+
+    const newPlaylist = state.playlist;
+
+    newPlaylist.splice(
+      toIndex < 0 ? newPlaylist.length + toIndex : toIndex,
+      0,
+      newPlaylist.splice(fromIndex, 1)[0]
+    );
+
+    state.playlist = newPlaylist;
   },
 
   loadSong: (state: playlistState) => {

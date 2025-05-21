@@ -6,7 +6,7 @@ type NextButtonUIProps = {
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
-export default function NextButtonUI({ onClick }: NextButtonUIProps) {
+export function NextButtonUI({ onClick }: NextButtonUIProps) {
   return (
     <>
       <button

@@ -3,14 +3,14 @@
 import { ReactNode } from "react";
 
 type BannerUIProps = {
-  source: string;
+  playlistName: string;
   by: string;
   numberOfSongs: number;
   children: ReactNode;
 };
 
 export function BannerUI({
-  source,
+  playlistName,
   by,
   numberOfSongs,
   children,
@@ -28,7 +28,7 @@ export function BannerUI({
             className="w-full text-4xl lg:text-6xl p-1 font-black truncate
             text-white"
           >
-            {source}
+            {playlistName}
           </p>
           <p className="text-sm text-white/70 truncate px-1">
             by {by} • {numberOfSongs} songs

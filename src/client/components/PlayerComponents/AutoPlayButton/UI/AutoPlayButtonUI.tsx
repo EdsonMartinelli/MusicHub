@@ -9,7 +9,7 @@ type AutoPlayButtonUIProps = {
 };
 
 //"bg-indigo-800 hover:bg-indigo-700"
-export default function AutoPlayButtonUI({
+export function AutoPlayButtonUI({
   isInAutoPlay,
   onClick,
 }: AutoPlayButtonUIProps) {

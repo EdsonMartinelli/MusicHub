@@ -3,7 +3,7 @@
 import InputRange, {
   InputRangeProperties,
 } from "@/client/components/InputRange/InputRange";
-import TimestampUI from "../TimestampUI";
+import { TimestampUI } from "../TimestampUI";
 
 type ProgressBarUIProps = {
   currentTime: number;
@@ -12,7 +12,7 @@ type ProgressBarUIProps = {
   onAfterInput: (e: InputRangeProperties) => void;
 };
 
-export default function ProgressBarUI({
+export function ProgressBarUI({
   currentTime,
   duration,
   onInput,

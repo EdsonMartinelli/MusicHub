@@ -2,26 +2,22 @@
 
 import { store } from "@/client/redux/store";
 import { Provider } from "react-redux";
-import { addPlaylist } from "@/client/redux/slices/playlistYoutubeSlice";
-import PlayerYoutube from "../PlayerComponents/Players/Youtube/PlayerYoutube";
-import { PlaylistYoutube } from "../PlaylistsComponents/Playlists/PlaylistYoutube";
+import { addPlaylist } from "@/client/redux/slices/playlistSlice";
+import { Playlist } from "../PlaylistsComponents/Playlists/Playlist";
 import { SongInfo } from "@/types";
+import { useEffect } from "react";
+import { PlayerHandler } from "../PlayerComponents/Players/PlayerHandler";
 
-type ProviderWrapperYoutubeProps = {
-  playlist: SongInfo[];
-  isInProduction: boolean;
-};
+export function ProviderWrapperYoutube(data: { playlist: SongInfo[] }) {
+  useEffect(() => {
+    store.dispatch(addPlaylist(data.playlist));
+  }, []);
 
-export default function ProviderWrapperYoutube({
-  playlist,
-  isInProduction,
-}: ProviderWrapperYoutubeProps) {
-  store.dispatch(addPlaylist(playlist));
   return (
     <>
       <Provider store={store}>
-        <PlaylistYoutube />
-        <PlayerYoutube isInProduction={isInProduction} />
+        <Playlist playlistName="Youtube" by="53657468" />
+        <PlayerHandler />
       </Provider>
     </>
   );

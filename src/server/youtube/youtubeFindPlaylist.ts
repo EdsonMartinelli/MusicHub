@@ -1,8 +1,7 @@
-import { SongInfo, handledResponse } from "@/types";
+import { PlaylistInfo, SongInfo, SongsPageInfo } from "@/types";
 import { getShortDate } from "../utils";
-import { URLError } from "../errors/URLError";
 
-type responseYoutubeItem = {
+type VideoInfoYT = {
   snippet: {
     publishedAt: string;
     title: string;
@@ -13,72 +12,78 @@ type responseYoutubeItem = {
   };
 };
 
-type responseYoutube = {
+type PageInfoYT = {
   nextPageToken?: string;
-  items: responseYoutubeItem[];
-};
-
-type videosWithNextPage = {
-  videos: SongInfo[];
-  nextPageToken?: string;
+  items: VideoInfoYT[];
 };
 
 export async function youtubeFindPlaylist(
   playlistId: string
-): Promise<handledResponse> {
-  try {
-    const { videos, nextPageToken } = await youtubeFetch(playlistId);
-    let newPageToken = nextPageToken;
-    let list = videos;
+): Promise<PlaylistInfo> {
+  let nextPageToken: string | undefined = undefined;
+  let songsList: SongInfo[] = [];
 
-    while (newPageToken != null) {
-      const { videos: newVideos, nextPageToken: newNextPageToken } =
-        await youtubeFetch(playlistId, newPageToken);
-      newPageToken = newNextPageToken;
-      list = [...list, ...newVideos];
+  do {
+    const {
+      songs,
+      nextPageToken: newNextPageToken,
+      error,
+    } = await youtubeFetch(playlistId, nextPageToken);
+
+    if (error != null) {
+      return { songs: songsList, error };
     }
-    return { list };
-  } catch (error: any) {
-    return { list: [], error: error.message };
-  }
+
+    nextPageToken = newNextPageToken;
+    songsList = [...songsList, ...songs];
+  } while (nextPageToken != null);
+
+  return { songs: songsList };
 }
 
 async function youtubeFetch(
   playlistId: string,
   pageToken?: string
-): Promise<videosWithNextPage> {
+): Promise<SongsPageInfo> {
   const key = process.env.GOOGLE_KEY;
   const part = "snippet";
   const maxResults = 50;
   const fields =
     "items/snippet/resourceId/videoId, items/snippet/title, items/snippet/publishedAt, items/snippet/videoOwnerChannelTitle, nextPageToken";
   const url = `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${playlistId}&key=${key}&part=${part}&maxResults=${maxResults}&fields=${fields}`;
-  const response = await fetch(
+  const pageInfo = await fetch(
     pageToken == null ? url : `${url}&pageToken=${pageToken}`,
     { next: { revalidate: 60 * 60 * 24 * 15 } } // 15 days in seconds
   );
 
-  if (!response.ok) throw new URLError();
+  if (!pageInfo.ok) return { songs: [], error: "URLError" };
 
-  const responseJSON: responseYoutube = await response.json();
+  let pageInfoJSON: PageInfoYT;
 
-  const filteredResponse: responseYoutubeItem[] = responseJSON.items.filter(
+  try {
+    pageInfoJSON = await pageInfo.json();
+  } catch (exception) {
+    return { songs: [], error: "JSONParseError" };
+  }
+
+  const filteredVideos: VideoInfoYT[] = pageInfoJSON.items.filter(
     (item) => !(item.snippet.videoOwnerChannelTitle == undefined)
   );
 
-  let videos = filteredResponse.map((item: responseYoutubeItem) => {
+  let songs = filteredVideos.map((video) => {
     return {
-      title: item.snippet.title,
-      author: item.snippet.videoOwnerChannelTitle,
-      id: item.snippet.resourceId.videoId,
-      createdAt: getShortDate(item.snippet.publishedAt),
-    };
+      title: video.snippet.title,
+      author: video.snippet.videoOwnerChannelTitle,
+      id: video.snippet.resourceId.videoId,
+      createdAt: getShortDate(video.snippet.publishedAt),
+      source: "youtube",
+    } satisfies SongInfo;
   });
 
-  if (responseJSON.nextPageToken == null) return { videos };
+  if (pageInfoJSON.nextPageToken == null) return { songs };
 
   return {
-    videos,
-    nextPageToken: responseJSON.nextPageToken,
+    songs,
+    nextPageToken: pageInfoJSON.nextPageToken,
   };
 }

@@ -18,10 +18,7 @@ function IconPlayButtonUI({ currentState }: IconPlayButtonUIProps) {
   return <ArrowCounterClockwise weight="fill" size="100%" />;
 }
 
-export default function PlayButtonUI({
-  currentState,
-  onClick,
-}: PlayButtonUIProps) {
+export function PlayButtonUI({ currentState, onClick }: PlayButtonUIProps) {
   return (
     <div
       className={`w-8 h-8 lg:w-12 lg:h-12 relative hover:after:absolute flex items-center
