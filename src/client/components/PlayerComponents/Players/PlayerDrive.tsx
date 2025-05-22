@@ -9,11 +9,11 @@ import {
   errorSong,
   loadSong,
   nextSong,
+  pauseSong,
   playSong,
   setDuration,
   updateTime,
 } from "@/client/redux/slices/playlistSlice";
-import { PlayerBackgroundUI } from "./UI/PlayerBackgroundUI";
 import { PlayerUIError } from "./UI/PlayerUIError";
 import { PlayerUISkeleton } from "./UI/PlayerUISkeleton";
 
@@ -47,6 +47,7 @@ export function PlayerDrive() {
 
     function handleLoadStart() {
       dispatch(loadSong());
+      dispatch(updateTime(0));
     }
 
     function handleLoadedData() {
@@ -60,7 +61,8 @@ export function PlayerDrive() {
     }
 
     audioPlayer.addEventListener("loadstart", handleLoadStart);
-    audioPlayer.addEventListener("loadeddata", handleLoadedData);
+    // Is this event correct?
+    audioPlayer.addEventListener("canplaythrough", handleLoadedData);
     audioPlayer.addEventListener("timeupdate", handleTime);
 
     return () => {
@@ -122,6 +124,25 @@ export function PlayerDrive() {
     if (audioObject.current == null) return;
     audioObject.current.volume = isMuted ? 0 : volume;
   }, [volume, isMuted]);
+
+  useEffect(() => {
+    if (audioObject.current == null) return;
+    function handlePause() {
+      if (currentState == "paused") return;
+      dispatch(pauseSong());
+    }
+    audioObject.current.addEventListener("pause", handlePause);
+
+    function handlePlay() {
+      if (currentState == "playing") return;
+      dispatch(playSong());
+    }
+    audioObject.current.addEventListener("play", handlePlay);
+
+    return () => {
+      audioObject.current?.removeEventListener("play", handlePlay);
+    };
+  }, [currentState, dispatch]);
 
   useEffect(() => {
     if (audioObject.current == null) return;
