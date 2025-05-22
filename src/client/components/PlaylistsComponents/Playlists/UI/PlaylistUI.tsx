@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 import {
   DndContext,
@@ -29,8 +29,18 @@ export function PlaylistUI({
   playlist: SongInfo[];
   onChangePosition: (oldIndex: number, newIndex: number) => void;
 }) {
+  const [detectSensor, setDetectSensor] = useState<
+    typeof TouchSensor | typeof PointerSensor
+  >(PointerSensor);
   const dndContextId = useId();
   const searchLowerCase = search.toLowerCase();
+
+  useEffect(() => {
+    /Mobi|Android/i.test(window.navigator.userAgent) ||
+    /Tablet|iPad/i.test(window.navigator.userAgent)
+      ? setDetectSensor(TouchSensor)
+      : setDetectSensor(PointerSensor);
+  }, []);
 
   const dataIds = useMemo<UniqueIdentifier[]>(() => {
     return playlist.map(({ id }) => id);
@@ -52,11 +62,11 @@ export function PlaylistUI({
     }
   }
 
-  const detectSensor =
-    /Mobi|Android/i.test(window.navigator.userAgent) ||
-    /Tablet|iPad/i.test(window.navigator.userAgent)
-      ? TouchSensor
-      : PointerSensor;
+  // const detectSensor =
+  //   /Mobi|Android/i.test(window.navigator.userAgent) ||
+  //   /Tablet|iPad/i.test(window.navigator.userAgent)
+  //     ? TouchSensor
+  //     : PointerSensor;
 
   const sensors = useSensors(
     useSensor(detectSensor, {
