@@ -53,8 +53,8 @@ export function PlaylistUI({
   }
 
   const detectSensor =
-    /Mobi|Android/i.test(navigator.userAgent) ||
-    /Tablet|iPad/i.test(navigator.userAgent)
+    /Mobi|Android/i.test(window.navigator.userAgent) ||
+    /Tablet|iPad/i.test(window.navigator.userAgent)
       ? TouchSensor
       : PointerSensor;
 
