@@ -29,17 +29,15 @@ export function PlaylistUI({
   playlist: SongInfo[];
   onChangePosition: (oldIndex: number, newIndex: number) => void;
 }) {
-  const [detectSensor, setDetectSensor] = useState<
-    typeof TouchSensor | typeof PointerSensor
-  >(PointerSensor);
+  const [isMobile, setIsMobile] = useState(false);
   const dndContextId = useId();
   const searchLowerCase = search.toLowerCase();
 
   useEffect(() => {
-    /Mobi|Android/i.test(window.navigator.userAgent) ||
-    /Tablet|iPad/i.test(window.navigator.userAgent)
-      ? setDetectSensor(TouchSensor)
-      : setDetectSensor(PointerSensor);
+    setIsMobile(
+      /Mobi|Android/i.test(window.navigator.userAgent) ||
+        /Tablet|iPad/i.test(window.navigator.userAgent)
+    );
   }, []);
 
   const dataIds = useMemo<UniqueIdentifier[]>(() => {
@@ -62,14 +60,8 @@ export function PlaylistUI({
     }
   }
 
-  // const detectSensor =
-  //   /Mobi|Android/i.test(window.navigator.userAgent) ||
-  //   /Tablet|iPad/i.test(window.navigator.userAgent)
-  //     ? TouchSensor
-  //     : PointerSensor;
-
   const sensors = useSensors(
-    useSensor(detectSensor, {
+    useSensor(isMobile ? TouchSensor : PointerSensor, {
       activationConstraint: {
         distance: 0.01,
       },
