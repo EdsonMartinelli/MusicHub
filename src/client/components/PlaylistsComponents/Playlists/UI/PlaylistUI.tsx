@@ -2,8 +2,6 @@ import { useId, useMemo } from "react";
 
 import {
   DndContext,
-  KeyboardSensor,
-  MouseSensor,
   TouchSensor,
   closestCenter,
   type DragEndEvent,
@@ -54,12 +52,14 @@ export function PlaylistUI({
     }
   }
 
+  const detectSensor =
+    /Mobi|Android/i.test(navigator.userAgent) ||
+    /Tablet|iPad/i.test(navigator.userAgent)
+      ? TouchSensor
+      : PointerSensor;
+
   const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {}),
-    // allow add onClick to the element
-    useSensor(PointerSensor, {
+    useSensor(detectSensor, {
       activationConstraint: {
         distance: 0.01,
       },
