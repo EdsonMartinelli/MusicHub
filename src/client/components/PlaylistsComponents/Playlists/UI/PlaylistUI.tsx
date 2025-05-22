@@ -63,7 +63,7 @@ export function PlaylistUI({
   const sensors = useSensors(
     useSensor(isMobile ? TouchSensor : PointerSensor, {
       activationConstraint: {
-        distance: 0.01,
+        distance: isMobile ? 8 : 0.01,
       },
     })
   );
